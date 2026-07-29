@@ -76,7 +76,6 @@ public class ModItemModelProvider extends ItemModelProvider {
         simpleItem(ModItems.TESTING_CHESTPLATE);
         simpleItem(ModItems.TESTING_LEGGINGS);
         simpleItem(ModItems.TESTING_BOOTS);
-
     }
 
     private ItemModelBuilder simpleItem(RegistryObject<Item> item) {

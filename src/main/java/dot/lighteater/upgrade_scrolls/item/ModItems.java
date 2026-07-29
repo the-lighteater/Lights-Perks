@@ -41,6 +41,15 @@ public class ModItems {
 
 
     public static void register(IEventBus eventBus) {
+
         ITEMS.register(eventBus);
+
+        LoadItems.load();
+
+        for (ItemDefinition definition : LoadItems.getDefinitions().values()) {
+
+            ITEMS.register(definition.id,
+                    () -> new JsonItem(definition));
+        }
     }
 }

@@ -1,0 +1,7 @@
+{
+  "id": "fire_scroll",
+  "displayName": "Fire Scroll",
+  "maxStackSize": 16,
+  "rarity": "rare",
+  "texture": "upgrade_scrolls:item/eclipsed_macuahuitl_bright"
+}

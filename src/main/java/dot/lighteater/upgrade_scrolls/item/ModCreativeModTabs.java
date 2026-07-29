@@ -3,10 +3,7 @@ package dot.lighteater.upgrade_scrolls.item;
 import dot.lighteater.upgrade_scrolls.UpgradeScrolls;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
-import net.minecraft.world.item.CreativeModeTab;
-import net.minecraft.world.item.CreativeModeTabs;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
+import net.minecraft.world.item.*;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.RegistryObject;
@@ -20,10 +17,9 @@ public class ModCreativeModTabs {
             .icon(() -> Items.DIAMOND_SWORD.getDefaultInstance()) // Testing
             .title(Component.translatable("creativetab.upgrade_scrolls"))
             .displayItems((parameters, output) -> {
-
-                output.accept(ModItems.ECLIPSED_MACUAHUITL.get());
-
-                output.accept(ModItems.STRENGTH_PERK.get());
+                for (RegistryObject<Item> item : ModItems.ITEMS.getEntries()) {
+                    output.accept(item.get());
+                }
 
             }).build());
 

@@ -1,6 +1,7 @@
 package dot.lighteater.upgrade_scrolls;
 
 import com.mojang.logging.LogUtils;
+import dot.lighteater.upgrade_scrolls.item.LoadItems;
 import dot.lighteater.upgrade_scrolls.item.ModCreativeModTabs;
 import dot.lighteater.upgrade_scrolls.item.ModItems;
 import net.minecraftforge.common.MinecraftForge;
@@ -26,6 +27,8 @@ public class UpgradeScrolls
     public UpgradeScrolls(FMLJavaModLoadingContext context)
     {
         IEventBus modEventBus = context.getModEventBus();
+
+        LoadItems.load();
 
         ModNetwork.init();
 
