@@ -1,13 +1,9 @@
 package dot.lighteater.upgrade_scrolls.event;
 
 import dot.lighteater.upgrade_scrolls.UpgradeScrolls;
-import dot.lighteater.upgrade_scrolls.item.custom.ModularWeaponItem;
-import dot.lighteater.upgrade_scrolls.item.custom.WeaponData;
 import dot.lighteater.upgrade_scrolls.perk.IPerkItem;
 import dot.lighteater.upgrade_scrolls.perk.Perk;
 import dot.lighteater.upgrade_scrolls.perk.PerkRegistry;
-import dot.lighteater.upgrade_scrolls.trait.Trait;
-import dot.lighteater.upgrade_scrolls.trait.TraitContext;
 import net.minecraft.ChatFormatting;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;

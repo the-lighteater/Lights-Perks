@@ -1,6 +1,6 @@
 {
   "parent": "minecraft:item/generated",
   "textures": {
-    "layer0": "upgrade_scrolls:item/testing_helmet"
+    "layer0": "upgrade_scrolls:item/strength_perk"
   }
 }
