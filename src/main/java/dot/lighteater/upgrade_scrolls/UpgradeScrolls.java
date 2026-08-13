@@ -1,9 +1,11 @@
 package dot.lighteater.upgrade_scrolls;
 
+import com.github.L_Ender.cataclysm.init.ModMenu;
 import com.mojang.logging.LogUtils;
 import dot.lighteater.upgrade_scrolls.item.LoadItems;
 import dot.lighteater.upgrade_scrolls.item.ModCreativeModTabs;
 import dot.lighteater.upgrade_scrolls.item.ModItems;
+import dot.lighteater.upgrade_scrolls.menu.ModMenus;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.AddReloadListenerEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -31,6 +33,8 @@ public class UpgradeScrolls
         LoadItems.load();
 
         ModNetwork.init();
+
+        ModMenus.MENUS.register(modEventBus);
 
         ModCreativeModTabs.register(modEventBus);
         ModItems.register(modEventBus);

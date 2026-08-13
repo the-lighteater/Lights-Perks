@@ -1,13 +1,17 @@
 package dot.lighteater.upgrade_scrolls.event;
 
 import dot.lighteater.upgrade_scrolls.ModKeyBindings;
+import dot.lighteater.upgrade_scrolls.ModNetwork;
 import dot.lighteater.upgrade_scrolls.UpgradeScrolls;
+import dot.lighteater.upgrade_scrolls.menu.ModMenus;
 import dot.lighteater.upgrade_scrolls.menu.PerkScreen;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 
 @Mod.EventBusSubscriber(
         modid = UpgradeScrolls.MODID,
@@ -25,8 +29,10 @@ public class ClientEvents {
 
         while (ModKeyBindings.OPEN_PERKS.consumeClick()) {
 
+            UpgradeScrolls.LOGGER.debug("Testing opening menu");
+
             if (minecraft.player != null) {
-                minecraft.setScreen(new PerkScreen());
+                ModNetwork.sendOpenPerkMenu();
             }
         }
     }

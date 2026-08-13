@@ -19,12 +19,27 @@ public class ModNetwork {
 
     private static int index = 0;
 
+    private static int packetId = 0;
+
+    private static int id() {
+        return packetId++;
+    }
+
     public static void init() {
         CHANNEL.messageBuilder(SocketUpdatePacket.class, index++)
                 .encoder(SocketUpdatePacket::encode)
                 .decoder(SocketUpdatePacket::decode)
                 .consumerMainThread(SocketUpdatePacket::handle)
                 .add();
+
+        CHANNEL.registerMessage(
+                id(),
+                OpenPerkMenuPacket.class,
+                (packet, buffer) -> {
+                },
+                buffer -> new OpenPerkMenuPacket(),
+                OpenPerkMenuPacket::handle
+        );
     }
 
     public static void sendSocketUpdate(int armorSlot, int socketIndex, int inventorySlot, ItemStack item) {
@@ -50,5 +65,10 @@ public class ModNetwork {
                 -1,
                 item
         ));
+    }
+
+    public static void sendOpenPerkMenu() {
+        UpgradeScrolls.LOGGER.debug("Sending packet");
+        CHANNEL.sendToServer(new OpenPerkMenuPacket());
     }
 }

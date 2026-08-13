@@ -13,7 +13,7 @@ public class ModKeyBindings {
             new KeyMapping(
                     "key.upgrade_scrolls.open_perks",
                     InputConstants.Type.KEYSYM,
-                    GLFW.GLFW_KEY_P,
+                    GLFW.GLFW_KEY_B,
                     CATEGORY
             );
 }
