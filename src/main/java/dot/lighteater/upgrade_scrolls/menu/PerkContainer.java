@@ -31,6 +31,10 @@ public class PerkContainer implements Container {
         return equipmentType;
     }
 
+    public boolean hasEquipment() {
+        return !getEquipment().isEmpty();
+    }
+
     private ItemStack getEquipment() {
         return switch (equipmentType) {
             case HELMET -> player.getInventory().armor.get(3);

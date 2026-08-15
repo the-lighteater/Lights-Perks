@@ -2,8 +2,12 @@ package dot.lighteater.upgrade_scrolls.menu;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import dot.lighteater.upgrade_scrolls.UpgradeScrolls;
+import dot.lighteater.upgrade_scrolls.helpers.EquipmentType;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
+import net.minecraft.client.gui.screens.inventory.InventoryScreen;
+import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
@@ -41,7 +45,9 @@ public class PerkScreen extends AbstractContainerScreen<PerkMenu> {
         super.render(graphics, mouseX, mouseY, partialTick);
 
         this.renderTooltip(graphics, mouseX, mouseY);
+
     }
+
 
     @Override
     protected void renderBg(
@@ -87,23 +93,60 @@ public class PerkScreen extends AbstractContainerScreen<PerkMenu> {
                 0xFF403030
         );
 
+        renderPlayerModel(graphics, mouseX, mouseY);
 
         for (Slot slot : menu.slots) {
+
+            boolean enabled = true;
+
+            if (slot instanceof PerkSlot perkSlot) {
+                enabled = perkSlot.getPerkContainer().hasEquipment();
+            }
 
             drawSlotBackground(
                     graphics,
                     leftPos + slot.x - 1,
-                    topPos + slot.y - 1
+                    topPos + slot.y - 1,
+                    enabled
             );
         }
 
         renderEquipmentItems(graphics);
+
+    }
+
+    private void renderPlayerModel(
+            GuiGraphics graphics,
+            int mouseX,
+            int mouseY
+    ) {
+        Minecraft minecraft = Minecraft.getInstance();
+
+        LocalPlayer player = minecraft.player;
+
+        if (player == null) {
+            return;
+        }
+
+        int x = leftPos + 20;
+        int y = topPos + 85;
+
+        InventoryScreen.renderEntityInInventoryFollowsMouse(
+                graphics,
+                x,
+                y,
+                30,
+                (float) (x - mouseX),
+                (float) (y - mouseY),
+                player
+        );
     }
 
     private void drawSlotBackground(
             GuiGraphics graphics,
             int x,
-            int y
+            int y,
+            boolean enabled
     ) {
         /*
          * Outer border
@@ -113,7 +156,9 @@ public class PerkScreen extends AbstractContainerScreen<PerkMenu> {
                 y,
                 x + 18,
                 y + 18,
-                0xFF101010
+                enabled
+                        ? 0xFF101010
+                        : 0xFF080808
         );
 
         /*
@@ -124,7 +169,9 @@ public class PerkScreen extends AbstractContainerScreen<PerkMenu> {
                 y + 1,
                 x + 17,
                 y + 17,
-                0xFF8B8B8B
+                enabled
+                        ? 0xFF8B8B8B
+                        : 0xFF404040
         );
 
         /*
@@ -135,7 +182,9 @@ public class PerkScreen extends AbstractContainerScreen<PerkMenu> {
                 y + 2,
                 x + 16,
                 y + 16,
-                0xFF373737
+                enabled
+                        ? 0xFF373737
+                        : 0xFF202020
         );
     }
 
@@ -153,17 +202,6 @@ public class PerkScreen extends AbstractContainerScreen<PerkMenu> {
                 "Perks",
                 8,
                 6,
-                0xFFFFFF
-        );
-
-        /*
-         * Perk section
-         */
-        graphics.drawString(
-                font,
-                "Equipped Perks",
-                8,
-                22,
                 0xFFFFFF
         );
 
@@ -206,6 +244,17 @@ public class PerkScreen extends AbstractContainerScreen<PerkMenu> {
                     topPos + PerkMenu.EQUIPMENT_Y
             );
         }
+    }
+
+    private ItemStack getEquipmentStack(EquipmentType type) {
+        return switch (type) {
+            case HELMET -> menu.getPlayerInventory().armor.get(3);
+            case CHESTPLATE -> menu.getPlayerInventory().armor.get(2);
+            case LEGGINGS -> menu.getPlayerInventory().armor.get(1);
+            case BOOTS -> menu.getPlayerInventory().armor.get(0);
+            case MAIN_HAND -> menu.getPlayerInventory().player.getMainHandItem();
+            case OFF_HAND -> menu.getPlayerInventory().player.getOffhandItem();
+        };
     }
 
     @Override
