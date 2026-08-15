@@ -8,6 +8,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.Slot;
+import net.minecraft.world.item.ItemStack;
 
 public class PerkScreen extends AbstractContainerScreen<PerkMenu> {
 
@@ -86,12 +87,7 @@ public class PerkScreen extends AbstractContainerScreen<PerkMenu> {
                 0xFF403030
         );
 
-        /*
-         * Draw slot backgrounds.
-         *
-         * The actual Slot objects are still responsible
-         * for the items and interaction.
-         */
+
         for (Slot slot : menu.slots) {
 
             drawSlotBackground(
@@ -100,6 +96,8 @@ public class PerkScreen extends AbstractContainerScreen<PerkMenu> {
                     topPos + slot.y - 1
             );
         }
+
+        renderEquipmentItems(graphics);
     }
 
     private void drawSlotBackground(
@@ -170,30 +168,6 @@ public class PerkScreen extends AbstractContainerScreen<PerkMenu> {
         );
 
         /*
-         * Draw text next to each perk slot.
-         */
-        for (int i = 0; i < PerkMenu.PERK_SLOT_COUNT; i++) {
-
-            Slot slot = menu.slots.get(i);
-
-            Component text;
-
-            if (slot.hasItem()) {
-                text = slot.getItem().getHoverName();
-            } else {
-                text = Component.literal("Empty Slot");
-            }
-
-            graphics.drawString(
-                    font,
-                    text,
-                    slot.x + 24,
-                    slot.y + 5,
-                    0xFFFFFF
-            );
-        }
-
-        /*
          * Inventory section
          */
         graphics.drawString(
@@ -203,6 +177,35 @@ public class PerkScreen extends AbstractContainerScreen<PerkMenu> {
                 97,
                 0xFFFFFF
         );
+    }
+
+    private void renderEquipmentItems(GuiGraphics graphics) {
+
+        Inventory inventory = menu.getPlayerInventory();
+
+        ItemStack[] equipment = {
+                inventory.armor.get(3),
+                inventory.armor.get(2),
+                inventory.armor.get(1),
+                inventory.armor.get(0),
+                inventory.player.getMainHandItem(),
+                inventory.player.getOffhandItem()
+        };
+
+        for (int i = 0; i < equipment.length; i++) {
+
+            ItemStack stack = equipment[i];
+
+            if (stack.isEmpty()) {
+                continue;
+            }
+
+            graphics.renderItem(
+                    stack,
+                    leftPos + PerkMenu.EQUIPMENT_X[i],
+                    topPos + PerkMenu.EQUIPMENT_Y
+            );
+        }
     }
 
     @Override

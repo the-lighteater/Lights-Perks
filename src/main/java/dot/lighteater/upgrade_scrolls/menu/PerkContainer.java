@@ -1,6 +1,6 @@
 package dot.lighteater.upgrade_scrolls.menu;
 
-import dot.lighteater.upgrade_scrolls.UpgradeScrolls;
+import dot.lighteater.upgrade_scrolls.helpers.EquipmentType;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
@@ -11,23 +11,52 @@ import net.minecraft.world.item.ItemStack;
 public class PerkContainer implements Container {
 
     private static final String SOCKETS_TAG = "light_perks:sockets";
+    private static final String ITEM_TAG = "Item";
 
     private final Player player;
     private final int size;
+    private final EquipmentType equipmentType;
 
-    public PerkContainer(Player player, int size) {
+    public PerkContainer(
+            Player player,
+            int size,
+            EquipmentType equipmentType
+    ) {
         this.player = player;
         this.size = size;
+        this.equipmentType = equipmentType;
     }
 
-    /**
-     * For now, all perk slots belong to the main-hand item.
-     *
-     * Later this will be replaced with equipment-specific
-     * containers for helmet/chest/legs/boots/main-hand/off-hand.
-     */
+    public EquipmentType getEquipmentType() {
+        return equipmentType;
+    }
+
     private ItemStack getEquipment() {
-        return player.getMainHandItem();
+        return switch (equipmentType) {
+            case HELMET -> player.getInventory().armor.get(3);
+            case CHESTPLATE -> player.getInventory().armor.get(2);
+            case LEGGINGS -> player.getInventory().armor.get(1);
+            case BOOTS -> player.getInventory().armor.get(0);
+            case MAIN_HAND -> player.getMainHandItem();
+            case OFF_HAND -> player.getOffhandItem();
+        };
+    }
+
+    private ListTag getSockets(ItemStack equipment) {
+        if (equipment.isEmpty()) {
+            return null;
+        }
+
+        CompoundTag tag = equipment.getTag();
+
+        if (tag == null || !tag.contains(SOCKETS_TAG, Tag.TAG_LIST)) {
+            return null;
+        }
+
+        return tag.getList(
+                SOCKETS_TAG,
+                Tag.TAG_COMPOUND
+        );
     }
 
     @Override
@@ -48,62 +77,43 @@ public class PerkContainer implements Container {
 
     @Override
     public ItemStack getItem(int index) {
-
         if (index < 0 || index >= size) {
             return ItemStack.EMPTY;
         }
 
-        ItemStack equipment = getEquipment();
+        ListTag sockets = getSockets(getEquipment());
 
-        if (equipment.isEmpty()) {
-            return ItemStack.EMPTY;
-        }
-
-        CompoundTag tag = equipment.getTag();
-
-        if (tag == null ||
-                !tag.contains(SOCKETS_TAG, Tag.TAG_LIST)) {
-            return ItemStack.EMPTY;
-        }
-
-        ListTag sockets = tag.getList(
-                SOCKETS_TAG,
-                Tag.TAG_COMPOUND
-        );
-
-        if (index >= sockets.size()) {
+        if (sockets == null || index >= sockets.size()) {
             return ItemStack.EMPTY;
         }
 
         CompoundTag socket = sockets.getCompound(index);
 
-        if (!socket.contains("Item", Tag.TAG_COMPOUND)) {
+        if (!socket.contains(ITEM_TAG, Tag.TAG_COMPOUND)) {
             return ItemStack.EMPTY;
         }
 
-        ItemStack result = ItemStack.of(
-                socket.getCompound("Item")
+        return ItemStack.of(
+                socket.getCompound(ITEM_TAG)
         );
-
-        return result;
     }
 
     @Override
     public ItemStack removeItem(int index, int count) {
-
         ItemStack stack = getItem(index);
 
         if (stack.isEmpty()) {
             return ItemStack.EMPTY;
         }
 
-        ItemStack result;
+        ItemStack result = stack.copy();
 
         if (stack.getCount() <= count) {
-            result = stack;
             setItem(index, ItemStack.EMPTY);
         } else {
-            result = stack.split(count);
+            result.setCount(count);
+
+            stack.shrink(count);
             setItem(index, stack);
         }
 
@@ -112,17 +122,17 @@ public class PerkContainer implements Container {
 
     @Override
     public ItemStack removeItemNoUpdate(int index) {
-
         ItemStack stack = getItem(index);
 
-        setItem(index, ItemStack.EMPTY);
+        if (!stack.isEmpty()) {
+            setItem(index, ItemStack.EMPTY);
+        }
 
         return stack;
     }
 
     @Override
     public void setItem(int index, ItemStack stack) {
-
         if (index < 0 || index >= size) {
             return;
         }
@@ -147,31 +157,25 @@ public class PerkContainer implements Container {
         CompoundTag socket = sockets.getCompound(index);
 
         if (stack.isEmpty()) {
-
-            socket.remove("Item");
-
+            socket.remove(ITEM_TAG);
         } else {
-
             CompoundTag itemTag = new CompoundTag();
 
             stack.save(itemTag);
 
             socket.put(
-                    "Item",
+                    ITEM_TAG,
                     itemTag
             );
         }
 
         sockets.set(index, socket);
-
         tag.put(SOCKETS_TAG, sockets);
-
-        equipment.setTag(tag);
     }
 
     @Override
     public void setChanged() {
-        // Menu synchronization will handle this.
+        // Container/menu synchronization handles this.
     }
 
     @Override
@@ -181,7 +185,6 @@ public class PerkContainer implements Container {
 
     @Override
     public void clearContent() {
-
         for (int i = 0; i < size; i++) {
             setItem(i, ItemStack.EMPTY);
         }
