@@ -18,12 +18,6 @@ public class PerkContainer implements Container {
     public PerkContainer(Player player, int size) {
         this.player = player;
         this.size = size;
-
-        UpgradeScrolls.LOGGER.debug(
-                "[PerkContainer] Created for player '{}' with {} slots",
-                player.getName().getString(),
-                size
-        );
     }
 
     /**
@@ -91,13 +85,6 @@ public class PerkContainer implements Container {
                 socket.getCompound("Item")
         );
 
-        UpgradeScrolls.LOGGER.debug(
-                "[PerkContainer] getItem({}): {} x{}",
-                index,
-                result.getItem(),
-                result.getCount()
-        );
-
         return result;
     }
 
@@ -146,14 +133,6 @@ public class PerkContainer implements Container {
             return;
         }
 
-        UpgradeScrolls.LOGGER.debug(
-                "[PerkContainer] setItem({}, {} x{}) on {}",
-                index,
-                stack.getItem(),
-                stack.getCount(),
-                equipment.getItem()
-        );
-
         CompoundTag tag = equipment.getOrCreateTag();
 
         ListTag sockets = tag.getList(
@@ -188,11 +167,6 @@ public class PerkContainer implements Container {
         tag.put(SOCKETS_TAG, sockets);
 
         equipment.setTag(tag);
-
-        UpgradeScrolls.LOGGER.debug(
-                "[PerkContainer] Finished writing socket {}",
-                index
-        );
     }
 
     @Override

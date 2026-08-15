@@ -1,6 +1,7 @@
 package dot.lighteater.upgrade_scrolls.menu;
 
 import com.mojang.blaze3d.systems.RenderSystem;
+import dot.lighteater.upgrade_scrolls.UpgradeScrolls;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.network.chat.Component;
@@ -25,6 +26,20 @@ public class PerkScreen extends AbstractContainerScreen<PerkMenu> {
 
         imageWidth = 176;
         imageHeight = 200;
+    }
+
+    @Override
+    public void render(
+            GuiGraphics graphics,
+            int mouseX,
+            int mouseY,
+            float partialTick
+    ) {
+        this.renderBackground(graphics);
+
+        super.render(graphics, mouseX, mouseY, partialTick);
+
+        this.renderTooltip(graphics, mouseX, mouseY);
     }
 
     @Override
