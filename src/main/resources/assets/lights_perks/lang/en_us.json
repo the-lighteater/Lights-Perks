@@ -1,0 +1,12 @@
+{
+  "light_perks:swift_sneak": "Swift Sneak Perk",
+  "light_perks:health_boost": "Health Boost Perk",
+  "light_perks:night_vision": "Night Vision Perk",
+
+  "key.categories.lights_perks": "Light's Perks Keybinds",
+
+  "key.lights_perks.open_perks": "Opening Perk Menu",
+  "key.lights_perks.perk_submenu": "Opening Skills Submenu",
+
+  "creativetab.lights_perks": "Light's Perks"
+}
