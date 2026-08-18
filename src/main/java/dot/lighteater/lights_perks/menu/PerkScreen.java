@@ -8,6 +8,7 @@ import dot.lighteater.lights_perks.helpers.EquipmentType;
 import dot.lighteater.lights_perks.skill.SkillData;
 import dot.lighteater.lights_perks.skill.SkillLevelData;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.gui.screens.inventory.InventoryScreen;
@@ -19,6 +20,7 @@ import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 
 import java.util.List;
+import java.util.Map;
 
 public class PerkScreen extends AbstractContainerScreen<PerkMenu> {
 
@@ -53,7 +55,7 @@ public class PerkScreen extends AbstractContainerScreen<PerkMenu> {
                                     "+15 Attack Damage",
                                     "+10% Attack Speed"
                             )
-                    )),
+                    ), Map.of(EquipmentType.HELMET, 1, EquipmentType.CHESTPLATE, 0)),
             new SkillData("Defense Up",0xFF7A4030, 8, 4, 0,
                     List.of(
                             new SkillLevelData(
@@ -75,7 +77,7 @@ public class PerkScreen extends AbstractContainerScreen<PerkMenu> {
                                     "+15 Attack Damage",
                                     "+10% Attack Speed"
                             )
-                    )),
+                    ), Map.of(EquipmentType.HELMET, 1, EquipmentType.CHESTPLATE, 0)),
             new SkillData("Recovery",0xFF7A7020, 3, 2, 0,
                     List.of(
                             new SkillLevelData(
@@ -97,7 +99,7 @@ public class PerkScreen extends AbstractContainerScreen<PerkMenu> {
                                     "+15 Attack Damage",
                                     "+10% Attack Speed"
                             )
-                    )),
+                    ), Map.of(EquipmentType.HELMET, 1, EquipmentType.CHESTPLATE, 0)),
             new SkillData("Critical Eye",0xFF7A1010, 4, 1, 2,
                     List.of(
                             new SkillLevelData(
@@ -118,8 +120,29 @@ public class PerkScreen extends AbstractContainerScreen<PerkMenu> {
                                     false,
                                     "+15 Attack Damage",
                                     "+10% Attack Speed"
+                            ),
+
+                            new SkillLevelData(
+                                    4,
+                                    false,
+                                    "+15 Attack Damage",
+                                    "+10% Attack Speed"
+                            ),
+
+                            new SkillLevelData(
+                                    5,
+                                    true,
+                                    "+15 Attack Damage",
+                                    "+10% Attack Speed"
+                            ),
+
+                            new SkillLevelData(
+                                    6,
+                                    true,
+                                    "+15 Attack Damage",
+                                    "+10% Attack Speed"
                             )
-                    ))
+                    ), Map.of(EquipmentType.HELMET, 1, EquipmentType.CHESTPLATE, 0))
     );
 
     public PerkScreen(
@@ -650,18 +673,15 @@ public class PerkScreen extends AbstractContainerScreen<PerkMenu> {
         int boxHeight = 18;
 
         /*
-         * Temporary test values.
-         *
-         * Replace these with actual values
-         * from SkillData later.
+         * Equipment order in the UI.
          */
-        int[] equipmentLevels = {
-                1,  // Helmet
-                0,  // Chest
-                0,  // Leggings
-                0,  // Boots
-                2,  // Main Hand
-                0   // Off Hand
+        EquipmentType[] equipmentTypes = {
+                EquipmentType.HELMET,
+                EquipmentType.CHESTPLATE,
+                EquipmentType.LEGGINGS,
+                EquipmentType.BOOTS,
+                EquipmentType.MAIN_HAND,
+                EquipmentType.OFF_HAND
         };
 
         String[] equipmentNames = {
@@ -673,7 +693,9 @@ public class PerkScreen extends AbstractContainerScreen<PerkMenu> {
                 "Off Hand"
         };
 
-        for (int i = 0; i < 6; i++) {
+        for (int i = 0; i < equipmentTypes.length; i++) {
+
+            EquipmentType equipmentType = equipmentTypes[i];
 
             int column = i % columns;
             int row = i / columns;
@@ -685,8 +707,26 @@ public class PerkScreen extends AbstractContainerScreen<PerkMenu> {
                     y + row * (boxHeight + spacing);
 
             /*
-             * Outer border
+             * =========================
+             * EQUIPMENT LEVEL
+             * =========================
+             *
+             * getOrDefault() means equipment
+             * that isn't present in the map
+             * automatically has 0 points.
              */
+            int equipmentLevel =
+                    skillData.points.getOrDefault(
+                            equipmentType,
+                            0
+                    );
+
+            /*
+             * =========================
+             * OUTER BORDER
+             * =========================
+             */
+
             graphics.fill(
                     boxX,
                     boxY,
@@ -696,8 +736,11 @@ public class PerkScreen extends AbstractContainerScreen<PerkMenu> {
             );
 
             /*
-             * Interior
+             * =========================
+             * INTERIOR
+             * =========================
              */
+
             graphics.fill(
                     boxX + 1,
                     boxY + 1,
@@ -707,8 +750,11 @@ public class PerkScreen extends AbstractContainerScreen<PerkMenu> {
             );
 
             /*
-             * Equipment name
+             * =========================
+             * EQUIPMENT NAME
+             * =========================
              */
+
             drawScaledString(
                     graphics,
                     equipmentNames[i],
@@ -719,12 +765,15 @@ public class PerkScreen extends AbstractContainerScreen<PerkMenu> {
             );
 
             /*
-             * Level
+             * =========================
+             * LEVEL
+             * =========================
              */
-            if (equipmentLevels[i] > 0) {
+
+            if (equipmentLevel > 0) {
 
                 String levelText =
-                        "+" + equipmentLevels[i];
+                        "+" + equipmentLevel;
 
                 int textWidth =
                         (int)(font.width(levelText) * 0.7F);
@@ -748,62 +797,20 @@ public class PerkScreen extends AbstractContainerScreen<PerkMenu> {
             int y,
             int width
     ) {
-        /*
-         * Temporary test data.
-         *
-         * We'll eventually get this from SkillData.
-         */
-        List<SkillLevelData> levels = List.of(
-
-                new SkillLevelData(
-                        1,
-                        false,
-                        "+5 Attack Damage"
-                ),
-
-                new SkillLevelData(
-                        2,
-                        false,
-                        "+10 Attack Damage",
-                        "+5% Attack Speed"
-                ),
-
-                new SkillLevelData(
-                        3,
-                        false,
-                        "+15 Attack Damage",
-                        "+10% Attack Speed"
-                ),
-
-                new SkillLevelData(
-                        4,
-                        false,
-                        "+20 Attack Damage",
-                        "+15% Attack Speed"
-                ),
-
-                new SkillLevelData(
-                        5,
-                        false,
-                        "+25 Attack Damage",
-                        "+20% Attack Speed"
-                )
-        );
-
         int currentLevel =
                 skillData.currLevel;
 
         int currentY = y;
 
-        for (int i = 0; i < levels.size(); i++) {
+        for (int i = 0; i < skillData.levels.size(); i++) {
 
             SkillLevelData level =
-                    levels.get(i);
+                    skillData.levels.get(i);
 
             /*
              * Render the level.
              */
-            renderSkillLevel(
+            int diff = renderSkillLevel(
                     graphics,
                     level,
                     currentLevel,
@@ -815,11 +822,11 @@ public class PerkScreen extends AbstractContainerScreen<PerkMenu> {
             /*
              * Move down for the next level.
              */
-            currentY += 40;
+            currentY += (40 + diff);
         }
     }
 
-    private void renderSkillLevel(
+    private int renderSkillLevel(
             GuiGraphics graphics,
             SkillLevelData level,
             int currentLevel,
@@ -868,11 +875,14 @@ public class PerkScreen extends AbstractContainerScreen<PerkMenu> {
         String levelText =
                 "Lv. " + level.level;
 
-        graphics.drawString(
-                font,
+        float scale = .5f;
+
+        drawScaledString(
+                graphics,
                 levelText,
                 x,
                 y,
+                scale,
                 color
         );
 
@@ -883,19 +893,23 @@ public class PerkScreen extends AbstractContainerScreen<PerkMenu> {
          * =========================
          */
 
+        int diff = -16;
+
         int effectY = y + 10;
 
         for (String effect : level.effects) {
 
-            graphics.drawString(
-                    font,
+            drawScaledString(
+                    graphics,
                     effect,
-                    x + 8,
+                    x + (int)(8 * scale),
                     effectY,
+                    scale,
                     color
             );
 
-            effectY += 8;
+            effectY += (int)(8 * scale);
+            diff += 8;
         }
 
 
@@ -912,6 +926,8 @@ public class PerkScreen extends AbstractContainerScreen<PerkMenu> {
                 effectY + 4,
                 0xFFFFFFFF
         );
+
+        return diff;
     }
 
     @Override
@@ -920,41 +936,16 @@ public class PerkScreen extends AbstractContainerScreen<PerkMenu> {
             double mouseY,
             int button
     ) {
-        UpgradeScrolls.LOGGER.debug(
-                "[PerkScreen] 1 Clicked At: {}, {}",
-                mouseX,
-                mouseY
-        );
 
-//        if (super.mouseClicked(mouseX, mouseY, button)) {
-//            return true;
-//        }
-
-        UpgradeScrolls.LOGGER.debug(
-                "[PerkScreen] 2 Clicked At: {}, {}",
-                mouseX,
-                mouseY
-        );
+        super.mouseClicked(mouseX, mouseY, button);
 
         if (button != 0) {
             return false;
         }
 
-        UpgradeScrolls.LOGGER.debug(
-                "[PerkScreen] 3 Clicked At: {}, {}",
-                mouseX,
-                mouseY
-        );
-
         if (!submenuOpen) {
             return false;
         }
-
-        UpgradeScrolls.LOGGER.debug(
-                "[PerkScreen] 4 Clicked At: {}, {}",
-                mouseX,
-                mouseY
-        );
 
         /*
          * Match the exact coordinates used
