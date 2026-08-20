@@ -8,7 +8,6 @@ import dot.lighteater.lights_perks.helpers.EquipmentType;
 import dot.lighteater.lights_perks.skill.SkillData;
 import dot.lighteater.lights_perks.skill.SkillLevelData;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.gui.screens.inventory.InventoryScreen;
@@ -33,6 +32,12 @@ public class PerkScreen extends AbstractContainerScreen<PerkMenu> {
     private boolean submenuOpen = false;
     private SkillData selectedSkill = null;
 
+    private int skillPage = 0;
+    private int skillLevelPage = 0;
+
+    private static final int SKILLS_PER_PAGE = 4;
+    private static final int LEVELS_PER_PAGE = 3;
+
     private List<SkillData> testSkills = List.of(
             new SkillData("Attack Up",0xFF7A3030, 5, 3, 1,
                     List.of(
@@ -54,6 +59,13 @@ public class PerkScreen extends AbstractContainerScreen<PerkMenu> {
                                     false,
                                     "+15 Attack Damage",
                                     "+10% Attack Speed"
+                            ),
+
+                            new SkillLevelData(
+                                    4,
+                                    true,
+                                    "+25 Attack Damage",
+                                    "+120% Attack Speed"
                             )
                     ), Map.of(EquipmentType.HELMET, 1, EquipmentType.CHESTPLATE, 0)),
             new SkillData("Defense Up",0xFF7A4030, 8, 4, 0,
@@ -78,6 +90,64 @@ public class PerkScreen extends AbstractContainerScreen<PerkMenu> {
                                     "+10% Attack Speed"
                             )
                     ), Map.of(EquipmentType.HELMET, 1, EquipmentType.CHESTPLATE, 0)),
+            new SkillData("Light's Guidance",0xFF707070, 8, 2, 3,
+                    List.of(
+                            new SkillLevelData(
+                                    1,
+                                    false,
+                                    "+5 Attack Damage"
+                            ),
+
+                            new SkillLevelData(
+                                    2,
+                                    false,
+                                    "+10 Attack Damage",
+                                    "+5% Attack Speed"
+                            ),
+
+                            new SkillLevelData(
+                                    3,
+                                    false,
+                                    "+15 Attack Damage",
+                                    "+10% Attack Speed"
+                            ),
+
+                            new SkillLevelData(
+                                    4,
+                                    false,
+                                    "+10 Attack Damage",
+                                    "+5% Attack Speed"
+                            ),
+
+                            new SkillLevelData(
+                                    5,
+                                    false,
+                                    "+10 Attack Damage",
+                                    "+5% Attack Speed"
+                            ),
+
+                            new SkillLevelData(
+                                    6,
+                                    true,
+                                    "+10 Attack Damage",
+                                    "+5% Attack Speed"
+                            ),
+
+                            new SkillLevelData(
+                                    7,
+                                    true,
+                                    "+10 Attack Damage",
+                                    "+5% Attack Speed"
+                            ),
+
+                            new SkillLevelData(
+                                    8,
+                                    true,
+                                    "+10 Attack Damage",
+                                    "+5% Attack Speed"
+                            )
+
+                    ), Map.of(EquipmentType.HELMET, 1, EquipmentType.CHESTPLATE, 0)),
             new SkillData("Recovery",0xFF7A7020, 3, 2, 0,
                     List.of(
                             new SkillLevelData(
@@ -99,7 +169,7 @@ public class PerkScreen extends AbstractContainerScreen<PerkMenu> {
                                     "+15 Attack Damage",
                                     "+10% Attack Speed"
                             )
-                    ), Map.of(EquipmentType.HELMET, 1, EquipmentType.CHESTPLATE, 0)),
+                    ), Map.of(EquipmentType.HELMET, 2, EquipmentType.LEGGINGS, 1, EquipmentType.MAIN_HAND, 2)),
             new SkillData("Critical Eye",0xFF7A1010, 4, 1, 2,
                     List.of(
                             new SkillLevelData(
@@ -244,8 +314,11 @@ public class PerkScreen extends AbstractContainerScreen<PerkMenu> {
         int y = topPos + 20;
 
         /*
-         * Submenu background
+         * =========================
+         * SUBMENU BACKGROUND
+         * =========================
          */
+
         graphics.fill(
                 x,
                 y,
@@ -263,8 +336,11 @@ public class PerkScreen extends AbstractContainerScreen<PerkMenu> {
         );
 
         /*
-         * Title
+         * =========================
+         * TITLE
+         * =========================
          */
+
         graphics.drawString(
                 font,
                 "Perks",
@@ -274,17 +350,32 @@ public class PerkScreen extends AbstractContainerScreen<PerkMenu> {
         );
 
         /*
-         * Four perk boxes
+         * =========================
+         * SKILL BOXES
+         * =========================
          */
+
         int boxX = x + 6;
         int boxY = y + 22;
         int boxWidth = width - 12;
         int boxHeight = 30;
         int spacing = 3;
 
-        for (int i = 0; i < 4; i++) {
+        int startIndex =
+                skillPage * SKILLS_PER_PAGE;
 
-            int currentY = boxY + i * (boxHeight + spacing);
+        int endIndex =
+                Math.min(
+                        startIndex + SKILLS_PER_PAGE,
+                        testSkills.size()
+                );
+
+        for (int i = startIndex; i < endIndex; i++) {
+
+            int pageIndex = i - startIndex;
+
+            int currentY =
+                    boxY + pageIndex * (boxHeight + spacing);
 
             renderPerkBox(
                     testSkills.get(i),
@@ -294,6 +385,82 @@ public class PerkScreen extends AbstractContainerScreen<PerkMenu> {
                     boxWidth,
                     boxHeight,
                     i
+            );
+        }
+
+        /*
+         * =========================
+         * PAGE BUTTONS
+         * =========================
+         */
+
+        int pageCount =
+                (int) Math.ceil(
+                        (double) testSkills.size()
+                                / SKILLS_PER_PAGE
+                );
+
+        if (pageCount > 1) {
+
+            renderPageButtons(
+                    graphics,
+                    x,
+                    y + height - 13,
+                    width,
+                    pageCount,
+                    skillPage
+            );
+        }
+    }
+
+    private void renderPageButtons(
+            GuiGraphics graphics,
+            int x,
+            int y,
+            int width,
+            int pageCount,
+            int currentPage
+    ) {
+        int buttonSize = 7;
+        int spacing = 2;
+
+        int totalWidth =
+                pageCount * buttonSize
+                        + (pageCount - 1) * spacing;
+
+        int startX =
+                x + (width - totalWidth) / 2;
+
+        for (int i = 0; i < pageCount; i++) {
+
+            int buttonX =
+                    startX + i * (buttonSize + spacing);
+
+            boolean selected =
+                    i == currentPage;
+
+            /*
+             * Border
+             */
+            graphics.fill(
+                    buttonX,
+                    y,
+                    buttonX + buttonSize,
+                    y + buttonSize,
+                    0xFF080808
+            );
+
+            /*
+             * Interior
+             */
+            graphics.fill(
+                    buttonX + 1,
+                    y + 1,
+                    buttonX + buttonSize - 1,
+                    y + buttonSize - 1,
+                    selected
+                            ? 0xFFFFFFFF
+                            : 0xFF707070
             );
         }
     }
@@ -575,7 +742,7 @@ public class PerkScreen extends AbstractContainerScreen<PerkMenu> {
         }
 
         int width = 150;
-        int height = 280;
+        int height = 180;
 
         /*
          * Place it immediately to the right
@@ -650,7 +817,7 @@ public class PerkScreen extends AbstractContainerScreen<PerkMenu> {
                 graphics,
                 skillData,
                 x + 6,
-                y + 68,
+                y + 53,
                 width - 12
         );
     }
@@ -670,7 +837,7 @@ public class PerkScreen extends AbstractContainerScreen<PerkMenu> {
         int boxWidth =
                 (width - spacing * (columns - 1)) / columns;
 
-        int boxHeight = 18;
+        int boxHeight = 12;
 
         /*
          * Equipment order in the UI.
@@ -800,9 +967,18 @@ public class PerkScreen extends AbstractContainerScreen<PerkMenu> {
         int currentLevel =
                 skillData.currLevel;
 
+        int startIndex =
+                skillLevelPage * LEVELS_PER_PAGE;
+
+        int endIndex =
+                Math.min(
+                        startIndex + LEVELS_PER_PAGE,
+                        skillData.levels.size()
+                );
+
         int currentY = y;
 
-        for (int i = 0; i < skillData.levels.size(); i++) {
+        for (int i = startIndex; i < endIndex; i++) {
 
             SkillLevelData level =
                     skillData.levels.get(i);
@@ -819,10 +995,38 @@ public class PerkScreen extends AbstractContainerScreen<PerkMenu> {
                     width
             );
 
+            currentY += (30 + diff);
+        }
+
+        /*
+         * =========================
+         * LEVEL PAGE BUTTONS
+         * =========================
+         */
+
+        int pageCount =
+                (int) Math.ceil(
+                        (double) skillData.levels.size()
+                                / LEVELS_PER_PAGE
+                );
+
+        if (pageCount > 1) {
+
             /*
-             * Move down for the next level.
+             * Put the buttons underneath
+             * the displayed levels.
              */
-            currentY += (40 + diff);
+            int buttonY =
+                    y + 105;
+
+            renderPageButtons(
+                    graphics,
+                    x,
+                    buttonY,
+                    width,
+                    pageCount,
+                    skillLevelPage
+            );
         }
     }
 
@@ -912,7 +1116,6 @@ public class PerkScreen extends AbstractContainerScreen<PerkMenu> {
             diff += 8;
         }
 
-
         /*
          * =========================
          * DIVIDER
@@ -963,17 +1166,32 @@ public class PerkScreen extends AbstractContainerScreen<PerkMenu> {
         int boxHeight = 30;
         int spacing = 3;
 
-        for (int i = 0; i < testSkills.size(); i++) {
+        int startIndex =
+                skillPage * SKILLS_PER_PAGE;
+
+        int endIndex =
+                Math.min(
+                        startIndex + SKILLS_PER_PAGE,
+                        testSkills.size()
+                );
+
+        for (int i = startIndex; i < endIndex; i++) {
+
+            int pageIndex =
+                    i - startIndex;
 
             int currentY =
-                    boxY + i * (boxHeight + spacing);
+                    boxY + pageIndex * (boxHeight + spacing);
 
             if (mouseX >= boxX
                     && mouseX < boxX + boxWidth
                     && mouseY >= currentY
                     && mouseY < currentY + boxHeight) {
 
-                selectedSkill = testSkills.get(i);
+                selectedSkill =
+                        testSkills.get(i);
+
+                skillLevelPage = 0;
 
                 UpgradeScrolls.LOGGER.debug(
                         "[PerkScreen] Selected skill: {}",
@@ -981,6 +1199,130 @@ public class PerkScreen extends AbstractContainerScreen<PerkMenu> {
                 );
 
                 return true;
+            }
+        }
+
+        int pageCount =
+                (int) Math.ceil(
+                        (double) testSkills.size()
+                                / SKILLS_PER_PAGE
+                );
+
+        if (pageCount > 1) {
+
+            int buttonSize = 7;
+            int pageSpacing = 2;
+
+            int buttonY =
+                    y + height - 13;
+
+            int totalWidth =
+                    pageCount * buttonSize
+                            + (pageCount - 1) * pageSpacing;
+
+            int startX =
+                    x + (width - totalWidth) / 2;
+
+            for (int page = 0; page < pageCount; page++) {
+
+                int buttonX =
+                        startX + page * (buttonSize + pageSpacing);
+
+                if (mouseX >= buttonX
+                        && mouseX < buttonX + buttonSize
+                        && mouseY >= buttonY
+                        && mouseY < buttonY + buttonSize) {
+
+                    skillPage = page;
+
+                    /*
+                     * If the currently selected skill isn't
+                     * on the new page, deselect it.
+                     */
+                    if (selectedSkill != null) {
+
+                        int selectedIndex =
+                                testSkills.indexOf(selectedSkill);
+
+                        int newPageStart =
+                                skillPage * SKILLS_PER_PAGE;
+
+                        int newPageEnd =
+                                Math.min(
+                                        newPageStart + SKILLS_PER_PAGE,
+                                        testSkills.size()
+                                );
+
+                        if (selectedIndex < newPageStart
+                                || selectedIndex >= newPageEnd) {
+
+                            selectedSkill = null;
+                        }
+                    }
+
+                    return true;
+                }
+            }
+        }
+
+        if (selectedSkill != null) {
+
+            int skillWidth = 150;
+            int skillHeight = 280;
+
+            int skillX =
+                    leftPos + imageWidth + 4;
+
+            int skillY =
+                    topPos + 20;
+
+            int levelsX =
+                    skillX + 6;
+
+            int levelsY =
+                    skillY + 53;
+
+            int levelsWidth =
+                    skillWidth - 12;
+
+            int pageLevelsCount =
+                    (int) Math.ceil(
+                            (double) selectedSkill.levels.size()
+                                    / LEVELS_PER_PAGE
+                    );
+
+            if (pageLevelsCount > 1) {
+
+                int buttonSize = 7;
+                int pageSpacing = 2;
+
+                int buttonY =
+                        levelsY + 105;
+
+                int totalWidth =
+                        pageLevelsCount * buttonSize
+                                + (pageLevelsCount - 1) * pageSpacing;
+
+                int startX =
+                        levelsX
+                                + (levelsWidth - totalWidth) / 2;
+
+                for (int page = 0; page < pageLevelsCount; page++) {
+
+                    int buttonX =
+                            startX
+                                    + page * (buttonSize + pageSpacing);
+
+                    if (mouseX >= buttonX
+                            && mouseX < buttonX + buttonSize
+                            && mouseY >= buttonY
+                            && mouseY < buttonY + buttonSize) {
+
+                        skillLevelPage = page;
+
+                        return true;
+                    }
+                }
             }
         }
 
