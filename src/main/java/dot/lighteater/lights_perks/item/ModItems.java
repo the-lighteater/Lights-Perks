@@ -1,6 +1,7 @@
 package dot.lighteater.lights_perks.item;
 
 import dot.lighteater.lights_perks.UpgradeScrolls;
+import dot.lighteater.lights_perks.item.custom.AttackPerkItem;
 import dot.lighteater.lights_perks.item.custom.StrengthPerkItem;
 import net.minecraft.world.item.*;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -15,6 +16,9 @@ public class ModItems {
 
     public static final RegistryObject<Item> STRENGTH_PERK = ITEMS.register("strength_perk",
             () -> new StrengthPerkItem(new Item.Properties()));
+
+    public static final RegistryObject<Item> ATTACK_UP_PERK = ITEMS.register("attack_up_perk",
+            () -> new AttackPerkItem(new Item.Properties()));
 
 
     public static void register(IEventBus eventBus) {

@@ -5,8 +5,7 @@ import dot.lighteater.lights_perks.ClientConfig;
 import dot.lighteater.lights_perks.ModKeyBindings;
 import dot.lighteater.lights_perks.UpgradeScrolls;
 import dot.lighteater.lights_perks.helpers.EquipmentType;
-import dot.lighteater.lights_perks.skill.SkillData;
-import dot.lighteater.lights_perks.skill.SkillLevelData;
+import dot.lighteater.lights_perks.skill.*;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
@@ -18,8 +17,8 @@ import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 public class PerkScreen extends AbstractContainerScreen<PerkMenu> {
 
@@ -29,6 +28,8 @@ public class PerkScreen extends AbstractContainerScreen<PerkMenu> {
                     "textures/gui/container/inventory.png"
             );
 
+    List<SkillData> skills;
+
     private boolean submenuOpen = false;
     private SkillData selectedSkill = null;
 
@@ -37,183 +38,6 @@ public class PerkScreen extends AbstractContainerScreen<PerkMenu> {
 
     private static final int SKILLS_PER_PAGE = 4;
     private static final int LEVELS_PER_PAGE = 3;
-
-    private List<SkillData> testSkills = List.of(
-            new SkillData("Attack Up",0xFF7A3030, 5, 3, 1,
-                    List.of(
-                            new SkillLevelData(
-                                    1,
-                                    false,
-                                    "+5 Attack Damage"
-                            ),
-
-                            new SkillLevelData(
-                                    2,
-                                    false,
-                                    "+10 Attack Damage",
-                                    "+5% Attack Speed"
-                            ),
-
-                            new SkillLevelData(
-                                    3,
-                                    false,
-                                    "+15 Attack Damage",
-                                    "+10% Attack Speed"
-                            ),
-
-                            new SkillLevelData(
-                                    4,
-                                    true,
-                                    "+25 Attack Damage",
-                                    "+120% Attack Speed"
-                            )
-                    ), Map.of(EquipmentType.HELMET, 1, EquipmentType.CHESTPLATE, 0)),
-            new SkillData("Defense Up",0xFF7A4030, 8, 4, 0,
-                    List.of(
-                            new SkillLevelData(
-                                    1,
-                                    false,
-                                    "+5 Attack Damage"
-                            ),
-
-                            new SkillLevelData(
-                                    2,
-                                    false,
-                                    "+10 Attack Damage",
-                                    "+5% Attack Speed"
-                            ),
-
-                            new SkillLevelData(
-                                    3,
-                                    false,
-                                    "+15 Attack Damage",
-                                    "+10% Attack Speed"
-                            )
-                    ), Map.of(EquipmentType.HELMET, 1, EquipmentType.CHESTPLATE, 0)),
-            new SkillData("Light's Guidance",0xFF707070, 8, 2, 3,
-                    List.of(
-                            new SkillLevelData(
-                                    1,
-                                    false,
-                                    "+5 Attack Damage"
-                            ),
-
-                            new SkillLevelData(
-                                    2,
-                                    false,
-                                    "+10 Attack Damage",
-                                    "+5% Attack Speed"
-                            ),
-
-                            new SkillLevelData(
-                                    3,
-                                    false,
-                                    "+15 Attack Damage",
-                                    "+10% Attack Speed"
-                            ),
-
-                            new SkillLevelData(
-                                    4,
-                                    false,
-                                    "+10 Attack Damage",
-                                    "+5% Attack Speed"
-                            ),
-
-                            new SkillLevelData(
-                                    5,
-                                    false,
-                                    "+10 Attack Damage",
-                                    "+5% Attack Speed"
-                            ),
-
-                            new SkillLevelData(
-                                    6,
-                                    true,
-                                    "+10 Attack Damage",
-                                    "+5% Attack Speed"
-                            ),
-
-                            new SkillLevelData(
-                                    7,
-                                    true,
-                                    "+10 Attack Damage",
-                                    "+5% Attack Speed"
-                            ),
-
-                            new SkillLevelData(
-                                    8,
-                                    true,
-                                    "+10 Attack Damage",
-                                    "+5% Attack Speed"
-                            )
-
-                    ), Map.of(EquipmentType.HELMET, 1, EquipmentType.CHESTPLATE, 0)),
-            new SkillData("Recovery",0xFF7A7020, 3, 2, 0,
-                    List.of(
-                            new SkillLevelData(
-                                    1,
-                                    false,
-                                    "+5 Attack Damage"
-                            ),
-
-                            new SkillLevelData(
-                                    2,
-                                    false,
-                                    "+10 Attack Damage",
-                                    "+5% Attack Speed"
-                            ),
-
-                            new SkillLevelData(
-                                    3,
-                                    false,
-                                    "+15 Attack Damage",
-                                    "+10% Attack Speed"
-                            )
-                    ), Map.of(EquipmentType.HELMET, 2, EquipmentType.LEGGINGS, 1, EquipmentType.MAIN_HAND, 2)),
-            new SkillData("Critical Eye",0xFF7A1010, 4, 1, 2,
-                    List.of(
-                            new SkillLevelData(
-                                    1,
-                                    false,
-                                    "+5 Attack Damage"
-                            ),
-
-                            new SkillLevelData(
-                                    2,
-                                    false,
-                                    "+10 Attack Damage",
-                                    "+5% Attack Speed"
-                            ),
-
-                            new SkillLevelData(
-                                    3,
-                                    false,
-                                    "+15 Attack Damage",
-                                    "+10% Attack Speed"
-                            ),
-
-                            new SkillLevelData(
-                                    4,
-                                    false,
-                                    "+15 Attack Damage",
-                                    "+10% Attack Speed"
-                            ),
-
-                            new SkillLevelData(
-                                    5,
-                                    true,
-                                    "+15 Attack Damage",
-                                    "+10% Attack Speed"
-                            ),
-
-                            new SkillLevelData(
-                                    6,
-                                    true,
-                                    "+15 Attack Damage",
-                                    "+10% Attack Speed"
-                            )
-                    ), Map.of(EquipmentType.HELMET, 1, EquipmentType.CHESTPLATE, 0))
-    );
 
     public PerkScreen(
             PerkMenu menu,
@@ -234,6 +58,8 @@ public class PerkScreen extends AbstractContainerScreen<PerkMenu> {
             float partialTick
     ) {
         super.render(graphics, mouseX, mouseY, partialTick);
+
+        skills = new ArrayList<>(SkillManager.getAllSkills());
 
         renderEquipmentItems(graphics);
 
@@ -367,7 +193,7 @@ public class PerkScreen extends AbstractContainerScreen<PerkMenu> {
         int endIndex =
                 Math.min(
                         startIndex + SKILLS_PER_PAGE,
-                        testSkills.size()
+                        skills.size()
                 );
 
         for (int i = startIndex; i < endIndex; i++) {
@@ -378,7 +204,7 @@ public class PerkScreen extends AbstractContainerScreen<PerkMenu> {
                     boxY + pageIndex * (boxHeight + spacing);
 
             renderPerkBox(
-                    testSkills.get(i),
+                    skills.get(i),
                     graphics,
                     boxX,
                     currentY,
@@ -396,7 +222,7 @@ public class PerkScreen extends AbstractContainerScreen<PerkMenu> {
 
         int pageCount =
                 (int) Math.ceil(
-                        (double) testSkills.size()
+                        (double) skills.size()
                                 / SKILLS_PER_PAGE
                 );
 
@@ -504,7 +330,10 @@ public class PerkScreen extends AbstractContainerScreen<PerkMenu> {
                 innerY,
                 innerX + innerWidth,
                 innerY + innerHeight,
-                skillData.color
+                (int) Long.parseLong(
+                skillData.color.replace("0x", ""),
+                16
+                )
         );
 
         /*
@@ -589,7 +418,7 @@ public class PerkScreen extends AbstractContainerScreen<PerkMenu> {
         int currentLevel = Math.max(
                 0,
                 Math.min(
-                        skillData.currLevel,
+                        skillData.getCurrentLevel(),
                         normalLevels
                 )
         );
@@ -698,7 +527,10 @@ public class PerkScreen extends AbstractContainerScreen<PerkMenu> {
                  * Normal level that has not
                  * been purchased yet.
                  */
-                innerColor = skillData.color;
+                innerColor = (int) Long.parseLong(
+                        skillData.color.replace("0x", ""),
+                        16
+                );
             }
 
 
@@ -883,7 +715,7 @@ public class PerkScreen extends AbstractContainerScreen<PerkMenu> {
              * automatically has 0 points.
              */
             int equipmentLevel =
-                    skillData.points.getOrDefault(
+                    skillData.getPoints().getOrDefault(
                             equipmentType,
                             0
                     );
@@ -965,7 +797,7 @@ public class PerkScreen extends AbstractContainerScreen<PerkMenu> {
             int width
     ) {
         int currentLevel =
-                skillData.currLevel;
+                skillData.getCurrentLevel();
 
         int startIndex =
                 skillLevelPage * LEVELS_PER_PAGE;
@@ -1172,7 +1004,7 @@ public class PerkScreen extends AbstractContainerScreen<PerkMenu> {
         int endIndex =
                 Math.min(
                         startIndex + SKILLS_PER_PAGE,
-                        testSkills.size()
+                        skills.size()
                 );
 
         for (int i = startIndex; i < endIndex; i++) {
@@ -1189,7 +1021,7 @@ public class PerkScreen extends AbstractContainerScreen<PerkMenu> {
                     && mouseY < currentY + boxHeight) {
 
                 selectedSkill =
-                        testSkills.get(i);
+                        skills.get(i);
 
                 skillLevelPage = 0;
 
@@ -1204,7 +1036,7 @@ public class PerkScreen extends AbstractContainerScreen<PerkMenu> {
 
         int pageCount =
                 (int) Math.ceil(
-                        (double) testSkills.size()
+                        (double) skills.size()
                                 / SKILLS_PER_PAGE
                 );
 
@@ -1242,7 +1074,7 @@ public class PerkScreen extends AbstractContainerScreen<PerkMenu> {
                     if (selectedSkill != null) {
 
                         int selectedIndex =
-                                testSkills.indexOf(selectedSkill);
+                                skills.indexOf(selectedSkill);
 
                         int newPageStart =
                                 skillPage * SKILLS_PER_PAGE;
@@ -1250,7 +1082,7 @@ public class PerkScreen extends AbstractContainerScreen<PerkMenu> {
                         int newPageEnd =
                                 Math.min(
                                         newPageStart + SKILLS_PER_PAGE,
-                                        testSkills.size()
+                                        skills.size()
                                 );
 
                         if (selectedIndex < newPageStart

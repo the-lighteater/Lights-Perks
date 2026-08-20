@@ -73,12 +73,6 @@ public class ModEvents {
             if (socketItem.isEmpty()) continue;
 
             if (socketItem.getItem() instanceof IPerkItem perkItem) {
-
-                Perk perk = PerkRegistry.get(perkItem.getPerkId());
-
-                if (perk != null) {
-                    perk.apply(player, perkItem.getLevel(socketItem));
-                }
             }
         }
     }

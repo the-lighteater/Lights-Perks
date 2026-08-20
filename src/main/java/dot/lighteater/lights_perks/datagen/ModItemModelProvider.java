@@ -22,6 +22,7 @@ public class ModItemModelProvider extends ItemModelProvider {
     @Override
     protected void registerModels() {
         simpleItem(ModItems.STRENGTH_PERK);
+        simpleItem(ModItems.ATTACK_UP_PERK);
     }
 
     private ItemModelBuilder simpleItem(RegistryObject<Item> item) {

@@ -1,12 +1,16 @@
 package dot.lighteater.lights_perks.skill;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class SkillLevelData {
 
-    public final int level;
-    public final List<String> effects;
-    public final boolean bonus;
+    public int level;
+    public boolean bonus;
+    public List<String> effects;
+
+    public SkillLevelData() {
+    }
 
     public SkillLevelData(
             int level,

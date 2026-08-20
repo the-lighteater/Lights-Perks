@@ -4,6 +4,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 
 public interface IPerkItem {
-    ResourceLocation getPerkId();
-    int getLevel(ItemStack stack);
+    ResourceLocation getSkillId();
+    int getSkillPoints();
+    int getLevel();
 }

@@ -3,22 +3,20 @@ package dot.lighteater.lights_perks.item.custom;
 import dot.lighteater.lights_perks.perk.IPerkItem;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
 
-public class StrengthPerkItem extends Item implements IPerkItem {
-
-    public StrengthPerkItem(Properties props) {
-        super(props);
+public class AttackPerkItem extends Item implements IPerkItem {
+    public AttackPerkItem(Properties pProperties) {
+        super(pProperties);
     }
 
     @Override
     public ResourceLocation getSkillId() {
-        return null;
+        return new ResourceLocation("lights_perks", "attack_up");
     }
 
     @Override
     public int getSkillPoints() {
-        return 0;
+        return 1;
     }
 
     @Override
