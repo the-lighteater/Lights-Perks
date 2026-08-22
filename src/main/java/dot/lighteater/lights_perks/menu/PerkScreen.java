@@ -41,7 +41,12 @@ public class PerkScreen extends AbstractContainerScreen<PerkMenu> {
     private static final int SKILLS_PER_PAGE = 4;
     private static final int LEVELS_PER_PAGE = 3;
 
-    private static Map<ResourceLocation, Integer> points = null;
+    private Map<ResourceLocation, Integer> points =
+            new HashMap<>();
+
+    private Map<ResourceLocation, Map<EquipmentType, Integer>>
+            equipmentPoints =
+            new HashMap<>();
 
 
     public PerkScreen(
@@ -69,11 +74,25 @@ public class PerkScreen extends AbstractContainerScreen<PerkMenu> {
         Minecraft minecraft = Minecraft.getInstance();
 
         if (minecraft.player != null) {
-            points = new HashMap<>(
+
+            Map<ResourceLocation, Integer> current =
                     SkillManager.getPlayerSkillPoints(
                             minecraft.player
-                    )
-            );
+                    );
+
+            if (!current.equals(points)) {
+                points = new HashMap<>(current);
+            }
+
+            Map<ResourceLocation, Map<EquipmentType, Integer>> currentEquipmentPoints =
+                    SkillManager.getPlayerSkillPointsByEquipment(
+                            minecraft.player
+                    );
+
+            if (!currentEquipmentPoints.equals(equipmentPoints)) {
+                equipmentPoints =
+                        new HashMap<>(currentEquipmentPoints);
+            }
         }
 
         renderEquipmentItems(graphics);
@@ -736,8 +755,17 @@ public class PerkScreen extends AbstractContainerScreen<PerkMenu> {
              * that isn't present in the map
              * automatically has 0 points.
              */
+            ResourceLocation skillId =
+                    new ResourceLocation(skillData.skill_id);
+
+            Map<EquipmentType, Integer> skillEquipmentPoints =
+                    equipmentPoints.getOrDefault(
+                            skillId,
+                            Map.of()
+                    );
+
             int equipmentLevel =
-                    skillData.getPoints().getOrDefault(
+                    skillEquipmentPoints.getOrDefault(
                             equipmentType,
                             0
                     );

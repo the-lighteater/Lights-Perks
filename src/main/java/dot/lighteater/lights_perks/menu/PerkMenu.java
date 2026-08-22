@@ -109,12 +109,8 @@ public class PerkMenu extends AbstractContainerMenu {
 
     @Override
     public ItemStack quickMoveStack(Player player, int index) {
-        /*
-        Slot slot = slots.get(index);
 
-        if (!slot.hasItem()) {
-            return ItemStack.EMPTY;
-        }
+        Slot slot = slots.get(index);
 
         ItemStack stack = slot.getItem();
         ItemStack copy = stack.copy();
@@ -156,8 +152,6 @@ public class PerkMenu extends AbstractContainerMenu {
         }
 
         return copy;
-        */
-        return ItemStack.EMPTY;
     }
 
     @Override

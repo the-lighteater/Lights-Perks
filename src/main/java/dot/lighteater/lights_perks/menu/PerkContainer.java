@@ -179,7 +179,6 @@ public class PerkContainer implements Container {
 
     @Override
     public void setChanged() {
-        // Container/menu synchronization handles this.
     }
 
     @Override

@@ -152,6 +152,136 @@ public class SkillManager {
                 .getOrDefault(skillId, 0);
     }
 
+    public static Map<ResourceLocation, Map<EquipmentType, Integer>>
+        getPlayerSkillPointsByEquipment(Player player) {
+
+        Map<ResourceLocation, Map<EquipmentType, Integer>> points =
+                new HashMap<>();
+
+        /*
+         * Main hand
+         */
+        addEquipmentPointsByEquipment(
+                player.getMainHandItem(),
+                EquipmentType.MAIN_HAND,
+                points
+        );
+
+        /*
+         * Off hand
+         */
+        addEquipmentPointsByEquipment(
+                player.getOffhandItem(),
+                EquipmentType.OFF_HAND,
+                points
+        );
+
+        /*
+         * Armor
+         */
+        addEquipmentPointsByEquipment(
+                player.getInventory().armor.get(3),
+                EquipmentType.HELMET,
+                points
+        );
+
+        addEquipmentPointsByEquipment(
+                player.getInventory().armor.get(2),
+                EquipmentType.CHESTPLATE,
+                points
+        );
+
+        addEquipmentPointsByEquipment(
+                player.getInventory().armor.get(1),
+                EquipmentType.LEGGINGS,
+                points
+        );
+
+        addEquipmentPointsByEquipment(
+                player.getInventory().armor.get(0),
+                EquipmentType.BOOTS,
+                points
+        );
+
+        return points;
+    }
+
+    private static void addEquipmentPointsByEquipment(
+            ItemStack equipment,
+            EquipmentType equipmentType,
+            Map<ResourceLocation, Map<EquipmentType, Integer>> points
+    ) {
+        if (equipment.isEmpty()) {
+            return;
+        }
+
+        CompoundTag tag = equipment.getTag();
+
+        if (tag == null ||
+                !tag.contains(SOCKETS_TAG, Tag.TAG_LIST)) {
+            return;
+        }
+
+        ListTag sockets =
+                tag.getList(
+                        SOCKETS_TAG,
+                        Tag.TAG_COMPOUND
+                );
+
+        for (int i = 0; i < sockets.size(); i++) {
+
+            CompoundTag socket =
+                    sockets.getCompound(i);
+
+            if (!socket.contains(
+                    ITEM_TAG,
+                    Tag.TAG_COMPOUND
+            )) {
+                continue;
+            }
+
+            ItemStack perkStack =
+                    ItemStack.of(
+                            socket.getCompound(ITEM_TAG)
+                    );
+
+            if (perkStack.isEmpty()) {
+                continue;
+            }
+
+            if (!(perkStack.getItem()
+                    instanceof IPerkItem perkItem)) {
+                continue;
+            }
+
+            ResourceLocation skillId =
+                    perkItem.getSkillId();
+
+            int skillPoints =
+                    perkItem.getSkillPoints();
+
+            /*
+             * Get the equipment map for this skill.
+             * If it doesn't exist yet, create it.
+             */
+            Map<EquipmentType, Integer> equipmentPoints =
+                    points.computeIfAbsent(
+                            skillId,
+                            id -> new HashMap<>()
+                    );
+
+            /*
+             * Add this perk's points to the
+             * appropriate equipment slot.
+             */
+            equipmentPoints.merge(
+                    equipmentType,
+                    skillPoints,
+                    Integer::sum
+            );
+        }
+    }
+
 
     /*
      * =========================================================

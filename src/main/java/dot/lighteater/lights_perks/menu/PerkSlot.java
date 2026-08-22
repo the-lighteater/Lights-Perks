@@ -47,4 +47,8 @@ public class PerkSlot extends Slot {
         return perkContainer.hasEquipment();
     }
 
+    @Override
+    public int getMaxStackSize() {
+        return 1;
+    }
 }
