@@ -224,12 +224,30 @@ public class SkillManager {
                     Integer::sum
             );
 
+//            UpgradeScrolls.LOGGER.debug(
+//                    "[SkillManager] {} provides {} point(s) to {} from {}",
+//                    perkStack.getItem(),
+//                    skillPoints,
+//                    skillId,
+//                    equipmentType
+//            );
+        }
+    }
+
+    private static Map<ResourceLocation, Integer> debugPoints = null;
+
+    public static void debugSkills(Player player) {
+
+        Map<ResourceLocation, Integer> current =
+                getPlayerSkillPoints(player);
+
+        if (!current.equals(debugPoints)) {
+
+            debugPoints = new HashMap<>(current);
+
             UpgradeScrolls.LOGGER.debug(
-                    "[SkillManager] {} provides {} point(s) to {} from {}",
-                    perkStack.getItem(),
-                    skillPoints,
-                    skillId,
-                    equipmentType
+                    "[SkillManager] Player skill points: {}",
+                    current
             );
         }
     }

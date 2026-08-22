@@ -9,10 +9,10 @@ import java.util.Map;
 public class SkillData {
 
     public String title;
+    public String skill_id;
     public String color;
 
     public int maxLevel;
-    public int currLevel;
     public int bonusLevel;
 
     public List<SkillLevelData> levels;
@@ -24,24 +24,20 @@ public class SkillData {
 
     public SkillData(
             String title,
+            String skill_id,
             String color,
             int maxLevel,
-            int currLevel,
             int bonusLevel,
             List<SkillLevelData> levels,
             Map<EquipmentType, Integer> points
     ) {
         this.title = title;
+        this.skill_id = skill_id;
         this.color = color;
         this.maxLevel = maxLevel;
-        this.currLevel = currLevel;
         this.bonusLevel = bonusLevel;
         this.levels = levels;
         this.points = points;
-    }
-
-    public int getCurrentLevel() {
-        return Math.max(currLevel, 0);
     }
 
     public Map<EquipmentType, Integer> getPoints() {

@@ -46,4 +46,5 @@ public class PerkSlot extends Slot {
     public boolean isActive() {
         return perkContainer.hasEquipment();
     }
+
 }

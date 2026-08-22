@@ -88,9 +88,9 @@ public class SkillCalculator {
             SkillData runtimeSkill =
                     new SkillData(
                             source.title,
+                            source.skill_id,
                             source.color,
                             source.maxLevel,
-                            0,
                             source.bonusLevel,
                             source.levels,
                             new HashMap<>()
@@ -157,11 +157,11 @@ public class SkillCalculator {
             totalPoints += points;
         }
 
-        skill.currLevel =
-                Math.min(
-                        totalPoints,
-                        skill.maxLevel
-                );
+//        skill.currLevel =
+//                Math.min(
+//                        totalPoints,
+//                        skill.maxLevel
+//                );
     }
 
     private static java.util.List<ItemStack> getPerkItems(

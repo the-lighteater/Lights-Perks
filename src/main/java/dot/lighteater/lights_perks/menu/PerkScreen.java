@@ -18,7 +18,9 @@ import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class PerkScreen extends AbstractContainerScreen<PerkMenu> {
 
@@ -38,6 +40,9 @@ public class PerkScreen extends AbstractContainerScreen<PerkMenu> {
 
     private static final int SKILLS_PER_PAGE = 4;
     private static final int LEVELS_PER_PAGE = 3;
+
+    private static Map<ResourceLocation, Integer> points = null;
+
 
     public PerkScreen(
             PerkMenu menu,
@@ -60,6 +65,16 @@ public class PerkScreen extends AbstractContainerScreen<PerkMenu> {
         super.render(graphics, mouseX, mouseY, partialTick);
 
         skills = new ArrayList<>(SkillManager.getAllSkills());
+
+        Minecraft minecraft = Minecraft.getInstance();
+
+        if (minecraft.player != null) {
+            points = new HashMap<>(
+                    SkillManager.getPlayerSkillPoints(
+                            minecraft.player
+                    )
+            );
+        }
 
         renderEquipmentItems(graphics);
 
@@ -187,24 +202,28 @@ public class PerkScreen extends AbstractContainerScreen<PerkMenu> {
         int boxHeight = 30;
         int spacing = 3;
 
+        List<SkillData> visibleSkills =
+                getVisibleSkills();
+
         int startIndex =
                 skillPage * SKILLS_PER_PAGE;
 
         int endIndex =
                 Math.min(
                         startIndex + SKILLS_PER_PAGE,
-                        skills.size()
+                        visibleSkills.size()
                 );
 
         for (int i = startIndex; i < endIndex; i++) {
 
-            int pageIndex = i - startIndex;
+            int pageIndex =
+                    i - startIndex;
 
             int currentY =
                     boxY + pageIndex * (boxHeight + spacing);
 
             renderPerkBox(
-                    skills.get(i),
+                    visibleSkills.get(i),
                     graphics,
                     boxX,
                     currentY,
@@ -222,7 +241,7 @@ public class PerkScreen extends AbstractContainerScreen<PerkMenu> {
 
         int pageCount =
                 (int) Math.ceil(
-                        (double) skills.size()
+                        (double) visibleSkills.size()
                                 / SKILLS_PER_PAGE
                 );
 
@@ -418,7 +437,10 @@ public class PerkScreen extends AbstractContainerScreen<PerkMenu> {
         int currentLevel = Math.max(
                 0,
                 Math.min(
-                        skillData.getCurrentLevel(),
+                        points.getOrDefault(
+                                new ResourceLocation(skillData.skill_id),
+                                0
+                        ),
                         normalLevels
                 )
         );
@@ -797,7 +819,10 @@ public class PerkScreen extends AbstractContainerScreen<PerkMenu> {
             int width
     ) {
         int currentLevel =
-                skillData.getCurrentLevel();
+                points.getOrDefault(
+                        new ResourceLocation(skillData.skill_id),
+                        0
+                );
 
         int startIndex =
                 skillLevelPage * LEVELS_PER_PAGE;
@@ -998,13 +1023,16 @@ public class PerkScreen extends AbstractContainerScreen<PerkMenu> {
         int boxHeight = 30;
         int spacing = 3;
 
+        List<SkillData> visibleSkills =
+                getVisibleSkills();
+
         int startIndex =
                 skillPage * SKILLS_PER_PAGE;
 
         int endIndex =
                 Math.min(
                         startIndex + SKILLS_PER_PAGE,
-                        skills.size()
+                        visibleSkills.size()
                 );
 
         for (int i = startIndex; i < endIndex; i++) {
@@ -1021,7 +1049,7 @@ public class PerkScreen extends AbstractContainerScreen<PerkMenu> {
                     && mouseY < currentY + boxHeight) {
 
                 selectedSkill =
-                        skills.get(i);
+                        visibleSkills.get(i);
 
                 skillLevelPage = 0;
 
@@ -1036,7 +1064,7 @@ public class PerkScreen extends AbstractContainerScreen<PerkMenu> {
 
         int pageCount =
                 (int) Math.ceil(
-                        (double) skills.size()
+                        (double) visibleSkills.size()
                                 / SKILLS_PER_PAGE
                 );
 
@@ -1074,7 +1102,7 @@ public class PerkScreen extends AbstractContainerScreen<PerkMenu> {
                     if (selectedSkill != null) {
 
                         int selectedIndex =
-                                skills.indexOf(selectedSkill);
+                                visibleSkills.indexOf(selectedSkill);
 
                         int newPageStart =
                                 skillPage * SKILLS_PER_PAGE;
@@ -1082,7 +1110,7 @@ public class PerkScreen extends AbstractContainerScreen<PerkMenu> {
                         int newPageEnd =
                                 Math.min(
                                         newPageStart + SKILLS_PER_PAGE,
-                                        skills.size()
+                                        visibleSkills.size()
                                 );
 
                         if (selectedIndex < newPageStart
@@ -1378,17 +1406,6 @@ public class PerkScreen extends AbstractContainerScreen<PerkMenu> {
         }
     }
 
-    private ItemStack getEquipmentStack(EquipmentType type) {
-        return switch (type) {
-            case HELMET -> menu.getPlayerInventory().armor.get(3);
-            case CHESTPLATE -> menu.getPlayerInventory().armor.get(2);
-            case LEGGINGS -> menu.getPlayerInventory().armor.get(1);
-            case BOOTS -> menu.getPlayerInventory().armor.get(0);
-            case MAIN_HAND -> menu.getPlayerInventory().player.getMainHandItem();
-            case OFF_HAND -> menu.getPlayerInventory().player.getOffhandItem();
-        };
-    }
-
     @Override
     protected void renderTooltip(
             GuiGraphics graphics,
@@ -1396,5 +1413,24 @@ public class PerkScreen extends AbstractContainerScreen<PerkMenu> {
             int mouseY
     ) {
         super.renderTooltip(graphics, mouseX, mouseY);
+    }
+
+    private List<SkillData> getVisibleSkills() {
+        List<SkillData> visibleSkills = new ArrayList<>();
+
+        for (SkillData skill : skills) {
+
+            ResourceLocation skillId =
+                    new ResourceLocation(skill.skill_id);
+
+            int currentLevel =
+                    points.getOrDefault(skillId, 0);
+
+            if (currentLevel > 0) {
+                visibleSkills.add(skill);
+            }
+        }
+
+        return visibleSkills;
     }
 }
