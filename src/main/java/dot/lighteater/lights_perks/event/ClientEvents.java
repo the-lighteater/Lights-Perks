@@ -24,9 +24,6 @@ public class ClientEvents {
         Minecraft minecraft = Minecraft.getInstance();
 
         while (ModKeyBindings.OPEN_PERKS.consumeClick()) {
-
-            UpgradeScrolls.LOGGER.debug("Testing opening menu");
-
             if (minecraft.player != null) {
                 ModNetwork.sendOpenPerkMenu();
             }

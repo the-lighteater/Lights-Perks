@@ -1,0 +1,57 @@
+{
+  "title": "Star Power",
+  "skill_id": "lights_perks:star_power",
+  "color": "0xFF7A6060",
+  "maxLevel": 5,
+  "bonusLevel": 1,
+
+  "levels": [
+    {
+      "level": 1,
+      "bonus": false,
+      "effects": [
+        "+5 Attack Damage"
+      ]
+    },
+    {
+      "level": 2,
+      "bonus": false,
+      "effects": [
+        "+10 Attack Damage",
+        "+5% Attack Speed"
+      ]
+    },
+    {
+      "level": 3,
+      "bonus": false,
+      "effects": [
+        "+15 Attack Damage",
+        "+10% Attack Speed"
+      ]
+    },
+    {
+      "level": 4,
+      "bonus": false,
+      "effects": [
+        "+25 Attack Damage",
+        "+120% Attack Speed"
+      ]
+    },
+    {
+      "level": 5,
+      "bonus": false,
+      "effects": [
+        "+25 Attack Damage",
+        "+120% Attack Speed"
+      ]
+    },
+    {
+      "level": 6,
+      "bonus": true,
+      "effects": [
+        "+25 Attack Damage",
+        "+120% Attack Speed"
+      ]
+    }
+  ]
+}

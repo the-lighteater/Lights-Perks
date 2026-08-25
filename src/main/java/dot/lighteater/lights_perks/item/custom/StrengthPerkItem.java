@@ -5,6 +5,8 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 
+import java.util.Map;
+
 public class StrengthPerkItem extends Item implements IPerkItem {
 
     public StrengthPerkItem(Properties props) {
@@ -24,5 +26,10 @@ public class StrengthPerkItem extends Item implements IPerkItem {
     @Override
     public int getLevel() {
         return 0;
+    }
+
+    @Override
+    public Map<ResourceLocation, Integer> getSkills() {
+        return Map.of();
     }
 }

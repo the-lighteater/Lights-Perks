@@ -4,6 +4,8 @@ import dot.lighteater.lights_perks.perk.IPerkItem;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 
+import java.util.Map;
+
 public class AttackPerkItem extends Item implements IPerkItem {
     public AttackPerkItem(Properties pProperties) {
         super(pProperties);
@@ -21,6 +23,11 @@ public class AttackPerkItem extends Item implements IPerkItem {
 
     @Override
     public int getLevel() {
-        return 0;
+        return 1;
+    }
+
+    @Override
+    public Map<ResourceLocation, Integer> getSkills() {
+        return Map.of();
     }
 }

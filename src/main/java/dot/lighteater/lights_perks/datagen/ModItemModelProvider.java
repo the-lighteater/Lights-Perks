@@ -8,6 +8,7 @@ import net.minecraft.world.item.Item;
 import net.minecraftforge.client.model.generators.ItemModelBuilder;
 import net.minecraftforge.client.model.generators.ItemModelProvider;
 import net.minecraftforge.common.data.ExistingFileHelper;
+import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.registries.RegistryObject;
 
 // Item Model Generation
@@ -21,8 +22,9 @@ public class ModItemModelProvider extends ItemModelProvider {
 
     @Override
     protected void registerModels() {
-        simpleItem(ModItems.STRENGTH_PERK);
-        simpleItem(ModItems.ATTACK_UP_PERK);
+        for (RegistryObject<Item> item : ModItems.ITEMS.getEntries()) {
+            simpleItem(item);
+        }
     }
 
     private ItemModelBuilder simpleItem(RegistryObject<Item> item) {

@@ -18,14 +18,9 @@ public class ClientSetup {
 
     @SubscribeEvent
     public static void clientSetup(FMLClientSetupEvent event) {
-
-        event.enqueueWork(() -> {
-
-            MenuScreens.register(
-                    ModMenus.PERK_MENU.get(),
-                    PerkScreen::new
-            );
-
-        });
+        event.enqueueWork(() -> MenuScreens.register(
+                ModMenus.PERK_MENU.get(),
+                PerkScreen::new
+        ));
     }
 }

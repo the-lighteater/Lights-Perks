@@ -4,10 +4,13 @@ import dot.lighteater.lights_perks.UpgradeScrolls;
 import dot.lighteater.lights_perks.perk.IPerkItem;
 import dot.lighteater.lights_perks.perk.Perk;
 import dot.lighteater.lights_perks.perk.PerkRegistry;
+import dot.lighteater.lights_perks.slots.ItemSlotData;
+import dot.lighteater.lights_perks.slots.ItemSlotManager;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.ItemStack;
@@ -77,13 +80,12 @@ public class ModEvents {
         }
     }
 
-    private static boolean isPerkable(ItemStack stack) {
-        return stack.getItem() instanceof ArmorItem
-                || stack.getItem() instanceof SwordItem
-                || stack.getItem() instanceof ShieldItem;
-    }
-
     public static void initializeSockets(ItemStack item) {
+
+        if (item.isEmpty()) return;
+        if (!isPerkable(item)) return;
+
+        boolean dataLoaded = false;
 
         CompoundTag tag = item.getOrCreateTag();
 
@@ -91,10 +93,36 @@ public class ModEvents {
 
             ListTag sockets = new ListTag();
 
-            for (int i = 0; i < 3; i++) {
+            int slotSize = 2;
+
+            ItemSlotData slotData = ItemSlotManager.get(item);
+            if (slotData != null && slotData.slots != null) {
+                slotSize = slotData.slots.size();
+                dataLoaded = true;
+            }
+
+            for (int i = 0; i < slotSize; i++) {
+
+                int socketLevel = 1;
+
+                if (dataLoaded) {
+                    socketLevel = slotData.slots.get(i);
+                    UpgradeScrolls.LOGGER.debug("[ModEvents] Loaded {} with socket #{} that has level {}",
+                            item,
+                            i,
+                            socketLevel);
+                }
 
                 CompoundTag socket = new CompoundTag();
-                socket.putInt("Slot", i);
+                socket.putInt(
+                        "Slot",
+                        i
+                );
+
+                socket.putInt(
+                        "Level",
+                        socketLevel
+                );
 
                 // empty itemstack
                 socket.put("Item", new CompoundTag());
@@ -111,26 +139,108 @@ public class ModEvents {
 
         ItemStack stack = event.getItemStack();
 
+        /*
+         * Only show perk information for perkable equipment.
+         */
+        if (!isPerkable(stack)) {
+            return;
+        }
+
         CompoundTag tag = stack.getTag();
 
-        if (tag == null || !tag.contains("lights_perks:perks"))
+        if (tag == null ||
+                !tag.contains("lights_perks:sockets", Tag.TAG_LIST)) {
             return;
+        }
 
-        event.getToolTip().add(Component.literal(""));
-        event.getToolTip().add(Component.literal("Perk Slots"));
+        ListTag sockets = tag.getList(
+                "lights_perks:sockets",
+                Tag.TAG_COMPOUND
+        );
 
-        ListTag slots = tag.getList("lights_perks:perks", Tag.TAG_COMPOUND);
+        boolean hasPerks = false;
 
-        for (int i = 0; i < slots.size(); i++) {
+        /*
+         * First determine whether there are
+         * actually any perk items.
+         */
+        for (int i = 0; i < sockets.size(); i++) {
 
-            CompoundTag slot = slots.getCompound(i);
+            CompoundTag socket = sockets.getCompound(i);
 
-            int level = slot.getInt("Level");
+            if (!socket.contains(
+                    "Item",
+                    Tag.TAG_COMPOUND
+            )) {
+                continue;
+            }
+
+            ItemStack perkStack = ItemStack.of(
+                    socket.getCompound("Item")
+            );
+
+            if (!perkStack.isEmpty()
+                    && perkStack.getItem() instanceof IPerkItem) {
+
+                hasPerks = true;
+                break;
+            }
+        }
+
+        /*
+         * Don't add an empty "Perk Slots" section.
+         */
+        if (!hasPerks) {
+            return;
+        }
+
+        event.getToolTip().add(
+                Component.literal("")
+        );
+
+        event.getToolTip().add(
+                Component.literal("Perk Slots")
+        );
+
+        /*
+         * Render each perk.
+         */
+        for (int i = 0; i < sockets.size(); i++) {
+
+            CompoundTag socket =
+                    sockets.getCompound(i);
+
+            if (!socket.contains(
+                    "Item",
+                    Tag.TAG_COMPOUND
+            )) {
+                continue;
+            }
+
+            ItemStack perkStack =
+                    ItemStack.of(
+                            socket.getCompound("Item")
+                    );
+
+            if (perkStack.isEmpty()) {
+                continue;
+            }
+
+            if (!(perkStack.getItem()
+                    instanceof IPerkItem perkItem)) {
+                continue;
+            }
+
+            /*
+             * Get the perk's skill information.
+             */
+            int level =
+                    perkItem.getLevel();
 
             event.getToolTip().add(
-                    Component.literal("◇ Lv." + level + " ").append(
-                            Component.translatable(slot.getString("Tooltip"))
-                    )
+                    Component.literal(
+                            "◇ Lv." + level + " "
+                    ).append(perkStack.getHoverName())
             );
         }
     }
@@ -143,5 +253,10 @@ public class ModEvents {
         slot.putString("Tooltip", translatable);
 
         return slot;
+    }
+    public static boolean isPerkable(ItemStack stack) {
+        return stack.getItem() instanceof ArmorItem
+                || stack.getItem() instanceof SwordItem
+                || stack.getItem() instanceof ShieldItem;
     }
 }

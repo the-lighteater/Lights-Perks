@@ -1,7 +1,7 @@
 {
-  "light_perks:swift_sneak": "Swift Sneak Perk",
-  "light_perks:health_boost": "Health Boost Perk",
-  "light_perks:night_vision": "Night Vision Perk",
+  "item.lights_perks.attack_up_perk": "Attack Up",
+  "item.lights_perks.star_power_perk": "Star Power",
+
 
   "key.categories.lights_perks": "Light's Perks Keybinds",
 

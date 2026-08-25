@@ -2,6 +2,7 @@ package dot.lighteater.lights_perks.menu;
 
 import dot.lighteater.lights_perks.helpers.EquipmentType;
 import dot.lighteater.lights_perks.perk.IPerkItem;
+import dot.lighteater.lights_perks.perk.Perk;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
@@ -15,9 +16,6 @@ public class PerkMenu extends AbstractContainerMenu {
     private final PerkContainer[] perkContainers;
 
     public static final int EQUIPMENT_COUNT = 6;
-    public static final int PERK_SLOT_COUNT = 3;
-    public static final int TOTAL_PERK_SLOTS =
-            EQUIPMENT_COUNT * PERK_SLOT_COUNT;
 
     public static final int[] EQUIPMENT_X = {
             50,   // Helmet
@@ -44,20 +42,25 @@ public class PerkMenu extends AbstractContainerMenu {
         this.playerInventory = inventory;
 
         perkContainers = new PerkContainer[] {
-                new PerkContainer(inventory.player, PERK_SLOT_COUNT, EquipmentType.HELMET),
-                new PerkContainer(inventory.player, PERK_SLOT_COUNT, EquipmentType.CHESTPLATE),
-                new PerkContainer(inventory.player, PERK_SLOT_COUNT, EquipmentType.LEGGINGS),
-                new PerkContainer(inventory.player, PERK_SLOT_COUNT, EquipmentType.BOOTS),
-                new PerkContainer(inventory.player, PERK_SLOT_COUNT, EquipmentType.MAIN_HAND),
-                new PerkContainer(inventory.player, PERK_SLOT_COUNT, EquipmentType.OFF_HAND)
+                new PerkContainer(inventory.player, EquipmentType.HELMET),
+                new PerkContainer(inventory.player, EquipmentType.CHESTPLATE),
+                new PerkContainer(inventory.player, EquipmentType.LEGGINGS),
+                new PerkContainer(inventory.player, EquipmentType.BOOTS),
+                new PerkContainer(inventory.player, EquipmentType.MAIN_HAND),
+                new PerkContainer(inventory.player, EquipmentType.OFF_HAND)
         };
 
-        addPerkSlots(perkContainers[0], EQUIPMENT_X[0], 35);
-        addPerkSlots(perkContainers[1], EQUIPMENT_X[1], 35);
-        addPerkSlots(perkContainers[2], EQUIPMENT_X[2], 35);
-        addPerkSlots(perkContainers[3], EQUIPMENT_X[3], 35);
-        addPerkSlots(perkContainers[4], EQUIPMENT_X[4], 35);
-        addPerkSlots(perkContainers[5], EQUIPMENT_X[5], 35);
+        /*
+         * Add the dynamically-sized perk slots.
+         */
+        for (int i = 0; i < EQUIPMENT_COUNT; i++) {
+
+            addPerkSlots(
+                    perkContainers[i],
+                    EQUIPMENT_X[i],
+                    35
+            );
+        }
 
         /*
          * Player inventory
@@ -97,7 +100,9 @@ public class PerkMenu extends AbstractContainerMenu {
             int x,
             int y
     ) {
-        for (int i = 0; i < PERK_SLOT_COUNT; i++) {
+        int perkSlots = container.getContainerSize();
+
+        for (int i = 0; i < perkSlots; i++) {
             addSlot(new PerkSlot(
                     container,
                     i,
@@ -105,6 +110,23 @@ public class PerkMenu extends AbstractContainerMenu {
                     y + i * 20
             ));
         }
+    }
+
+    /**
+     * Returns the number of perk slots currently
+     * present in the menu.
+     */
+    public int getTotalPerkSlots() {
+
+        int total = 0;
+
+        for (PerkContainer container :
+                perkContainers) {
+
+            total += container.getSocketCount();
+        }
+
+        return total;
     }
 
     @Override
@@ -115,12 +137,14 @@ public class PerkMenu extends AbstractContainerMenu {
         ItemStack stack = slot.getItem();
         ItemStack copy = stack.copy();
 
+        int totalPerkSlots = getTotalPerkSlots();
+
         // Perk slot -> player inventory
-        if (index < TOTAL_PERK_SLOTS) {
+        if (index < totalPerkSlots) {
 
             if (!moveItemStackTo(
                     stack,
-                    TOTAL_PERK_SLOTS,
+                    totalPerkSlots,
                     slots.size(),
                     true
             )) {
@@ -138,7 +162,7 @@ public class PerkMenu extends AbstractContainerMenu {
             if (!moveItemStackTo(
                     stack,
                     0,
-                    TOTAL_PERK_SLOTS,
+                    totalPerkSlots,
                     false
             )) {
                 return ItemStack.EMPTY;

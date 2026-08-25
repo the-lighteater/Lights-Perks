@@ -1,2 +1,5 @@
-// 1.20.1	2026-08-17T13:14:47.4679836	Item Models: lights_perks
+// 1.20.1	2026-08-24T15:27:37.327696	Item Models: lights_perks
+d9fb141842d960936dd03ce9a9d21c603fe3c8e8 assets/lights_perks/models/item/attack_up_perk.json
+504c90b9f85b24665af2b88d494fb0aec0b1bc63 assets/lights_perks/models/item/fire_scroll.json
+fbe24215c137b80dc353b73a1ee974b43c384e70 assets/lights_perks/models/item/star_power_perk.json
 f199ada5e4283756dc0af3a011b5686e7a31f418 assets/lights_perks/models/item/strength_perk.json

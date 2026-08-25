@@ -14,16 +14,13 @@ public class PerkContainer implements Container {
     private static final String ITEM_TAG = "Item";
 
     private final Player player;
-    private final int size;
     private final EquipmentType equipmentType;
 
     public PerkContainer(
             Player player,
-            int size,
             EquipmentType equipmentType
     ) {
         this.player = player;
-        this.size = size;
         this.equipmentType = equipmentType;
     }
 
@@ -35,7 +32,7 @@ public class PerkContainer implements Container {
         return !getEquipment().isEmpty();
     }
 
-    private ItemStack getEquipment() {
+    public ItemStack getEquipment() {
         return switch (equipmentType) {
             case HELMET -> player.getInventory().armor.get(3);
             case CHESTPLATE -> player.getInventory().armor.get(2);
@@ -44,6 +41,16 @@ public class PerkContainer implements Container {
             case MAIN_HAND -> player.getMainHandItem();
             case OFF_HAND -> player.getOffhandItem();
         };
+    }
+
+    public int getSocketCount() {
+        ListTag sockets = getSockets(getEquipment());
+
+        if (sockets == null) {
+            return 0;
+        }
+
+        return sockets.size();
     }
 
     private ListTag getSockets(ItemStack equipment) {
@@ -65,12 +72,12 @@ public class PerkContainer implements Container {
 
     @Override
     public int getContainerSize() {
-        return size;
+        return getSocketCount();
     }
 
     @Override
     public boolean isEmpty() {
-        for (int i = 0; i < size; i++) {
+        for (int i = 0; i < getContainerSize(); i++) {
             if (!getItem(i).isEmpty()) {
                 return false;
             }
@@ -81,7 +88,7 @@ public class PerkContainer implements Container {
 
     @Override
     public ItemStack getItem(int index) {
-        if (index < 0 || index >= size) {
+        if (index < 0 || index >= getContainerSize()) {
             return ItemStack.EMPTY;
         }
 
@@ -124,6 +131,29 @@ public class PerkContainer implements Container {
         return result;
     }
 
+    public int getSocketLevel(int index) {
+
+        if (index < 0 ||
+                index >= getSocketCount()) {
+
+            return 0;
+        }
+
+        ListTag sockets =
+                getSockets(getEquipment());
+
+        if (sockets == null ||
+                index >= sockets.size()) {
+
+            return 0;
+        }
+
+        CompoundTag socket =
+                sockets.getCompound(index);
+
+        return socket.getInt("Level");
+    }
+
     @Override
     public ItemStack removeItemNoUpdate(int index) {
         ItemStack stack = getItem(index);
@@ -137,7 +167,7 @@ public class PerkContainer implements Container {
 
     @Override
     public void setItem(int index, ItemStack stack) {
-        if (index < 0 || index >= size) {
+        if (index < 0 || index >= getContainerSize()) {
             return;
         }
 
@@ -188,7 +218,7 @@ public class PerkContainer implements Container {
 
     @Override
     public void clearContent() {
-        for (int i = 0; i < size; i++) {
+        for (int i = 0; i < getContainerSize(); i++) {
             setItem(i, ItemStack.EMPTY);
         }
     }

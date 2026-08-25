@@ -97,6 +97,8 @@ public class PerkScreen extends AbstractContainerScreen<PerkMenu> {
 
         renderEquipmentItems(graphics);
 
+        renderPerkSlotLevels(graphics);
+
         renderPerkSubmenu(graphics, mouseX, mouseY);
 
         if (selectedSkill != null) {
@@ -1299,6 +1301,47 @@ public class PerkScreen extends AbstractContainerScreen<PerkMenu> {
                     leftPos + slot.x - 1,
                     topPos + slot.y - 1,
                     enabled
+            );
+        }
+    }
+
+    private void renderPerkSlotLevels(GuiGraphics graphics) {
+
+        for (Slot slot : menu.slots) {
+
+            if (!(slot instanceof PerkSlot perkSlot)) {
+                continue;
+            }
+
+            PerkContainer container =
+                    perkSlot.getPerkContainer();
+
+            int level =
+                    container.getSocketLevel(perkSlot.getContainerSlot());
+
+            int x =
+                    leftPos + slot.x;
+
+            int y =
+                    topPos + slot.y;
+
+            String text =
+                    String.valueOf(level);
+
+            /*
+             * Draw in the bottom-right corner
+             * of the slot.
+             */
+            int textWidth =
+                    font.width(text);
+
+            graphics.drawString(
+                    font,
+                    text,
+                    x + 18 - textWidth - 2,
+                    y + 18 - 9,
+                    0xFFFFFFFF,
+                    true
             );
         }
     }
