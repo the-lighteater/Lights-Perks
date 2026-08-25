@@ -7,8 +7,9 @@ import java.util.List;
 import java.util.Map;
 
 public interface IPerkItem {
-    ResourceLocation getSkillId();
-    int getSkillPoints();
+
+    ResourceLocation getPerkId();
+    PerkData getPerkData();
     int getLevel();
     Map<ResourceLocation, Integer> getSkills();
 }

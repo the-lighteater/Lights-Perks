@@ -1,9 +1,8 @@
 package dot.lighteater.lights_perks.item;
 
 import dot.lighteater.lights_perks.UpgradeScrolls;
-import dot.lighteater.lights_perks.item.custom.AttackPerkItem;
-import dot.lighteater.lights_perks.item.custom.StarPowerPerkItem;
-import dot.lighteater.lights_perks.item.custom.StrengthPerkItem;
+import dot.lighteater.lights_perks.item.custom.PerkItem;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.*;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.registries.DeferredRegister;
@@ -16,13 +15,13 @@ public class ModItems {
             DeferredRegister.create(ForgeRegistries.ITEMS, UpgradeScrolls.MODID);
 
     public static final RegistryObject<Item> STRENGTH_PERK = ITEMS.register("strength_perk",
-            () -> new StrengthPerkItem(new Item.Properties()));
+            () -> new PerkItem(new Item.Properties(), new ResourceLocation(UpgradeScrolls.MODID, "strength_perk")));
 
     public static final RegistryObject<Item> ATTACK_UP_PERK = ITEMS.register("attack_up_perk",
-            () -> new AttackPerkItem(new Item.Properties()));
+            () -> new PerkItem(new Item.Properties(), new ResourceLocation(UpgradeScrolls.MODID, "attack_up_perk")));
 
     public static final RegistryObject<Item> STAR_POWER_PERK = ITEMS.register("star_power_perk",
-            () -> new StarPowerPerkItem(new Item.Properties()));
+            () -> new PerkItem(new Item.Properties(), new ResourceLocation(UpgradeScrolls.MODID, "star_power_perk")));
 
 
     public static void register(IEventBus eventBus) {

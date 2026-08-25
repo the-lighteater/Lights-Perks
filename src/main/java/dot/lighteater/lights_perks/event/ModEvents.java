@@ -2,10 +2,10 @@ package dot.lighteater.lights_perks.event;
 
 import dot.lighteater.lights_perks.UpgradeScrolls;
 import dot.lighteater.lights_perks.perk.IPerkItem;
-import dot.lighteater.lights_perks.perk.Perk;
-import dot.lighteater.lights_perks.perk.PerkRegistry;
-import dot.lighteater.lights_perks.slots.ItemSlotData;
-import dot.lighteater.lights_perks.slots.ItemSlotManager;
+import dot.lighteater.lights_perks.item_config.ItemConfigData;
+import dot.lighteater.lights_perks.item_config.ItemConfigManager;
+import dot.lighteater.lights_perks.skill.SkillData;
+import dot.lighteater.lights_perks.skill.SkillManager;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
@@ -20,6 +20,8 @@ import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
+
+import java.util.Map;
 
 // Events handled by the mod.
 
@@ -95,7 +97,7 @@ public class ModEvents {
 
             int slotSize = 2;
 
-            ItemSlotData slotData = ItemSlotManager.get(item);
+            ItemConfigData slotData = ItemConfigManager.get(item);
             if (slotData != null && slotData.slots != null) {
                 slotSize = slotData.slots.size();
                 dataLoaded = true;
@@ -138,6 +140,21 @@ public class ModEvents {
     public static void onTooltip(ItemTooltipEvent event) {
 
         ItemStack stack = event.getItemStack();
+
+        ItemConfigData data = ItemConfigManager.get(stack);
+
+        if (data != null) {
+            event.getToolTip().add(
+                    Component.literal("Built-In Skills")
+            );
+            for (Map.Entry<String, Integer> entry : data.builtin_skills.entrySet()) {
+                SkillData skillData = SkillManager.get(new ResourceLocation(entry.getKey()));
+
+                event.getToolTip().add(
+                        Component.literal(skillData.title + ": Level " + entry.getValue())
+                );
+            }
+        }
 
         /*
          * Only show perk information for perkable equipment.

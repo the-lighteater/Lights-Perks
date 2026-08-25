@@ -1,4 +1,4 @@
-package dot.lighteater.lights_perks.slots;
+package dot.lighteater.lights_perks.item_config;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -13,7 +13,7 @@ import net.minecraft.util.profiling.ProfilerFiller;
 import java.lang.reflect.Type;
 import java.util.Map;
 
-public class ItemSlotLoader extends SimpleJsonResourceReloadListener {
+public class ItemConfigLoader extends SimpleJsonResourceReloadListener {
 
     public static final Gson GSON =
             new GsonBuilder()
@@ -21,9 +21,9 @@ public class ItemSlotLoader extends SimpleJsonResourceReloadListener {
                     .create();
 
     private static final Type ITEM_MAP_TYPE =
-            new TypeToken<Map<String, ItemSlotData>>() {}.getType();
+            new TypeToken<Map<String, ItemConfigData>>() {}.getType();
 
-    public ItemSlotLoader() {
+    public ItemConfigLoader() {
         super(GSON, "config");
     }
 
@@ -33,7 +33,7 @@ public class ItemSlotLoader extends SimpleJsonResourceReloadListener {
             ResourceManager manager,
             ProfilerFiller profiler
     ) {
-        ItemSlotManager.clear();
+        ItemConfigManager.clear();
 
         /*
          * We are specifically looking for:
@@ -65,19 +65,24 @@ public class ItemSlotLoader extends SimpleJsonResourceReloadListener {
 
         try {
 
-            Map<String, ItemSlotData> items =
+            UpgradeScrolls.LOGGER.info(
+                    "[ItemSlotLoader] Parsing JSON: {}",
+                    json
+            );
+
+            Map<String, ItemConfigData> items =
                     GSON.fromJson(
                             json,
                             ITEM_MAP_TYPE
                     );
 
-            for (Map.Entry<String, ItemSlotData> entry
+            for (Map.Entry<String, ItemConfigData> entry
                     : items.entrySet()) {
 
                 ResourceLocation itemId =
                         new ResourceLocation(entry.getKey());
 
-                ItemSlotManager.register(
+                ItemConfigManager.register(
                         itemId,
                         entry.getValue()
                 );
@@ -89,6 +94,27 @@ public class ItemSlotLoader extends SimpleJsonResourceReloadListener {
                                 ? 0
                                 : entry.getValue().slots.size()
                 );
+
+                UpgradeScrolls.LOGGER.debug(
+                        "[ItemSlotLoader] Loaded {} with {} builtin skills",
+                        itemId,
+                        entry.getValue().builtin_skills == null
+                                ? 0
+                                : entry.getValue().builtin_skills.size()
+                );
+
+                for (Map.Entry<String, Integer> entrySkill
+                        : entry.getValue().builtin_skills.entrySet()) {
+
+                    ResourceLocation skillId = new ResourceLocation(entrySkill.getKey());
+                    int level = entrySkill.getValue();
+
+                    UpgradeScrolls.LOGGER.debug(
+                            "Builtin skill: {} Level {}",
+                            skillId,
+                            level
+                    );
+                }
             }
 
         } catch (Exception e) {
@@ -101,7 +127,7 @@ public class ItemSlotLoader extends SimpleJsonResourceReloadListener {
 
         UpgradeScrolls.LOGGER.info(
                 "[ItemSlotLoader] Loaded {} item configurations.",
-                ItemSlotManager.getAll().size()
+                ItemConfigManager.getAll().size()
         );
     }
 }

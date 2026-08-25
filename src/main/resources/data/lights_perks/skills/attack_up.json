@@ -31,6 +31,22 @@
     },
     {
       "level": 4,
+      "bonus": false,
+      "effects": [
+        "+25 Attack Damage",
+        "+120% Attack Speed"
+      ]
+    },
+    {
+      "level": 5,
+      "bonus": false,
+      "effects": [
+        "+25 Attack Damage",
+        "+120% Attack Speed"
+      ]
+    },
+    {
+      "level": 6,
       "bonus": true,
       "effects": [
         "+25 Attack Damage",

@@ -1,4 +1,4 @@
-package dot.lighteater.lights_perks.slots;
+package dot.lighteater.lights_perks.item_config;
 
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
@@ -6,12 +6,12 @@ import net.minecraft.world.item.ItemStack;
 import java.util.HashMap;
 import java.util.Map;
 
-public class ItemSlotManager {
+public class ItemConfigManager {
 
-    private static final Map<ResourceLocation, ItemSlotData> ITEMS =
+    private static final Map<ResourceLocation, ItemConfigData> ITEMS =
             new HashMap<>();
 
-    private ItemSlotManager() {
+    private ItemConfigManager() {
     }
 
     public static void clear() {
@@ -20,12 +20,12 @@ public class ItemSlotManager {
 
     public static void register(
             ResourceLocation id,
-            ItemSlotData data
+            ItemConfigData data
     ) {
         ITEMS.put(id, data);
     }
 
-    public static ItemSlotData get(
+    public static ItemConfigData get(
             ResourceLocation id
     ) {
         return ITEMS.get(id);
@@ -37,11 +37,11 @@ public class ItemSlotManager {
         return ITEMS.containsKey(id);
     }
 
-    public static Map<ResourceLocation, ItemSlotData> getAll() {
+    public static Map<ResourceLocation, ItemConfigData> getAll() {
         return ITEMS;
     }
 
-    public static ItemSlotData get(ItemStack stack) {
+    public static ItemConfigData get(ItemStack stack) {
 
         if (stack.isEmpty()) {
             return null;

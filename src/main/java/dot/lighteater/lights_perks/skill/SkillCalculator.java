@@ -124,27 +124,30 @@ public class SkillCalculator {
                 continue;
             }
 
-            ResourceLocation skillId =
-                    perk.getSkillId();
+            for (Map.Entry<ResourceLocation, Integer> entry : perk.getSkills().entrySet()) {
 
-            SkillData skill =
-                    skills.get(skillId);
+                ResourceLocation skillId =
+                        entry.getKey();
 
-            if (skill == null) {
+                SkillData skill =
+                        skills.get(skillId);
 
-                UpgradeScrolls.LOGGER.warn(
-                        "[SkillCalculator] Unknown skill: {}",
-                        skillId
+                if (skill == null) {
+
+                    UpgradeScrolls.LOGGER.warn(
+                            "[SkillCalculator] Unknown skill: {}",
+                            skillId
+                    );
+
+                    continue;
+                }
+
+                skill.getPoints().merge(
+                        equipmentType,
+                        entry.getValue(),
+                        Integer::sum
                 );
-
-                continue;
             }
-
-            skill.getPoints().merge(
-                    equipmentType,
-                    perk.getSkillPoints(),
-                    Integer::sum
-            );
         }
     }
 

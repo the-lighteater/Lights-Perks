@@ -5,9 +5,10 @@ import dot.lighteater.lights_perks.item.LoadItems;
 import dot.lighteater.lights_perks.item.ModCreativeModTabs;
 import dot.lighteater.lights_perks.item.ModItems;
 import dot.lighteater.lights_perks.menu.ModMenus;
+import dot.lighteater.lights_perks.perk.PerkLoader;
 import dot.lighteater.lights_perks.skill.SkillLoader;
 import dot.lighteater.lights_perks.skill.SkillRuntimeLoader;
-import dot.lighteater.lights_perks.slots.ItemSlotLoader;
+import dot.lighteater.lights_perks.item_config.ItemConfigLoader;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.AddReloadListenerEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -53,6 +54,7 @@ public class UpgradeScrolls
     private void onAddReloadListeners(AddReloadListenerEvent event) {
         event.addListener(new SkillLoader());
         SkillRuntimeLoader.loadSkills();
-        event.addListener(new ItemSlotLoader());
+        event.addListener(new ItemConfigLoader());
+        event.addListener(new PerkLoader());
     }
 }

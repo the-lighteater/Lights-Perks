@@ -33,6 +33,8 @@ public class PerkScreen extends AbstractContainerScreen<PerkMenu> {
     List<SkillData> skills;
 
     private boolean submenuOpen = false;
+    private boolean helpOpen = false;
+
     private SkillData selectedSkill = null;
 
     private int skillPage = 0;
@@ -108,6 +110,12 @@ public class PerkScreen extends AbstractContainerScreen<PerkMenu> {
                     mouseY,
                     selectedSkill
             );
+        }
+
+        renderHelpButton(graphics);
+
+        if (helpOpen) {
+            renderHelpBox(graphics);
         }
 
         this.renderTooltip(graphics, mouseX, mouseY);
@@ -917,6 +925,192 @@ public class PerkScreen extends AbstractContainerScreen<PerkMenu> {
         }
     }
 
+    private void renderHelpButton(GuiGraphics graphics) {
+
+        int buttonSize = 12;
+
+        int x = leftPos + imageWidth - buttonSize - 5;
+        int y = topPos + 4;
+
+        /*
+         * =========================
+         * OUTER BORDER
+         * =========================
+         */
+
+        graphics.fill(
+                x,
+                y,
+                x + buttonSize,
+                y + buttonSize,
+                0xFF080808
+        );
+
+        /*
+         * =========================
+         * INTERIOR
+         * =========================
+         */
+
+        graphics.fill(
+                x + 1,
+                y + 1,
+                x + buttonSize - 1,
+                y + buttonSize - 1,
+                helpOpen
+                        ? 0xFF505050
+                        : 0xFF707070
+        );
+
+        /*
+         * =========================
+         * TEXT
+         * =========================
+         */
+
+        String text = helpOpen ? "X" : "?";
+
+        int textWidth = font.width(text);
+
+        graphics.drawString(
+                font,
+                text,
+                x + (buttonSize - textWidth) / 2,
+                y + 2,
+                0xFFFFFFFF
+        );
+    }
+
+    private void renderHelpBox(GuiGraphics graphics) {
+
+        int width = 150;
+        int height = 130;
+
+        /*
+         * Center the help box over the main menu.
+         */
+        int x =
+                leftPos + (imageWidth - width) / 2;
+
+        int y =
+                topPos + (imageHeight - height) / 2;
+
+        /*
+         * =========================
+         * OUTER BORDER
+         * =========================
+         */
+
+        graphics.fill(
+                x,
+                y,
+                x + width,
+                y + height,
+                0xFF080808
+        );
+
+        /*
+         * =========================
+         * INNER BACKGROUND
+         * =========================
+         */
+
+        graphics.fill(
+                x + 2,
+                y + 2,
+                x + width - 2,
+                y + height - 2,
+                0xFF303030
+        );
+
+        /*
+         * =========================
+         * TITLE
+         * =========================
+         */
+
+        graphics.drawString(
+                font,
+                "Perk Menu Help",
+                x + 6,
+                y + 6,
+                0xFFFFFFFF
+        );
+
+        /*
+         * =========================
+         * HELP TEXT
+         * =========================
+         */
+
+        int textX = x + 6;
+        int textY = y + 22;
+
+        int textColor = 0xFFD0D0D0;
+
+        graphics.drawString(
+                font,
+                "Perks can be attached to",
+                textX,
+                textY,
+                textColor
+        );
+
+        graphics.drawString(
+                font,
+                "your equipped items using",
+                textX,
+                textY + 10,
+                textColor
+        );
+
+        graphics.drawString(
+                font,
+                "the perk slots.",
+                textX,
+                textY + 20,
+                textColor
+        );
+
+        graphics.drawString(
+                font,
+                "Select a perk on the left",
+                textX,
+                textY + 38,
+                textColor
+        );
+
+        graphics.drawString(
+                font,
+                "to view its levels and",
+                textX,
+                textY + 48,
+                textColor
+        );
+
+        graphics.drawString(
+                font,
+                "equipment bonuses.",
+                textX,
+                textY + 58,
+                textColor
+        );
+
+        /*
+         * =========================
+         * CLOSE INSTRUCTION
+         * =========================
+         */
+
+        graphics.drawString(
+                font,
+                "Click ? to close.",
+                textX,
+                y + height - 16,
+                0xFFFFFFFF
+        );
+    }
+
     private int renderSkillLevel(
             GuiGraphics graphics,
             SkillLevelData level,
@@ -1026,12 +1220,62 @@ public class PerkScreen extends AbstractContainerScreen<PerkMenu> {
             double mouseY,
             int button
     ) {
-
-        super.mouseClicked(mouseX, mouseY, button);
+        if (button != 0) {
+            return false;
+        }
 
         if (button != 0) {
             return false;
         }
+
+        /*
+         * =========================
+         * HELP BUTTON
+         * =========================
+         */
+
+        int helpButtonSize = 12;
+
+        int helpButtonX =
+                leftPos + imageWidth - helpButtonSize - 5;
+
+        int helpButtonY =
+                topPos + 4;
+
+        if (mouseX >= helpButtonX
+                && mouseX < helpButtonX + helpButtonSize
+                && mouseY >= helpButtonY
+                && mouseY < helpButtonY + helpButtonSize) {
+
+            helpOpen = !helpOpen;
+
+            /*
+             * Help box is now handling the UI,
+             * so don't allow the click to interact
+             * with anything underneath it.
+             */
+            return true;
+        }
+
+        /*
+         * =========================
+         * HELP BOX OPEN
+         * =========================
+         *
+         * Prevent clicking anything underneath
+         * the help box.
+         */
+
+        if (helpOpen) {
+            return true;
+        }
+
+        /*
+         * Everything below this point is your
+         * existing mouseClicked() code.
+         */
+
+        super.mouseClicked(mouseX, mouseY, button);
 
         if (!submenuOpen) {
             return false;
@@ -1307,6 +1551,9 @@ public class PerkScreen extends AbstractContainerScreen<PerkMenu> {
 
     private void renderPerkSlotLevels(GuiGraphics graphics) {
 
+        if (helpOpen)
+            return;
+
         for (Slot slot : menu.slots) {
 
             if (!(slot instanceof PerkSlot perkSlot)) {
@@ -1355,7 +1602,7 @@ public class PerkScreen extends AbstractContainerScreen<PerkMenu> {
 
         LocalPlayer player = minecraft.player;
 
-        if (player == null) {
+        if (player == null || helpOpen) {
             return;
         }
 
@@ -1439,13 +1686,15 @@ public class PerkScreen extends AbstractContainerScreen<PerkMenu> {
         /*
          * Inventory section
          */
-        graphics.drawString(
-                font,
-                "Inventory",
-                8,
-                97,
-                0xFFFFFF
-        );
+        if (!helpOpen) {
+            graphics.drawString(
+                    font,
+                    "Inventory",
+                    8,
+                    97,
+                    0xFFFFFF
+            );
+        }
     }
 
     private void renderEquipmentItems(GuiGraphics graphics) {

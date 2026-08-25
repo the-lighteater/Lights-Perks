@@ -2,7 +2,6 @@ package dot.lighteater.lights_perks.menu;
 
 import dot.lighteater.lights_perks.helpers.EquipmentType;
 import dot.lighteater.lights_perks.perk.IPerkItem;
-import dot.lighteater.lights_perks.perk.Perk;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;

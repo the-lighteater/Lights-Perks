@@ -2,6 +2,8 @@ package dot.lighteater.lights_perks.skill;
 
 import dot.lighteater.lights_perks.UpgradeScrolls;
 import dot.lighteater.lights_perks.helpers.EquipmentType;
+import dot.lighteater.lights_perks.item_config.ItemConfigData;
+import dot.lighteater.lights_perks.item_config.ItemConfigManager;
 import dot.lighteater.lights_perks.perk.IPerkItem;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
@@ -215,6 +217,24 @@ public class SkillManager {
             return;
         }
 
+        ItemConfigData itemData = ItemConfigManager.get(equipment);
+
+        if (itemData != null) {
+            for (Map.Entry<String, Integer> entry : itemData.builtin_skills.entrySet()) {
+                Map<EquipmentType, Integer> equipmentPoints =
+                        points.computeIfAbsent(
+                                new ResourceLocation(entry.getKey()),
+                                id -> new HashMap<>()
+                        );
+
+                equipmentPoints.merge(
+                        equipmentType,
+                        entry.getValue(),
+                        Integer::sum
+                );
+            }
+        }
+
         CompoundTag tag = equipment.getTag();
 
         if (tag == null ||
@@ -254,31 +274,34 @@ public class SkillManager {
                 continue;
             }
 
-            ResourceLocation skillId =
-                    perkItem.getSkillId();
+            for (Map.Entry<ResourceLocation, Integer> entry : perkItem.getSkills().entrySet()) {
 
-            int skillPoints =
-                    perkItem.getSkillPoints();
+                ResourceLocation skillId =
+                        entry.getKey();
 
-            /*
-             * Get the equipment map for this skill.
-             * If it doesn't exist yet, create it.
-             */
-            Map<EquipmentType, Integer> equipmentPoints =
-                    points.computeIfAbsent(
-                            skillId,
-                            id -> new HashMap<>()
-                    );
+                int skillPoints =
+                        entry.getValue();
 
-            /*
-             * Add this perk's points to the
-             * appropriate equipment slot.
-             */
-            equipmentPoints.merge(
-                    equipmentType,
-                    skillPoints,
-                    Integer::sum
-            );
+                /*
+                 * Get the equipment map for this skill.
+                 * If it doesn't exist yet, create it.
+                 */
+                Map<EquipmentType, Integer> equipmentPoints =
+                        points.computeIfAbsent(
+                                skillId,
+                                id -> new HashMap<>()
+                        );
+
+                /*
+                 * Add this perk's points to the
+                 * appropriate equipment slot.
+                 */
+                equipmentPoints.merge(
+                        equipmentType,
+                        skillPoints,
+                        Integer::sum
+                );
+            }
         }
     }
 
@@ -299,6 +322,19 @@ public class SkillManager {
             return;
         }
 
+        ItemConfigData itemData = ItemConfigManager.get(equipment);
+
+        if (itemData != null) {
+            for (Map.Entry<String, Integer> entry : itemData.builtin_skills.entrySet()) {
+
+                points.merge(
+                        new ResourceLocation(entry.getKey()),
+                        entry.getValue(),
+                        Integer::sum
+                );
+            }
+        }
+
         CompoundTag tag = equipment.getTag();
 
         if (tag == null ||
@@ -338,21 +374,24 @@ public class SkillManager {
                 continue;
             }
 
-            ResourceLocation skillId =
-                    perkItem.getSkillId();
+            for (Map.Entry<ResourceLocation, Integer> entry : perkItem.getSkills().entrySet()) {
 
-            int skillPoints =
-                    perkItem.getSkillPoints();
 
-            /*
-             * Add this perk's points to the
-             * player's total for this skill.
-             */
-            points.merge(
-                    skillId,
-                    skillPoints,
-                    Integer::sum
-            );
+                ResourceLocation skillId =
+                        entry.getKey();
+
+                int skillPoints =
+                        entry.getValue();
+
+                /*
+                 * Add this perk's points to the
+                 * player's total for this skill.
+                 */
+                points.merge(
+                        skillId,
+                        skillPoints,
+                        Integer::sum
+                );
 
 //            UpgradeScrolls.LOGGER.debug(
 //                    "[SkillManager] {} provides {} point(s) to {} from {}",
@@ -361,6 +400,7 @@ public class SkillManager {
 //                    skillId,
 //                    equipmentType
 //            );
+            }
         }
     }
 

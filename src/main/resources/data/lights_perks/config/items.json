@@ -1,5 +1,8 @@
 {
   "minecraft:diamond_sword": {
+    "builtin_skills": {
+      "lights_perks:attack_up": 1
+    },
     "slots": [
       1,
       2,
@@ -8,6 +11,9 @@
   },
 
   "minecraft:netherite_sword": {
+    "builtin_skills": {
+      "lights_perks:attack_up": 1
+    },
     "slots": [
       2,
       3,
@@ -16,6 +22,9 @@
   },
 
   "minecraft:diamond_chestplate": {
+    "builtin_skills": {
+      "lights_perks:attack_up": 1
+    },
     "slots": [
       1,
       2
