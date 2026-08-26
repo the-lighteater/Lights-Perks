@@ -856,11 +856,16 @@ public class PerkScreen extends AbstractContainerScreen<PerkMenu> {
             int y,
             int width
     ) {
-        int currentLevel =
-                points.getOrDefault(
-                        new ResourceLocation(skillData.skill_id),
-                        0
-                );
+        int currentLevel = Math.max(
+                0,
+                Math.min(
+                        points.getOrDefault(
+                                new ResourceLocation(skillData.skill_id),
+                                0
+                        ),
+                        normalLevels
+                )
+        );
 
         int startIndex =
                 skillLevelPage * LEVELS_PER_PAGE;
