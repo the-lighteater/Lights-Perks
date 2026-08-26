@@ -1136,6 +1136,15 @@ public class PerkScreen extends AbstractContainerScreen<PerkMenu> {
          */
         if (level.bonus) {
 
+            if (level.level < currentLevel) {
+                // Passed Bonus Level
+                color = 0xFF388F87;
+            } else if (level.level == currentLevel) {
+                // Current Bonus Level
+                color = 0xFF17FFEE;
+            }
+
+            // Upcoming Bonus Level
             color = 0xFF81EBE3;
 
             /*
