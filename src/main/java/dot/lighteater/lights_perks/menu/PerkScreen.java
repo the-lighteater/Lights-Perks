@@ -856,6 +856,11 @@ public class PerkScreen extends AbstractContainerScreen<PerkMenu> {
             int y,
             int width
     ) {
+
+        int levelCap = skillData.maxLevel;
+
+        // TODO - Add in bonusSkills check
+
         int currentLevel = Math.max(
                 0,
                 Math.min(
@@ -863,7 +868,7 @@ public class PerkScreen extends AbstractContainerScreen<PerkMenu> {
                                 new ResourceLocation(skillData.skill_id),
                                 0
                         ),
-                        normalLevels
+                        levelCap
                 )
         );
 
