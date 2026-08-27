@@ -87,6 +87,17 @@ public class PerkScreen extends AbstractContainerScreen<PerkMenu> {
                 points = new HashMap<>(current);
             }
 
+            if (selectedSkill != null) {
+                int skillPoints = points.getOrDefault(
+                        new ResourceLocation(selectedSkill.skill_id),
+                        0
+                );
+
+                if (skillPoints == 0) {
+                    selectedSkill = null;
+                }
+            }
+
             Map<ResourceLocation, Map<EquipmentType, Integer>> currentEquipmentPoints =
                     SkillManager.getPlayerSkillPointsByEquipment(
                             minecraft.player

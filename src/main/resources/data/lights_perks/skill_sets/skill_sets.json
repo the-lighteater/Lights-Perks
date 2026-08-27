@@ -1,0 +1,28 @@
+{
+  "entries": [
+    {
+      "skill": "lights_perks:attack_up",
+      "required": 2,
+      "points": 2,
+      "items": [
+        "minecraft:iron_helmet",
+        "minecraft:iron_chestplate",
+        "minecraft:iron_leggings",
+        "minecraft:iron_boots",
+        "minecraft:iron_sword"
+      ]
+    },
+    {
+      "skill": "lights_perks:attack_up",
+      "required": 4,
+      "points": 4,
+      "items": [
+        "minecraft:iron_helmet",
+        "minecraft:iron_chestplate",
+        "minecraft:iron_leggings",
+        "minecraft:iron_boots",
+        "minecraft:iron_sword"
+      ]
+    }
+  ]
+}

@@ -1,16 +1,20 @@
 package dot.lighteater.lights_perks.skill;
 
+import com.github.alexthe666.citadel.repack.jcodec.common.DictionaryCompressor;
 import dot.lighteater.lights_perks.UpgradeScrolls;
 import dot.lighteater.lights_perks.helpers.EquipmentType;
 import dot.lighteater.lights_perks.item_config.ItemConfigData;
 import dot.lighteater.lights_perks.item_config.ItemConfigManager;
 import dot.lighteater.lights_perks.perk.IPerkItem;
+import dot.lighteater.lights_perks.skill.skill_sets.SkillSetEntry;
+import dot.lighteater.lights_perks.skill.skill_sets.SkillSetLoader;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.*;
 
@@ -88,6 +92,8 @@ public class SkillManager {
         Map<ResourceLocation, Integer> points =
                 new HashMap<>();
 
+        addEquipmentPointsBySets(player, points);
+
         /*
          * Main hand
          */
@@ -152,6 +158,41 @@ public class SkillManager {
     ) {
         return getPlayerSkillPoints(player)
                 .getOrDefault(skillId, 0);
+    }
+
+    public static void addEquipmentPointsBySets(
+            Player player,
+            Map<ResourceLocation, Integer> points
+    ) {
+        for (SkillSetEntry entry : SkillSetLoader.getEntries()) {
+
+            int matches = 0;
+
+            for (ItemStack stack : getEquipment(player)) {
+
+                if (stack.isEmpty()) {
+                    continue;
+                }
+
+                ResourceLocation itemId =
+                        ForgeRegistries.ITEMS.getKey(stack.getItem());
+
+                if (itemId != null
+                        && entry.items().contains(itemId)) {
+
+                    matches++;
+                }
+            }
+
+            if (matches >= entry.required()) {
+
+                points.merge(
+                        entry.skill(),
+                        entry.points(),
+                        Integer::sum
+                );
+            }
+        }
     }
 
     public static Map<ResourceLocation, Map<EquipmentType, Integer>>
@@ -420,5 +461,16 @@ public class SkillManager {
                     current
             );
         }
+    }
+
+    private static List<ItemStack> getEquipment(Player player) {
+        return List.of(
+                player.getInventory().armor.get(3),
+                player.getInventory().armor.get(2),
+                player.getInventory().armor.get(1),
+                player.getInventory().armor.get(0),
+                player.getMainHandItem(),
+                player.getOffhandItem()
+        );
     }
 }
