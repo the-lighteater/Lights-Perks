@@ -16,6 +16,8 @@ public class PerkMenu extends AbstractContainerMenu {
 
     public static final int EQUIPMENT_COUNT = 6;
 
+    private static final int DEFAULT_SLOTS = 3;
+
     public static final int[] EQUIPMENT_X = {
             50,   // Helmet
             70,   // Chest
@@ -99,9 +101,9 @@ public class PerkMenu extends AbstractContainerMenu {
             int x,
             int y
     ) {
-        int perkSlots = container.getContainerSize();
+//        int perkSlots = container.getContainerSize();
 
-        for (int i = 0; i < perkSlots; i++) {
+        for (int i = 0; i < DEFAULT_SLOTS; i++) {
             addSlot(new PerkSlot(
                     container,
                     i,
@@ -117,15 +119,17 @@ public class PerkMenu extends AbstractContainerMenu {
      */
     public int getTotalPerkSlots() {
 
-        int total = 0;
+//        int total = 0;
+//
+//        for (PerkContainer container :
+//                perkContainers) {
+//
+//            total += container.getSocketCount();
+//        }
+//
+//        return total;
 
-        for (PerkContainer container :
-                perkContainers) {
-
-            total += container.getSocketCount();
-        }
-
-        return total;
+        return EQUIPMENT_COUNT * DEFAULT_SLOTS;
     }
 
     @Override

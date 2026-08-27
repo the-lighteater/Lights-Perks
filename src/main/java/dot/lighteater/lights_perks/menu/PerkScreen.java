@@ -1618,7 +1618,7 @@ public class PerkScreen extends AbstractContainerScreen<PerkMenu> {
             boolean enabled = true;
 
             if (slot instanceof PerkSlot perkSlot) {
-                enabled = perkSlot.getPerkContainer().hasEquipment();
+                enabled = perkSlot.isActive();
             }
 
             drawSlotBackground(
@@ -1646,6 +1646,8 @@ public class PerkScreen extends AbstractContainerScreen<PerkMenu> {
 
             int level =
                     container.getSocketLevel(perkSlot.getContainerSlot());
+
+            if (level == 0) continue;
 
             int x =
                     leftPos + slot.x;

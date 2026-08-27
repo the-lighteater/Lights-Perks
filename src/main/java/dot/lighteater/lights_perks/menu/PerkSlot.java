@@ -64,7 +64,17 @@ public class PerkSlot extends Slot {
 
     @Override
     public boolean isActive() {
-        return perkContainer.hasEquipment();
+
+        boolean isActive = false;
+
+        if (perkContainer.hasEquipment())
+            if (ModEvents.isPerkable(perkContainer.getEquipment()))
+                if (getContainerSlot() < (perkContainer.getSocketCount()))
+                {
+                    isActive = true;
+                }
+
+        return isActive;
     }
 
     @Override
