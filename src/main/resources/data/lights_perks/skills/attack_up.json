@@ -3,7 +3,7 @@
   "skill_id": "lights_perks:attack_up",
   "color": "0xFF7A3030",
   "maxLevel": 5,
-  "bonusLevel": 1,
+  "bonusLevel": 3,
 
   "levels": [
     {
@@ -47,6 +47,22 @@
     },
     {
       "level": 6,
+      "bonus": true,
+      "effects": [
+        "+25 Attack Damage",
+        "+120% Attack Speed"
+      ]
+    },
+    {
+      "level": 7,
+      "bonus": true,
+      "effects": [
+        "+25 Attack Damage",
+        "+120% Attack Speed"
+      ]
+    },
+    {
+      "level": 8,
       "bonus": true,
       "effects": [
         "+25 Attack Damage",

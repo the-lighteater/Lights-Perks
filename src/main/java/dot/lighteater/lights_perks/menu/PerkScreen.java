@@ -6,6 +6,7 @@ import dot.lighteater.lights_perks.ModKeyBindings;
 import dot.lighteater.lights_perks.UpgradeScrolls;
 import dot.lighteater.lights_perks.helpers.EquipmentType;
 import dot.lighteater.lights_perks.skill.*;
+import dot.lighteater.lights_perks.skill.bonus_skills.BonusSkillChecker;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
@@ -453,26 +454,41 @@ public class PerkScreen extends AbstractContainerScreen<PerkMenu> {
                 0
         );
 
-        int bonusLevels = Math.max(
-                skillData.bonusLevel,
-                0
-        );
+        ResourceLocation skillId =
+                new ResourceLocation(skillData.skill_id);
 
-        int totalLevels = Math.max(
-                normalLevels + bonusLevels,
-                1
-        );
+        Minecraft minecraft =
+                Minecraft.getInstance();
 
-        int currentLevel = Math.max(
-                0,
-                Math.min(
-                        points.getOrDefault(
-                                new ResourceLocation(skillData.skill_id),
-                                0
-                        ),
-                        normalLevels
-                )
-        );
+        boolean hasBonusSkill =
+                minecraft.player != null
+                        && BonusSkillChecker.hasBonusSkill(
+                        minecraft.player,
+                        skillId
+                );
+
+        int bonusLevels =
+                hasBonusSkill
+                        ? Math.max(skillData.bonusLevel, 0)
+                        : 0;
+
+        int totalLevels =
+                Math.max(
+                        normalLevels + bonusLevels,
+                        1
+                );
+
+        int currentLevel =
+                Math.max(
+                        0,
+                        Math.min(
+                                points.getOrDefault(
+                                        skillId,
+                                        0
+                                ),
+                                normalLevels + bonusLevels
+                        )
+                );
 
 
         /*
@@ -530,10 +546,12 @@ public class PerkScreen extends AbstractContainerScreen<PerkMenu> {
              */
 
             boolean isBonus =
-                    level >= normalLevels;
+                    hasBonusSkill
+                            && level >= normalLevels;
 
             boolean isCompleted =
-                    !isBonus && level < currentLevel;
+                    !isBonus
+                            && level < currentLevel;
 
             /*
              * =========================
@@ -856,21 +874,77 @@ public class PerkScreen extends AbstractContainerScreen<PerkMenu> {
             int y,
             int width
     ) {
+        ResourceLocation skillId =
+                new ResourceLocation(skillData.skill_id);
+
+        Minecraft minecraft = Minecraft.getInstance();
+
+        boolean hasBonus =
+                minecraft.player != null
+                        && BonusSkillChecker.hasBonusSkill(
+                        minecraft.player,
+                        skillId
+                );
+
+        /*
+         * =========================
+         * LEVEL CAP
+         * =========================
+         */
 
         int levelCap = skillData.maxLevel;
 
-        // TODO - Add in bonusSkills check
+        if (hasBonus) {
+            levelCap += skillData.bonusLevel;
+        }
 
         int currentLevel = Math.max(
                 0,
                 Math.min(
-                        points.getOrDefault(
-                                new ResourceLocation(skillData.skill_id),
-                                0
-                        ),
+                        points.getOrDefault(skillId, 0),
                         levelCap
                 )
         );
+
+        /*
+         * =========================
+         * VISIBLE LEVELS
+         * =========================
+         *
+         * Remove bonus levels entirely if
+         * the player does not currently have
+         * the bonus skill.
+         */
+
+        List<SkillLevelData> visibleLevels =
+                new ArrayList<>();
+
+        for (SkillLevelData level : skillData.levels) {
+
+            if (level.bonus && !hasBonus) {
+                continue;
+            }
+
+            visibleLevels.add(level);
+        }
+
+        int pageCount =
+                (int) Math.ceil(
+                        (double) visibleLevels.size()
+                                / LEVELS_PER_PAGE
+                );
+
+        skillLevelPage =
+                Math.min(
+                        skillLevelPage,
+                        Math.max(0, pageCount - 1)
+                );
+
+        /*
+         * =========================
+         * LEVEL PAGE
+         * =========================
+         */
 
         int startIndex =
                 skillLevelPage * LEVELS_PER_PAGE;
@@ -878,7 +952,7 @@ public class PerkScreen extends AbstractContainerScreen<PerkMenu> {
         int endIndex =
                 Math.min(
                         startIndex + LEVELS_PER_PAGE,
-                        skillData.levels.size()
+                        visibleLevels.size()
                 );
 
         int currentY = y;
@@ -886,19 +960,17 @@ public class PerkScreen extends AbstractContainerScreen<PerkMenu> {
         for (int i = startIndex; i < endIndex; i++) {
 
             SkillLevelData level =
-                    skillData.levels.get(i);
+                    visibleLevels.get(i);
 
-            /*
-             * Render the level.
-             */
-            int diff = renderSkillLevel(
-                    graphics,
-                    level,
-                    currentLevel,
-                    x,
-                    currentY,
-                    width
-            );
+            int diff =
+                    renderSkillLevel(
+                            graphics,
+                            level,
+                            currentLevel,
+                            x,
+                            currentY,
+                            width
+                    );
 
             currentY += (30 + diff);
         }
@@ -909,18 +981,8 @@ public class PerkScreen extends AbstractContainerScreen<PerkMenu> {
          * =========================
          */
 
-        int pageCount =
-                (int) Math.ceil(
-                        (double) skillData.levels.size()
-                                / LEVELS_PER_PAGE
-                );
-
         if (pageCount > 1) {
 
-            /*
-             * Put the buttons underneath
-             * the displayed levels.
-             */
             int buttonY =
                     y + 105;
 
@@ -1138,14 +1200,14 @@ public class PerkScreen extends AbstractContainerScreen<PerkMenu> {
 
             if (level.level < currentLevel) {
                 // Passed Bonus Level
-                color = 0xFF388F87;
+                color = 0xFF709995;
             } else if (level.level == currentLevel) {
                 // Current Bonus Level
                 color = 0xFF17FFEE;
+            } else {
+                // Upcoming Bonus Level
+                color = 0xFF0f9489;
             }
-
-            // Upcoming Bonus Level
-            color = 0xFF81EBE3;
 
             /*
              * Current level = bright green

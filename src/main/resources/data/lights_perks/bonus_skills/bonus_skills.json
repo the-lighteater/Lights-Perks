@@ -2,12 +2,13 @@
   "entries": [
     {
       "skill": "lights_perks:attack_up",
-      "required": 3,
+      "required": 4,
       "items": [
         "minecraft:iron_helmet",
         "minecraft:iron_chestplate",
         "minecraft:iron_leggings",
-        "minecraft:iron_boots"
+        "minecraft:iron_boots",
+        "minecraft:iron_sword"
       ]
     },
     {

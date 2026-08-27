@@ -6,6 +6,7 @@ import dot.lighteater.lights_perks.item_config.ItemConfigData;
 import dot.lighteater.lights_perks.item_config.ItemConfigManager;
 import dot.lighteater.lights_perks.skill.SkillData;
 import dot.lighteater.lights_perks.skill.SkillManager;
+import dot.lighteater.lights_perks.skill.bonus_skills.BonusSkillChecker;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
@@ -48,6 +49,12 @@ public class ModEvents {
         }
 
         applyPerks(player);
+
+        if (event.player.level().isClientSide) {
+            return;
+        }
+
+        BonusSkillChecker.update(event.player);
     }
 
     private static void applyPerks(Player player) {
