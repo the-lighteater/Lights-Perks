@@ -1,11 +1,13 @@
 package dot.lighteater.lights_perks.skill;
 
-import com.github.alexthe666.citadel.repack.jcodec.common.DictionaryCompressor;
 import dot.lighteater.lights_perks.UpgradeScrolls;
 import dot.lighteater.lights_perks.helpers.EquipmentType;
 import dot.lighteater.lights_perks.item_config.ItemConfigData;
 import dot.lighteater.lights_perks.item_config.ItemConfigManager;
 import dot.lighteater.lights_perks.perk.IPerkItem;
+import dot.lighteater.lights_perks.skill.bonus_skills.BonusLoader;
+import dot.lighteater.lights_perks.skill.bonus_skills.BonusSkillEntry;
+import dot.lighteater.lights_perks.skill.bonus_skills.EquipmentSnapshot;
 import dot.lighteater.lights_perks.skill.skill_sets.SkillSetEntry;
 import dot.lighteater.lights_perks.skill.skill_sets.SkillSetLoader;
 import net.minecraft.nbt.CompoundTag;
@@ -28,6 +30,18 @@ public class SkillManager {
 
     private static final String ITEM_TAG =
             "Item";
+
+    private static final Map<UUID, Map<ResourceLocation, Integer>>
+            PLAYER_SKILL_POINTS = new HashMap<>();
+
+    private static final Map<UUID, Map<ResourceLocation, Map<EquipmentType, Integer>>>
+            PLAYER_EQUIPMENT_POINTS = new HashMap<>();
+
+    private static final Map<UUID, Set<ResourceLocation>> BONUS_SKILL_CACHE =
+            new HashMap<>();
+
+    private static final Map<UUID, EquipmentSnapshot> BONUS_SKILL_SNAPSHOTS =
+            new HashMap<>();
 
     private SkillManager() {
     }
@@ -82,6 +96,29 @@ public class SkillManager {
      * =========================================================
      */
 
+    public static void updatePlayerSkills(Player player) {
+
+        UUID uuid = player.getUUID();
+
+        Map<ResourceLocation, Integer> points =
+                getPlayerSkillPoints(player);
+
+        Map<ResourceLocation, Map<EquipmentType, Integer>> equipmentPoints =
+                getPlayerSkillPointsByEquipment(player);
+
+        PLAYER_SKILL_POINTS.put(
+                uuid,
+                points
+        );
+
+        PLAYER_EQUIPMENT_POINTS.put(
+                uuid,
+                equipmentPoints
+        );
+
+        updateBonusSkills(player);
+    }
+
     /**
      * Calculates all skill points supplied by the player's
      * currently equipped perk items.
@@ -92,7 +129,13 @@ public class SkillManager {
         Map<ResourceLocation, Integer> points =
                 new HashMap<>();
 
-        addEquipmentPointsBySets(player, points);
+        /*
+         * Skill set bonuses
+         */
+        addEquipmentPointsBySets(
+                player,
+                points
+        );
 
         /*
          * Main hand
@@ -346,6 +389,66 @@ public class SkillManager {
         }
     }
 
+    public static void updateBonusSkills(Player player) {
+
+        UUID uuid = player.getUUID();
+
+        EquipmentSnapshot current =
+                EquipmentSnapshot.from(player);
+
+        EquipmentSnapshot previous =
+                BONUS_SKILL_SNAPSHOTS.get(uuid);
+
+        if (current.equals(previous)) {
+            return;
+        }
+
+        BONUS_SKILL_SNAPSHOTS.put(uuid, current);
+
+        Set<ResourceLocation> bonusSkills =
+                new HashSet<>();
+
+        for (BonusSkillEntry entry : BonusLoader.getEntries()) {
+
+            int matches = 0;
+
+            for (ItemStack stack : getEquipment(player)) {
+
+                if (stack.isEmpty()) {
+                    continue;
+                }
+
+                ResourceLocation itemId =
+                        ForgeRegistries.ITEMS.getKey(stack.getItem());
+
+                if (itemId != null
+                        && entry.items().contains(itemId)) {
+
+                    matches++;
+                }
+            }
+
+            if (matches >= entry.required()) {
+                bonusSkills.add(entry.skill());
+            }
+        }
+
+        BONUS_SKILL_CACHE.put(uuid, bonusSkills);
+    }
+
+    public static boolean hasBonusSkill(
+            Player player,
+            ResourceLocation skill
+    ) {
+        updateBonusSkills(player);
+
+        return BONUS_SKILL_CACHE
+                .getOrDefault(
+                        player.getUUID(),
+                        Set.of()
+                )
+                .contains(skill);
+    }
 
     /*
      * =========================================================

@@ -6,7 +6,6 @@ import dot.lighteater.lights_perks.ModKeyBindings;
 import dot.lighteater.lights_perks.UpgradeScrolls;
 import dot.lighteater.lights_perks.helpers.EquipmentType;
 import dot.lighteater.lights_perks.skill.*;
-import dot.lighteater.lights_perks.skill.bonus_skills.BonusSkillChecker;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
@@ -473,7 +472,7 @@ public class PerkScreen extends AbstractContainerScreen<PerkMenu> {
 
         boolean hasBonusSkill =
                 minecraft.player != null
-                        && BonusSkillChecker.hasBonusSkill(
+                        && SkillManager.hasBonusSkill(
                         minecraft.player,
                         skillId
                 );
@@ -892,7 +891,7 @@ public class PerkScreen extends AbstractContainerScreen<PerkMenu> {
 
         boolean hasBonus =
                 minecraft.player != null
-                        && BonusSkillChecker.hasBonusSkill(
+                        && SkillManager.hasBonusSkill(
                         minecraft.player,
                         skillId
                 );
