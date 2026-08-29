@@ -119,6 +119,32 @@ public class SkillManager {
         updateBonusSkills(player);
     }
 
+    public static Map<ResourceLocation, Integer> getPlayerSkillPointsScreen(
+            Player player
+    ) {
+        if (player == null) {
+            return Map.of();
+        }
+
+        return PLAYER_SKILL_POINTS.getOrDefault(
+                player.getUUID(),
+                Map.of()
+        );
+    }
+
+    public static Map<ResourceLocation, Map<EquipmentType, Integer>> getPlayerEquipmentPointsScreen(
+        Player player
+    ) {
+            if (player == null) {
+                return Map.of();
+            }
+
+            return PLAYER_EQUIPMENT_POINTS.getOrDefault(
+                    player.getUUID(),
+                    Map.of()
+            );
+    }
+
     /**
      * Calculates all skill points supplied by the player's
      * currently equipped perk items.

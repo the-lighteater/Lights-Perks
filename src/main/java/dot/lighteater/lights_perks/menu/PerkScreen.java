@@ -50,6 +50,7 @@ public class PerkScreen extends AbstractContainerScreen<PerkMenu> {
             equipmentPoints =
             new HashMap<>();
 
+    LocalPlayer player = null;
 
     public PerkScreen(
             PerkMenu menu,
@@ -71,42 +72,7 @@ public class PerkScreen extends AbstractContainerScreen<PerkMenu> {
     ) {
         super.render(graphics, mouseX, mouseY, partialTick);
 
-        skills = new ArrayList<>(SkillManager.getAllSkills());
-
-        Minecraft minecraft = Minecraft.getInstance();
-
-        if (minecraft.player != null) {
-
-            Map<ResourceLocation, Integer> current =
-                    SkillManager.getPlayerSkillPoints(
-                            minecraft.player
-                    );
-
-            if (!current.equals(points)) {
-                points = new HashMap<>(current);
-            }
-
-            if (selectedSkill != null) {
-                int skillPoints = points.getOrDefault(
-                        new ResourceLocation(selectedSkill.skill_id),
-                        0
-                );
-
-                if (skillPoints == 0) {
-                    selectedSkill = null;
-                }
-            }
-
-            Map<ResourceLocation, Map<EquipmentType, Integer>> currentEquipmentPoints =
-                    SkillManager.getPlayerSkillPointsByEquipment(
-                            minecraft.player
-                    );
-
-            if (!currentEquipmentPoints.equals(equipmentPoints)) {
-                equipmentPoints =
-                        new HashMap<>(currentEquipmentPoints);
-            }
-        }
+        updatePlayerInfo();
 
         renderEquipmentItems(graphics);
 
@@ -130,6 +96,30 @@ public class PerkScreen extends AbstractContainerScreen<PerkMenu> {
         }
 
         this.renderTooltip(graphics, mouseX, mouseY);
+    }
+
+    private void updatePlayerInfo() {
+        Minecraft minecraft = Minecraft.getInstance();
+
+        if (minecraft.player != null) {
+
+            player = minecraft.player;
+
+            points = SkillManager.getPlayerSkillPointsScreen(player);
+
+            equipmentPoints = SkillManager.getPlayerEquipmentPointsScreen(player);
+
+            if (selectedSkill != null) {
+                int skillPoints = points.getOrDefault(
+                        new ResourceLocation(selectedSkill.skill_id),
+                        0
+                );
+
+                if (skillPoints == 0) {
+                    selectedSkill = null;
+                }
+            }
+        }
     }
 
     @Override
