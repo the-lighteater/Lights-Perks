@@ -99,6 +99,8 @@ public class PerkScreen extends AbstractContainerScreen<PerkMenu> {
     }
 
     private void updatePlayerInfo() {
+        skills = new ArrayList<>(SkillManager.getAllSkills());
+
         Minecraft minecraft = Minecraft.getInstance();
 
         if (minecraft.player != null) {

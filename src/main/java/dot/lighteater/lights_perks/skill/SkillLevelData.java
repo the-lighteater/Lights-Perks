@@ -7,7 +7,16 @@ public class SkillLevelData {
 
     public int level;
     public boolean bonus;
+
+    /*
+     * Human-readable text shown in the GUI.
+     */
     public List<String> effects;
+
+    /*
+     * Actual gameplay effects.
+     */
+    public List<SkillEffectData> skillEffects;
 
     public SkillLevelData() {
     }
@@ -15,10 +24,12 @@ public class SkillLevelData {
     public SkillLevelData(
             int level,
             boolean bonus,
-            String... effects
+            List<String> effects,
+            List<SkillEffectData> skillEffects
     ) {
         this.level = level;
         this.bonus = bonus;
-        this.effects = List.of(effects);
+        this.effects = effects;
+        this.skillEffects = skillEffects;
     }
 }

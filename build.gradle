@@ -208,6 +208,9 @@ dependencies {
 //
     compileOnly(fg.deobf("curse.maven:alexscaves-924854:5848216"))
     compileOnly(fg.deobf("curse.maven:citadel-331936:6702068"))
+
+    implementation fg.deobf("curse.maven:placebo-283644:6274231")
+    implementation fg.deobf("curse.maven:apothic-attributes-898963:5634071")
 //
 //    implementation fg.deobf("curse.maven:better-combat-by-daedelus-639842:5625757")
 //    implementation fg.deobf("curse.maven:playeranimator-658587:4587214")
@@ -251,7 +254,7 @@ dependencies {
 //    runtimeOnly(fg.deobf("curse.maven:patchouli-306770:6164575"))
 //    runtimeOnly(fg.deobf("curse.maven:goetycataclysm-1224214:6723713"))
 //
-//    runtimeOnly(fg.deobf("curse.maven:jade-324717:6855440"))
+    runtimeOnly(fg.deobf("curse.maven:jade-324717:6855440"))
 
     // Example mod dependency using a mod jar from ./libs with a flat dir repository
     // This maps to ./libs/coolmod-${mc_version}-${coolmod_version}.jar

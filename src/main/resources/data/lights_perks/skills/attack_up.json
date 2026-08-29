@@ -11,6 +11,14 @@
       "bonus": false,
       "effects": [
         "+5 Attack Damage"
+      ],
+      "skillEffects": [
+        {
+          "type": "attribute",
+          "attribute": "minecraft:generic.attack_damage",
+          "amount": 5.0,
+          "operation": "addition"
+        }
       ]
     },
     {
@@ -19,6 +27,14 @@
       "effects": [
         "+10 Attack Damage",
         "+5% Attack Speed"
+      ],
+      "skillEffects": [
+        {
+          "type": "attribute",
+          "attribute": "minecraft:generic.attack_damage",
+          "amount": 10.0,
+          "operation": "addition"
+        }
       ]
     },
     {
@@ -27,6 +43,14 @@
       "effects": [
         "+15 Attack Damage",
         "+10% Attack Speed"
+      ],
+      "skillEffects": [
+        {
+          "type": "attribute",
+          "attribute": "minecraft:generic.attack_damage",
+          "amount": 15.0,
+          "operation": "addition"
+        }
       ]
     },
     {
@@ -35,6 +59,14 @@
       "effects": [
         "+25 Attack Damage",
         "+120% Attack Speed"
+      ],
+      "skillEffects": [
+        {
+          "type": "attribute",
+          "attribute": "minecraft:generic.attack_damage",
+          "amount": 25.0,
+          "operation": "addition"
+        }
       ]
     },
     {
@@ -43,6 +75,14 @@
       "effects": [
         "+25 Attack Damage",
         "+120% Attack Speed"
+      ],
+      "skillEffects": [
+        {
+          "type": "attribute",
+          "attribute": "minecraft:generic.attack_damage",
+          "amount": 30.0,
+          "operation": "addition"
+        }
       ]
     },
     {
@@ -51,6 +91,14 @@
       "effects": [
         "+25 Attack Damage",
         "+120% Attack Speed"
+      ],
+      "skillEffects": [
+        {
+          "type": "attribute",
+          "attribute": "minecraft:generic.attack_damage",
+          "amount": 40.0,
+          "operation": "addition"
+        }
       ]
     },
     {
@@ -59,6 +107,14 @@
       "effects": [
         "+25 Attack Damage",
         "+120% Attack Speed"
+      ],
+      "skillEffects": [
+        {
+          "type": "attribute",
+          "attribute": "minecraft:generic.attack_damage",
+          "amount": 50.0,
+          "operation": "addition"
+        }
       ]
     },
     {
@@ -67,6 +123,14 @@
       "effects": [
         "+25 Attack Damage",
         "+120% Attack Speed"
+      ],
+      "skillEffects": [
+        {
+          "type": "attribute",
+          "attribute": "minecraft:generic.attack_damage",
+          "amount": 70.0,
+          "operation": "addition"
+        }
       ]
     }
   ]

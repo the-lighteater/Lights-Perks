@@ -14,10 +14,14 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.ai.attributes.Attribute;
+import net.minecraft.world.entity.ai.attributes.AttributeInstance;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.registries.ForgeRegistries;
 
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 
 public class SkillManager {
@@ -100,23 +104,82 @@ public class SkillManager {
 
         UUID uuid = player.getUUID();
 
-        Map<ResourceLocation, Integer> points =
+        Map<ResourceLocation, Integer> newPoints =
                 getPlayerSkillPoints(player);
 
-        Map<ResourceLocation, Map<EquipmentType, Integer>> equipmentPoints =
+        Map<ResourceLocation, Map<EquipmentType, Integer>> newEquipmentPoints =
                 getPlayerSkillPointsByEquipment(player);
 
+        Map<ResourceLocation, Integer> oldPoints =
+                PLAYER_SKILL_POINTS.get(uuid);
+
+        Map<ResourceLocation, Map<EquipmentType, Integer>> oldEquipmentPoints =
+                PLAYER_EQUIPMENT_POINTS.get(uuid);
+
+        /*
+         * Determine whether the player's skill state
+         * actually changed.
+         */
+        boolean pointsChanged =
+                !newPoints.equals(oldPoints);
+
+        boolean equipmentPointsChanged =
+                !newEquipmentPoints.equals(oldEquipmentPoints);
+
+        /*
+         * Update the cached state.
+         */
         PLAYER_SKILL_POINTS.put(
                 uuid,
-                points
+                newPoints
         );
 
         PLAYER_EQUIPMENT_POINTS.put(
                 uuid,
-                equipmentPoints
+                newEquipmentPoints
         );
 
-        updateBonusSkills(player);
+        /*
+         * Update bonus skills before determining
+         * the final modifiers.
+         */
+        boolean bonusChanged = updateBonusSkills(player);
+
+        /*
+         * Only rebuild the player's attribute modifiers
+         * if something affecting their skills changed.
+         */
+        if (pointsChanged || equipmentPointsChanged || bonusChanged) {
+
+            UpgradeScrolls.LOGGER.debug(
+                    "[SkillManager] Skill state changed for {}",
+                    player.getName().getString()
+            );
+
+            UpgradeScrolls.LOGGER.debug(
+                    "[SkillManager] Old points: {}",
+                    oldPoints
+            );
+
+            UpgradeScrolls.LOGGER.debug(
+                    "[SkillManager] New points: {}",
+                    newPoints
+            );
+
+            UpgradeScrolls.LOGGER.debug(
+                    "[SkillManager] Old equipment points: {}",
+                    oldEquipmentPoints
+            );
+
+            UpgradeScrolls.LOGGER.debug(
+                    "[SkillManager] New equipment points: {}",
+                    newEquipmentPoints
+            );
+
+            clearSkillModifiers(player);
+
+            applySkillModifiers(player);
+        }
     }
 
     public static Map<ResourceLocation, Integer> getPlayerSkillPointsScreen(
@@ -415,7 +478,7 @@ public class SkillManager {
         }
     }
 
-    public static void updateBonusSkills(Player player) {
+    public static boolean updateBonusSkills(Player player) {
 
         UUID uuid = player.getUUID();
 
@@ -426,7 +489,7 @@ public class SkillManager {
                 BONUS_SKILL_SNAPSHOTS.get(uuid);
 
         if (current.equals(previous)) {
-            return;
+            return false;
         }
 
         BONUS_SKILL_SNAPSHOTS.put(uuid, current);
@@ -460,6 +523,8 @@ public class SkillManager {
         }
 
         BONUS_SKILL_CACHE.put(uuid, bonusSkills);
+
+        return true;
     }
 
     public static boolean hasBonusSkill(
@@ -590,6 +655,311 @@ public class SkillManager {
                     current
             );
         }
+
+
+    }
+
+    public static int getPlayerSkillLevel(
+            Player player,
+            ResourceLocation skillId
+    ) {
+        Map<ResourceLocation, Integer> points =
+                PLAYER_SKILL_POINTS.get(player.getUUID());
+
+        if (points == null) {
+            return 0;
+        }
+
+        return points.getOrDefault(skillId, 0);
+    }
+
+    public static SkillLevelData getActiveSkillLevel(
+            Player player,
+            ResourceLocation skillId
+    ) {
+        SkillData skill = get(skillId);
+
+        if (skill == null || skill.levels.isEmpty()) {
+            return null;
+        }
+
+        int currentLevel =
+                getPlayerSkillLevel(player, skillId);
+
+        boolean hasBonus =
+                hasBonusSkill(player, skillId);
+
+        int maxLevel =
+                skill.maxLevel;
+
+        if (hasBonus) {
+            maxLevel += skill.bonusLevel;
+        }
+
+        /*
+         * Clamp the player's level to the
+         * maximum level they currently have access to.
+         */
+        currentLevel =
+                Math.max(
+                        0,
+                        Math.min(
+                                currentLevel,
+                                maxLevel
+                        )
+                );
+
+        /*
+         * Level 0 means the skill isn't active.
+         */
+        if (currentLevel == 0) {
+            return null;
+        }
+
+        /*
+         * Skill levels are 1-based,
+         * List indexes are 0-based.
+         */
+        int index = currentLevel - 1;
+
+        /*
+         * Safety check in case the JSON doesn't
+         * actually contain all expected levels.
+         */
+        if (index >= skill.levels.size()) {
+            return null;
+        }
+
+        return skill.levels.get(index);
+    }
+
+    private static void applySkillModifiers(Player player) {
+
+        for (SkillData skill : getAllSkills()) {
+
+            ResourceLocation skillId =
+                    new ResourceLocation(skill.skill_id);
+
+            int currentLevel =
+                    getPlayerSkillLevel(
+                            player,
+                            skillId
+                    );
+
+            if (currentLevel <= 0) {
+                continue;
+            }
+
+            SkillLevelData level =
+                    getActiveSkillLevel(
+                            player,
+                            skillId
+                    );
+
+            if (level == null ||
+                    level.skillEffects == null) {
+                continue;
+            }
+
+            for (int i = 0; i < level.skillEffects.size(); i++) {
+
+                SkillEffectData effect =
+                        level.skillEffects.get(i);
+
+                if (!"attribute".equals(effect.type)) {
+                    continue;
+                }
+
+                applyAttributeModifier(
+                        player,
+                        skillId,
+                        level.level,
+                        i,
+                        effect
+                );
+            }
+        }
+    }
+
+    private static void applyAttributeModifier(
+            Player player,
+            ResourceLocation skillId,
+            int level,
+            int effectIndex,
+            SkillEffectData effect
+    ) {
+        AttributeInstance attribute =
+                getAttribute(
+                        player,
+                        effect.attribute
+                );
+
+        if (attribute == null) {
+            UpgradeScrolls.LOGGER.warn(
+                    "[SkillManager] Failed to apply attribute modifier: " +
+                            "attribute '{}' does not exist for skill {} level {}",
+                    effect.attribute,
+                    skillId,
+                    level
+            );
+
+            return;
+        }
+
+        UUID uuid =
+                getSkillModifierUUID(
+                        skillId,
+                        level,
+                        effectIndex
+                );
+
+        /*
+         * Remove it first in case it already exists.
+         */
+        attribute.removeModifier(uuid);
+
+        AttributeModifier.Operation operation =
+                parseOperation(effect.operation);
+
+        UpgradeScrolls.LOGGER.debug(
+                "[SkillManager] Applying skill modifier: " +
+                        "Player={}, Skill={}, Level={}, EffectIndex={}, " +
+                        "Attribute={}, Amount={}, Operation={}, UUID={}",
+                player.getGameProfile().getName(),
+                skillId,
+                level,
+                effectIndex,
+                effect.attribute,
+                effect.amount,
+                operation,
+                uuid
+        );
+
+        AttributeModifier modifier =
+                new AttributeModifier(
+                        uuid,
+                        "lights_perks." + skillId.getPath(),
+                        effect.amount,
+                        operation
+                );
+
+        attribute.addTransientModifier(modifier);
+
+        UpgradeScrolls.LOGGER.debug(
+                "[SkillManager] Successfully applied modifier '{}' to {}",
+                modifier.getName(),
+                player.getGameProfile().getName()
+        );
+    }
+
+    private static AttributeModifier.Operation parseOperation(
+            String operation
+    ) {
+        if (operation == null) {
+            return AttributeModifier.Operation.ADDITION;
+        }
+
+        return switch (operation.toLowerCase()) {
+
+            case "addition" ->
+                    AttributeModifier.Operation.ADDITION;
+
+            case "multiply_base" ->
+                    AttributeModifier.Operation.MULTIPLY_BASE;
+
+            case "multiply_total" ->
+                    AttributeModifier.Operation.MULTIPLY_TOTAL;
+
+            default -> {
+                UpgradeScrolls.LOGGER.warn(
+                        "Unknown attribute operation '{}', defaulting to addition",
+                        operation
+                );
+
+                yield AttributeModifier.Operation.ADDITION;
+            }
+        };
+    }
+
+    private static UUID getSkillModifierUUID(
+            ResourceLocation skillId,
+            int level,
+            int effectIndex
+    ) {
+        String key =
+                skillId.toString()
+                        + ":level:"
+                        + level
+                        + ":effect:"
+                        + effectIndex;
+
+        return UUID.nameUUIDFromBytes(
+                key.getBytes(StandardCharsets.UTF_8)
+        );
+    }
+
+    private static void clearSkillModifiers(Player player) {
+
+        for (SkillData skill : getAllSkills()) {
+
+            ResourceLocation skillId =
+                    new ResourceLocation(skill.skill_id);
+
+            for (SkillLevelData level : skill.levels) {
+
+                if (level.skillEffects == null) {
+                    continue;
+                }
+
+                for (int i = 0; i < level.skillEffects.size(); i++) {
+
+                    SkillEffectData effect =
+                            level.skillEffects.get(i);
+
+                    if (!"attribute".equals(effect.type)) {
+                        continue;
+                    }
+
+                    AttributeInstance attribute =
+                            getAttribute(player, effect.attribute);
+
+                    if (attribute == null) {
+                        continue;
+                    }
+
+                    UUID uuid =
+                            getSkillModifierUUID(
+                                    skillId,
+                                    level.level,
+                                    i
+                            );
+
+                    attribute.removeModifier(uuid);
+                }
+            }
+        }
+    }
+
+    private static AttributeInstance getAttribute(
+            Player player,
+            String attributeId
+    ) {
+        ResourceLocation id =
+                ResourceLocation.parse(attributeId);
+
+        Attribute attribute =
+                ForgeRegistries.ATTRIBUTES.getValue(id);
+
+        if (attribute == null) {
+            UpgradeScrolls.LOGGER.warn(
+                    "Unknown attribute '{}'",
+                    attributeId
+            );
+
+            return null;
+        }
+
+        return player.getAttribute(attribute);
     }
 
     private static List<ItemStack> getEquipment(Player player) {
