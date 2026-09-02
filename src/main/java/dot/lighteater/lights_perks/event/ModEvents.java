@@ -27,7 +27,7 @@ import java.util.Map;
 
 @Mod.EventBusSubscriber(modid = UpgradeScrolls.MODID)
 public class ModEvents {
-
+    
     @SubscribeEvent
     public static void onPlayerTick(TickEvent.PlayerTickEvent event) {
 

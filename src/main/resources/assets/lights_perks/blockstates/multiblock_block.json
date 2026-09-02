@@ -1,0 +1,6 @@
+{
+  "variants": {
+    "on=false": { "model": "lights_perks:block/multiblock_block_off" },
+    "on=true": { "model": "lights_perks:block/multiblock_block_on" }
+  }
+}

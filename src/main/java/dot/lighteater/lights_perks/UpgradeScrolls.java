@@ -1,6 +1,7 @@
 package dot.lighteater.lights_perks;
 
 import com.mojang.logging.LogUtils;
+import dot.lighteater.lights_perks.block.ModBlocks;
 import dot.lighteater.lights_perks.item.LoadItems;
 import dot.lighteater.lights_perks.item.ModCreativeModTabs;
 import dot.lighteater.lights_perks.item.ModItems;
@@ -41,6 +42,8 @@ public class UpgradeScrolls
 
         ModCreativeModTabs.register(modEventBus);
         ModItems.register(modEventBus);
+
+        ModBlocks.register(modEventBus);
 
         SkillRuntimeLoader.loadSkills();
 
