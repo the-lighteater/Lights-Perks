@@ -2,7 +2,6 @@ package dot.lighteater.lights_perks.event;
 
 import dot.lighteater.lights_perks.UpgradeScrolls;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraftforge.event.entity.living.LootingLevelEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
@@ -23,10 +22,8 @@ public class SkillEnchantmentEvents {
         UpgradeScrolls.LOGGER.debug("[Skill Enchant Events] Fortune is: {}",
                 player.getMainHandItem().getEnchantmentLevel(Enchantments.BLOCK_FORTUNE));
 
-        int level = EnchantmentHelper.getItemEnchantmentLevel(Enchantments.BLOCK_FORTUNE, player.getMainHandItem());
-
         UpgradeScrolls.LOGGER.debug("[Skill Enchant Events] Silk Touch is: {}",
-                level);
+                player.getMainHandItem().getEnchantmentLevel(Enchantments.SILK_TOUCH));
     }
 
     @SubscribeEvent

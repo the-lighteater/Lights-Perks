@@ -3,6 +3,7 @@ package dot.lighteater.lights_perks.mixin;
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 import dot.lighteater.lights_perks.UpgradeScrolls;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.item.enchantment.Enchantments;
@@ -27,8 +28,14 @@ public class EnchantmentHelperMixin {
             return original;
         }
 
-        UpgradeScrolls.LOGGER.debug("Fortune Level: {}", original);
+        int bonus = 0;
 
-        return original;
+        if (stack.is(Items.DIAMOND_PICKAXE)) {
+            bonus += 3;
+        }
+
+        UpgradeScrolls.LOGGER.debug("Fortune Level: {}", bonus);
+
+        return original + bonus;
     }
 }
