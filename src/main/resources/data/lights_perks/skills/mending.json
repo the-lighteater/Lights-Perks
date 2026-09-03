@@ -1,0 +1,25 @@
+{
+  "title": "Mending",
+  "skill_id": "lights_perks:mending",
+  "color": "0xFF7A3030",
+  "maxLevel": 1,
+  "bonusLevel": 0,
+
+  "levels": [
+    {
+      "level": 1,
+      "bonus": false,
+      "effects": [
+        "Mending applied to piece(s) that have points"
+      ],
+      "skillEffects": [
+        {
+          "type": "enchantment",
+          "enchantment": "minecraft:mending",
+          "application": "per_item",
+          "level": 1
+        }
+      ]
+    }
+  ]
+}

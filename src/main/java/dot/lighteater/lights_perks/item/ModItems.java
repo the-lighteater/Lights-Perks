@@ -23,6 +23,13 @@ public class ModItems {
     public static final RegistryObject<Item> STAR_POWER_PERK = ITEMS.register("star_power_perk",
             () -> new PerkItem(new Item.Properties(), new ResourceLocation(UpgradeScrolls.MODID, "star_power_perk")));
 
+    public static final RegistryObject<Item> MENDING_PERK = ITEMS.register("mending_perk",
+            () -> new PerkItem(new Item.Properties(), new ResourceLocation(UpgradeScrolls.MODID, "mending_perk")));
+
+    public static final RegistryObject<Item> SPEED_BOOST_PERK = ITEMS.register("speed_boost_perk",
+            () -> new PerkItem(new Item.Properties(), new ResourceLocation(UpgradeScrolls.MODID, "speed_boost_perk")));
+
+
 
     public static void register(IEventBus eventBus) {
 
