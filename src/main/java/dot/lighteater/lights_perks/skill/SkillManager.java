@@ -159,32 +159,6 @@ public class SkillManager {
          * if something affecting their skills changed.
          */
         if (pointsChanged || equipmentPointsChanged || bonusChanged) {
-
-            UpgradeScrolls.LOGGER.debug(
-                    "[SkillManager] Skill state changed for {}",
-                    player.getName().getString()
-            );
-
-            UpgradeScrolls.LOGGER.debug(
-                    "[SkillManager] Old points: {}",
-                    oldPoints
-            );
-
-            UpgradeScrolls.LOGGER.debug(
-                    "[SkillManager] New points: {}",
-                    newPoints
-            );
-
-            UpgradeScrolls.LOGGER.debug(
-                    "[SkillManager] Old equipment points: {}",
-                    oldEquipmentPoints
-            );
-
-            UpgradeScrolls.LOGGER.debug(
-                    "[SkillManager] New equipment points: {}",
-                    newEquipmentPoints
-            );
-
             clearEnchantmentTags(player);
 
             clearSkillModifiers(player);
@@ -256,12 +230,6 @@ public class SkillManager {
                 ForgeRegistries.MOB_EFFECTS.getValue(effectId);
 
         if (mobEffect == null) {
-            UpgradeScrolls.LOGGER.warn(
-                    "[SkillManager] Unknown mob effect '{}' for skill {}",
-                    effect.effect,
-                    skillId
-            );
-
             return;
         }
 
@@ -279,15 +247,6 @@ public class SkillManager {
                 );
 
         player.addEffect(instance);
-
-        UpgradeScrolls.LOGGER.debug(
-                "[SkillManager] Applied effect {} level {} for {} ticks to {} from skill {}",
-                effect.effect,
-                effect.strength,
-                effect.duration,
-                player.getGameProfile().getName(),
-                skillId
-        );
     }
 
     public static Map<ResourceLocation, Integer> getPlayerSkillPointsScreen(
@@ -735,36 +694,8 @@ public class SkillManager {
                         skillPoints,
                         Integer::sum
                 );
-
-//            UpgradeScrolls.LOGGER.debug(
-//                    "[SkillManager] {} provides {} point(s) to {} from {}",
-//                    perkStack.getItem(),
-//                    skillPoints,
-//                    skillId,
-//                    equipmentType
-//            );
             }
         }
-    }
-
-    private static Map<ResourceLocation, Integer> debugPoints = null;
-
-    public static void debugSkills(Player player) {
-
-        Map<ResourceLocation, Integer> current =
-                getPlayerSkillPoints(player);
-
-        if (!current.equals(debugPoints)) {
-
-            debugPoints = new HashMap<>(current);
-
-            UpgradeScrolls.LOGGER.debug(
-                    "[SkillManager] Player skill points: {}",
-                    current
-            );
-        }
-
-
     }
 
     public static int getPlayerSkillLevel(
@@ -965,12 +896,6 @@ public class SkillManager {
                 ForgeRegistries.ENCHANTMENTS.getValue(enchantmentId);
 
         if (enchantment == null) {
-            UpgradeScrolls.LOGGER.warn(
-                    "[SkillManager] Unknown enchantment '{}' for skill {}",
-                    effect.enchantment,
-                    skillId
-            );
-
             return;
         }
 
@@ -1008,14 +933,6 @@ public class SkillManager {
                     stack,
                     enchantmentId,
                     enchantmentLevel
-            );
-
-            UpgradeScrolls.LOGGER.debug(
-                    "[SkillManager] Applied enchantment {} level {} to {} from skill {}",
-                    enchantmentId,
-                    enchantmentLevel,
-                    stack.getItem(),
-                    skillId
             );
         }
     }
@@ -1076,14 +993,6 @@ public class SkillManager {
                 );
 
         if (attribute == null) {
-            UpgradeScrolls.LOGGER.warn(
-                    "[SkillManager] Failed to apply attribute modifier: " +
-                            "attribute '{}' does not exist for skill {} level {}",
-                    effect.attribute,
-                    skillId,
-                    level
-            );
-
             return;
         }
 
@@ -1102,20 +1011,6 @@ public class SkillManager {
         AttributeModifier.Operation operation =
                 parseOperation(effect.operation);
 
-        UpgradeScrolls.LOGGER.debug(
-                "[SkillManager] Applying skill modifier: " +
-                        "Player={}, Skill={}, Level={}, EffectIndex={}, " +
-                        "Attribute={}, Amount={}, Operation={}, UUID={}",
-                player.getGameProfile().getName(),
-                skillId,
-                level,
-                effectIndex,
-                effect.attribute,
-                effect.amount,
-                operation,
-                uuid
-        );
-
         AttributeModifier modifier =
                 new AttributeModifier(
                         uuid,
@@ -1125,12 +1020,6 @@ public class SkillManager {
                 );
 
         attribute.addTransientModifier(modifier);
-
-        UpgradeScrolls.LOGGER.debug(
-                "[SkillManager] Successfully applied modifier '{}' to {}",
-                modifier.getName(),
-                player.getGameProfile().getName()
-        );
     }
 
     private static AttributeModifier.Operation parseOperation(
@@ -1152,11 +1041,6 @@ public class SkillManager {
                     AttributeModifier.Operation.MULTIPLY_TOTAL;
 
             default -> {
-                UpgradeScrolls.LOGGER.warn(
-                        "Unknown attribute operation '{}', defaulting to addition",
-                        operation
-                );
-
                 yield AttributeModifier.Operation.ADDITION;
             }
         };
@@ -1250,11 +1134,6 @@ public class SkillManager {
                 ForgeRegistries.ATTRIBUTES.getValue(id);
 
         if (attribute == null) {
-            UpgradeScrolls.LOGGER.warn(
-                    "Unknown attribute '{}'",
-                    attributeId
-            );
-
             return null;
         }
 

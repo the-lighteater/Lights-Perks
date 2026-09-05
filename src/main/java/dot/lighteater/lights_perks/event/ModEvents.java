@@ -1,5 +1,6 @@
 package dot.lighteater.lights_perks.event;
 
+import dot.lighteater.lights_perks.Config;
 import dot.lighteater.lights_perks.UpgradeScrolls;
 import dot.lighteater.lights_perks.perk.IPerkItem;
 import dot.lighteater.lights_perks.item_config.ItemConfigData;
@@ -11,22 +12,68 @@ import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.ArmorItem;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.ShieldItem;
-import net.minecraft.world.item.SwordItem;
+import net.minecraft.world.item.*;
 import net.minecraftforge.event.TickEvent;
+import net.minecraftforge.event.entity.living.LivingDropsEvent;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
 import java.util.Map;
 
+import static dot.lighteater.lights_perks.event.DropPoolManager.getRandomDrop;
+
 // Events handled by the mod.
 
 @Mod.EventBusSubscriber(modid = UpgradeScrolls.MODID)
 public class ModEvents {
+
+    @SubscribeEvent
+    public static void onLivingDrops(LivingDropsEvent event) {
+
+        LivingEntity entity = event.getEntity();
+
+        if (entity.level().isClientSide()) {
+            return;
+        }
+
+        if (!DropPoolManager.canDrop(entity)) {
+            return;
+        }
+
+        // Drop chance
+        float roll = entity.getRandom().nextFloat();
+        double chance = Config.MOB_DROP_CHANCE.get();
+
+        if (roll >= chance) {
+            return;
+        }
+
+        // Get random item from the pool
+        ItemStack drop = DropPoolManager.getRandomDrop(
+                entity.getRandom()
+        );
+
+        // Nothing in the pool
+        if (drop.isEmpty()) {
+            return;
+        }
+
+
+        // Add it to the drops
+        event.getDrops().add(
+                new ItemEntity(
+                        entity.level(),
+                        entity.getX(),
+                        entity.getY(),
+                        entity.getZ(),
+                        drop
+                )
+        );
+    }
 
     @SubscribeEvent
     public static void onPlayerTick(TickEvent.PlayerTickEvent event) {

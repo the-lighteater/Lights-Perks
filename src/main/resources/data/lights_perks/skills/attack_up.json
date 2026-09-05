@@ -1,7 +1,7 @@
 {
   "title": "Attack Up",
   "skill_id": "lights_perks:attack_up",
-  "color": "0xFF7A3030",
+  "color": "0xFF7A1030",
   "maxLevel": 5,
   "bonusLevel": 3,
 

@@ -4,6 +4,7 @@ import com.mojang.logging.LogUtils;
 import dot.lighteater.lights_perks.item.LoadItems;
 import dot.lighteater.lights_perks.item.ModCreativeModTabs;
 import dot.lighteater.lights_perks.item.ModItems;
+import dot.lighteater.lights_perks.loot.ModLootModifiers;
 import dot.lighteater.lights_perks.menu.ModMenus;
 import dot.lighteater.lights_perks.perk.PerkLoader;
 import dot.lighteater.lights_perks.skill.SkillLoader;
@@ -14,6 +15,7 @@ import dot.lighteater.lights_perks.skill.skill_sets.SkillSetLoader;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.AddReloadListenerEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
+import net.minecraftforge.fml.ModLoader;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
@@ -41,6 +43,8 @@ public class UpgradeScrolls
 
         ModCreativeModTabs.register(modEventBus);
         ModItems.register(modEventBus);
+
+        ModLootModifiers.register(modEventBus);
 
         SkillRuntimeLoader.loadSkills();
 

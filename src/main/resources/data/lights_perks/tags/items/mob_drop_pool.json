@@ -1,0 +1,10 @@
+{
+  "replace": false,
+  "values": [
+    "lights_perks:attack_up_perk",
+    "lights_perks:mending_perk",
+    "lights_perks:speed_boost_perk",
+    "lights_perks:star_power_perk",
+    "lights_perks:strength_perk"
+  ]
+}

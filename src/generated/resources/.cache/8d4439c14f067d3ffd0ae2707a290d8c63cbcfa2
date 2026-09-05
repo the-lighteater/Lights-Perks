@@ -1,0 +1,4 @@
+// 1.20.1	2026-09-04T23:52:04.2331654	Global Loot Modifiers : lights_perks
+85532ce2623e246f8d8cb97d34c6430d4c94018a data/forge/loot_modifiers/global_loot_modifiers.json
+118c64f75d0d585446da8178a4676c87b37bfb97 data/lights_perks/loot_modifiers/perks_from_mineshafts.json
+61668bce56a35b326bb8826f14338a7fdcd7f802 data/lights_perks/loot_modifiers/perks_from_suspicious_sand.json
