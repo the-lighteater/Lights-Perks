@@ -2,6 +2,7 @@ package dot.lighteater.lights_perks.event;
 
 import dot.lighteater.lights_perks.Config;
 import dot.lighteater.lights_perks.UpgradeScrolls;
+import dot.lighteater.lights_perks.loot.DropPoolManager;
 import dot.lighteater.lights_perks.perk.IPerkItem;
 import dot.lighteater.lights_perks.item_config.ItemConfigData;
 import dot.lighteater.lights_perks.item_config.ItemConfigManager;
@@ -23,8 +24,6 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
 import java.util.Map;
-
-import static dot.lighteater.lights_perks.event.DropPoolManager.getRandomDrop;
 
 // Events handled by the mod.
 
@@ -54,7 +53,8 @@ public class ModEvents {
 
         // Get random item from the pool
         ItemStack drop = DropPoolManager.getRandomDrop(
-                entity.getRandom()
+                entity.getRandom(),
+                "lights_perks:perk_drop_pool"
         );
 
         // Nothing in the pool

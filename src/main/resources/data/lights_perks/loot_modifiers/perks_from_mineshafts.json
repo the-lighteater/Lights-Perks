@@ -9,5 +9,5 @@
   ],
   "max_count": 3,
   "min_count": 1,
-  "perk_pool_id": "lights_perks:perk_item_pool"
+  "perk_pool_id": "lights_perks:perk_drop_pool"
 }

@@ -1,4 +1,4 @@
-package dot.lighteater.lights_perks.event;
+package dot.lighteater.lights_perks.loot;
 
 import dot.lighteater.lights_perks.UpgradeScrolls;
 import net.minecraft.core.Holder;
@@ -22,7 +22,7 @@ public class DropPoolManager {
             ItemTags.create(
                     new ResourceLocation(
                             UpgradeScrolls.MODID,
-                            "mob_drop_pool"
+                            "perk_drop_pool"
                     )
             );
 
@@ -40,12 +40,18 @@ public class DropPoolManager {
         return entity.getType().is(DROP_ENTITIES);
     }
 
-    public static ItemStack getRandomDrop(RandomSource random) {
+    public static ItemStack getRandomDrop(RandomSource random, String poolId) {
+
+        TagKey<Item> dropItems = ItemTags.create(
+                new ResourceLocation(
+                        poolId
+                )
+        );
 
         List<Item> possibleItems = new ArrayList<>();
 
         for (Holder<Item> holder :
-                BuiltInRegistries.ITEM.getOrCreateTag(DROP_ITEMS)) {
+                BuiltInRegistries.ITEM.getOrCreateTag(dropItems)) {
 
             possibleItems.add(holder.value());
         }

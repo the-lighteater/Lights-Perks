@@ -5,7 +5,6 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import dot.lighteater.lights_perks.Config;
 import dot.lighteater.lights_perks.UpgradeScrolls;
-import dot.lighteater.lights_perks.event.DropPoolManager;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.storage.loot.LootContext;
@@ -119,7 +118,8 @@ public class AddItemModifier extends LootModifier {
 
         // Get random item from the pool
         ItemStack drop = DropPoolManager.getRandomDrop(
-                context.getRandom()
+                context.getRandom(),
+                perk_pool_id
         );
 
         if (drop.isEmpty()) {
