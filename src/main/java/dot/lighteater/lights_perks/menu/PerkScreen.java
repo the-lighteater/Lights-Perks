@@ -30,6 +30,42 @@ public class PerkScreen extends AbstractContainerScreen<PerkMenu> {
                     "textures/gui/container/inventory.png"
             );
 
+    private static final ResourceLocation soloSlotTexture =
+            new ResourceLocation(
+                    "lights_perks",
+                    "textures/gui/container/slot.png"
+            );
+
+    private static final ResourceLocation inactiveSlotTexture =
+            new ResourceLocation(
+                    "lights_perks",
+                    "textures/gui/container/inactive_slot.png"
+            );
+
+    private static final ResourceLocation LEVEL_1_TEXTURE =
+            new ResourceLocation(
+                    "lights_perks",
+                    "textures/gui/container/slot_levels_1.png"
+            );
+
+    private static final ResourceLocation LEVEL_2_TEXTURE =
+            new ResourceLocation(
+                    "lights_perks",
+                    "textures/gui/container/slot_levels_2.png"
+            );
+
+    private static final ResourceLocation LEVEL_3_TEXTURE =
+            new ResourceLocation(
+                    "lights_perks",
+                    "textures/gui/container/slot_levels_3.png"
+            );
+
+    private static final ResourceLocation LEVEL_4_TEXTURE =
+            new ResourceLocation(
+                    "lights_perks",
+                    "textures/gui/container/slot_levels_4.png"
+            );
+
     List<SkillData> skills;
 
     private boolean submenuOpen = false;
@@ -1647,33 +1683,42 @@ public class PerkScreen extends AbstractContainerScreen<PerkMenu> {
                     perkSlot.getPerkContainer();
 
             int level =
-                    container.getSocketLevel(perkSlot.getContainerSlot());
+                    container.getSocketLevel(
+                            perkSlot.getContainerSlot()
+                    );
 
-            if (level == 0) continue;
+            if (level <= 0) {
+                continue;
+            }
+
+            ResourceLocation texture;
+
+            switch (level) {
+                case 1 -> texture = LEVEL_1_TEXTURE;
+                case 2 -> texture = LEVEL_2_TEXTURE;
+                case 3 -> texture = LEVEL_3_TEXTURE;
+                case 4 -> texture = LEVEL_4_TEXTURE;
+                default -> {
+                    continue;
+                }
+            }
 
             int x =
-                    leftPos + slot.x;
+                    leftPos + slot.x - 1;
 
             int y =
-                    topPos + slot.y;
+                    topPos + slot.y - 1;
 
-            String text =
-                    String.valueOf(level);
-
-            /*
-             * Draw in the bottom-right corner
-             * of the slot.
-             */
-            int textWidth =
-                    font.width(text);
-
-            graphics.drawString(
-                    font,
-                    text,
-                    x + 18 - textWidth - 2,
-                    y + 18 - 9,
-                    0xFFFFFFFF,
-                    true
+            graphics.blit(
+                    texture,
+                    x,
+                    y,
+                    0,
+                    0,
+                    18,
+                    18,
+                    18,
+                    18
             );
         }
     }
@@ -1711,43 +1756,21 @@ public class PerkScreen extends AbstractContainerScreen<PerkMenu> {
             int y,
             boolean enabled
     ) {
-        /*
-         * Outer border
-         */
-        graphics.fill(
+        ResourceLocation texture =
+                enabled
+                        ? soloSlotTexture
+                        : inactiveSlotTexture;
+
+        graphics.blit(
+                texture,
                 x,
                 y,
-                x + 18,
-                y + 18,
-                enabled
-                        ? 0xFF101010
-                        : 0xFF080808
-        );
-
-        /*
-         * Inner slot
-         */
-        graphics.fill(
-                x + 1,
-                y + 1,
-                x + 17,
-                y + 17,
-                enabled
-                        ? 0xFF8B8B8B
-                        : 0xFF404040
-        );
-
-        /*
-         * Inner shadow/highlight
-         */
-        graphics.fill(
-                x + 2,
-                y + 2,
-                x + 16,
-                y + 16,
-                enabled
-                        ? 0xFF373737
-                        : 0xFF202020
+                0,
+                0,
+                18,
+                18,
+                18,
+                18
         );
     }
 
