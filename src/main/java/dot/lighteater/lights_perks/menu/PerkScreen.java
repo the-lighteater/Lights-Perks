@@ -46,8 +46,8 @@ public class PerkScreen extends AbstractContainerScreen<PerkMenu> {
     private int skillPage = 0;
     private int skillLevelPage = 0;
 
-    private static final int SKILLS_PER_PAGE = 4;
-    private static final int LEVELS_PER_PAGE = 3;
+    private static final int SKILLS_PER_PAGE = 5;
+    private static final int LEVELS_PER_PAGE = 4;
 
     private Map<ResourceLocation, Integer> points =
             new HashMap<>();
@@ -187,10 +187,8 @@ public class PerkScreen extends AbstractContainerScreen<PerkMenu> {
         }
 
         int width = 80;
-        int height = 180;
 
         int x = leftPos - width - 4;
-        int y = topPos + 20;
 
         /*
          * =========================
@@ -201,11 +199,11 @@ public class PerkScreen extends AbstractContainerScreen<PerkMenu> {
         graphics.blit(
                 perkMenuTexture,
         x,
-        y,
+        topPos,
         327,
         0,
         80,
-        180,
+        200,
         512,
         512
         );
@@ -220,7 +218,7 @@ public class PerkScreen extends AbstractContainerScreen<PerkMenu> {
                 font,
                 "Perks",
                 x + 6,
-                y + 6,
+                topPos + 6,
                 0xFFFFFF
         );
 
@@ -231,7 +229,7 @@ public class PerkScreen extends AbstractContainerScreen<PerkMenu> {
          */
 
         int boxX = x + 6;
-        int boxY = y + 22;
+        int boxY = topPos + 22;
         int boxWidth = width - 12;
         int boxHeight = 30;
         int spacing = 3;
@@ -284,7 +282,7 @@ public class PerkScreen extends AbstractContainerScreen<PerkMenu> {
             renderPageButtons(
                     graphics,
                     x,
-                    y + height - 13,
+                    topPos + 200 - 20,
                     width,
                     pageCount,
                     skillPage
@@ -630,18 +628,16 @@ public class PerkScreen extends AbstractContainerScreen<PerkMenu> {
         }
 
         int width = 150;
-        int height = 180;
 
         /*
          * Place it immediately to the right
          * of the main menu.
          */
         int x = leftPos + imageWidth + 4;
-        int y = topPos + 20;
 
         graphics.blit(perkMenuTexture,
-                x,y, 177, 0,
-                150, 180,
+                x,topPos, 177, 0,
+                150, 200,
                 512,512);
 
         /*
@@ -654,7 +650,7 @@ public class PerkScreen extends AbstractContainerScreen<PerkMenu> {
                 font,
                 skillData.title,
                 x + 6,
-                y + 6,
+                topPos + 6,
                 0xFFFFFF
         );
 
@@ -668,7 +664,7 @@ public class PerkScreen extends AbstractContainerScreen<PerkMenu> {
                 graphics,
                 skillData,
                 x + 6,
-                y + 22,
+                topPos + 22,
                 width - 12
         );
 
@@ -682,7 +678,7 @@ public class PerkScreen extends AbstractContainerScreen<PerkMenu> {
                 graphics,
                 skillData,
                 x + 6,
-                y + 53,
+                topPos + 53,
                 width - 12
         );
     }
@@ -923,13 +919,10 @@ public class PerkScreen extends AbstractContainerScreen<PerkMenu> {
 
         if (pageCount > 1) {
 
-            int buttonY =
-                    y + 105;
-
             renderPageButtons(
                     graphics,
                     x,
-                    buttonY,
+                    topPos + 200 - 20,
                     width,
                     pageCount,
                     skillLevelPage
@@ -1245,10 +1238,6 @@ public class PerkScreen extends AbstractContainerScreen<PerkMenu> {
             return false;
         }
 
-        if (button != 0) {
-            return false;
-        }
-
         /*
          * =========================
          * HELP BUTTON
@@ -1307,13 +1296,11 @@ public class PerkScreen extends AbstractContainerScreen<PerkMenu> {
          * when rendering the perk boxes.
          */
         int width = 80;
-        int height = 180;
 
         int x = leftPos - width - 4;
-        int y = topPos + 20;
 
         int boxX = x + 6;
-        int boxY = y + 22;
+        int boxY = topPos + 22;
         int boxWidth = width - 12;
         int boxHeight = 30;
         int spacing = 3;
@@ -1369,7 +1356,7 @@ public class PerkScreen extends AbstractContainerScreen<PerkMenu> {
             int pageSpacing = 2;
 
             int buttonY =
-                    y + height - 13;
+                    topPos + 200 - 13;
 
             int totalWidth =
                     pageCount * buttonSize
@@ -1423,19 +1410,13 @@ public class PerkScreen extends AbstractContainerScreen<PerkMenu> {
         if (selectedSkill != null) {
 
             int skillWidth = 150;
-            int skillHeight = 280;
 
             int skillX =
                     leftPos + imageWidth + 4;
 
-            int skillY =
-                    topPos + 20;
 
             int levelsX =
                     skillX + 6;
-
-            int levelsY =
-                    skillY + 53;
 
             int levelsWidth =
                     skillWidth - 12;
@@ -1452,7 +1433,7 @@ public class PerkScreen extends AbstractContainerScreen<PerkMenu> {
                 int pageSpacing = 2;
 
                 int buttonY =
-                        levelsY + 105;
+                       topPos + 180;
 
                 int totalWidth =
                         pageLevelsCount * buttonSize
@@ -1467,6 +1448,12 @@ public class PerkScreen extends AbstractContainerScreen<PerkMenu> {
                     int buttonX =
                             startX
                                     + page * (buttonSize + pageSpacing);
+
+//                    UpgradeScrolls.LOGGER.debug("Button Click at: {} and {}, page buttons at X: {}-{}, and Y: {}-{}",
+//                            mouseX, mouseY,
+//                            buttonX, buttonX + buttonSize,
+//                            buttonY, buttonY + buttonSize
+//                    );
 
                     if (mouseX >= buttonX
                             && mouseX < buttonX + buttonSize
