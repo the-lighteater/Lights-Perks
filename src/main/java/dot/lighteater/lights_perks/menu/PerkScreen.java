@@ -23,13 +23,6 @@ import java.util.List;
 import java.util.Map;
 
 public class PerkScreen extends AbstractContainerScreen<PerkMenu> {
-
-    private static final ResourceLocation SLOT_TEXTURE =
-            new ResourceLocation(
-                    "minecraft",
-                    "textures/gui/container/inventory.png"
-            );
-
     private static final ResourceLocation perkMenuTexture =
             new ResourceLocation(
                     "lights_perks",
@@ -112,6 +105,10 @@ public class PerkScreen extends AbstractContainerScreen<PerkMenu> {
         if (minecraft.player != null) {
 
             player = minecraft.player;
+
+            if (player.tickCount % ClientConfig.SYNC_PER_TICK_SCREEN.get() != 0) {
+                return;
+            }
 
             points = SkillManager.getPlayerSkillPointsScreen(player);
 
@@ -203,7 +200,7 @@ public class PerkScreen extends AbstractContainerScreen<PerkMenu> {
         327,
         0,
         80,
-        200,
+        201,
         512,
         512
         );
@@ -282,7 +279,7 @@ public class PerkScreen extends AbstractContainerScreen<PerkMenu> {
             renderPageButtons(
                     graphics,
                     x,
-                    topPos + 200 - 20,
+                    topPos + 200 - 8,
                     width,
                     pageCount,
                     skillPage
@@ -637,7 +634,7 @@ public class PerkScreen extends AbstractContainerScreen<PerkMenu> {
 
         graphics.blit(perkMenuTexture,
                 x,topPos, 177, 0,
-                150, 200,
+                150, 201,
                 512,512);
 
         /*
@@ -922,7 +919,7 @@ public class PerkScreen extends AbstractContainerScreen<PerkMenu> {
             renderPageButtons(
                     graphics,
                     x,
-                    topPos + 200 - 20,
+                    topPos + 200 - 8,
                     width,
                     pageCount,
                     skillLevelPage
@@ -1356,7 +1353,7 @@ public class PerkScreen extends AbstractContainerScreen<PerkMenu> {
             int pageSpacing = 2;
 
             int buttonY =
-                    topPos + 200 - 13;
+                    topPos + 200 - 8;
 
             int totalWidth =
                     pageCount * buttonSize
@@ -1414,7 +1411,6 @@ public class PerkScreen extends AbstractContainerScreen<PerkMenu> {
             int skillX =
                     leftPos + imageWidth + 4;
 
-
             int levelsX =
                     skillX + 6;
 
@@ -1433,7 +1429,7 @@ public class PerkScreen extends AbstractContainerScreen<PerkMenu> {
                 int pageSpacing = 2;
 
                 int buttonY =
-                       topPos + 180;
+                       topPos + 200 - 8;
 
                 int totalWidth =
                         pageLevelsCount * buttonSize
@@ -1511,7 +1507,7 @@ public class PerkScreen extends AbstractContainerScreen<PerkMenu> {
                 0,
                 0,
                 176,
-                200,
+                201,
                 512,
                 512
                 );

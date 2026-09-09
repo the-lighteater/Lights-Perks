@@ -55,6 +55,7 @@ public class UpgradeScrolls
         // Register our mod's ForgeConfigSpec so that Forge can create and load the config file for us
         context.registerConfig(ModConfig.Type.COMMON, Config.SPEC);
         context.registerConfig(ModConfig.Type.CLIENT, ClientConfig.SPEC);
+        context.registerConfig(ModConfig.Type.SERVER, ServerConfig.SPEC);
     }
 
     private void onAddReloadListeners(AddReloadListenerEvent event) {

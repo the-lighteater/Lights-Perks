@@ -1,6 +1,7 @@
 package dot.lighteater.lights_perks.event;
 
 import dot.lighteater.lights_perks.Config;
+import dot.lighteater.lights_perks.ServerConfig;
 import dot.lighteater.lights_perks.UpgradeScrolls;
 import dot.lighteater.lights_perks.loot.DropPoolManager;
 import dot.lighteater.lights_perks.perk.IPerkItem;
@@ -82,6 +83,10 @@ public class ModEvents {
         if (event.phase != TickEvent.Phase.END) return;
 
         Player player = event.player;
+
+        if (event.player.tickCount % ServerConfig.SYNC_PER_TICK_MANAGER.get() != 0) {
+            return;
+        }
 
         for (ItemStack stack : player.getInventory().items) {
             if (isPerkable(stack)) initializeSockets(stack);

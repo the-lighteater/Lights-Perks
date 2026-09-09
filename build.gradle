@@ -87,6 +87,8 @@ minecraft {
             // Comma-separated list of namespaces to load gametests from. Empty = all namespaces.
             property 'forge.enabledGameTestNamespaces', mod_id
 
+            jvmArg '-Xmx6G'
+
             workingDirectory project.file('run')
             property 'mixin.env.remapRefMap', 'true'
             property 'mixin.env.refMapRemappingFile', "${projectDir}/build/createSrgToMcp/output.srg"
@@ -95,6 +97,8 @@ minecraft {
         server {
             property 'forge.enabledGameTestNamespaces', mod_id
             args '--nogui'
+
+            jvmArg '-Xmx6G'
 
             workingDirectory project.file('run')
             property 'mixin.env.remapRefMap', 'true'
