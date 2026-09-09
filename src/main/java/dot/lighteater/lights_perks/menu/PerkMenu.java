@@ -27,7 +27,7 @@ public class PerkMenu extends AbstractContainerMenu {
             150   // Off hand
     };
 
-    public static final int EQUIPMENT_Y = 20;
+    public static final int EQUIPMENT_Y = 17;
 
     public PerkMenu(int containerId, Inventory inventory) {
         this(containerId, inventory, null);

@@ -11,5 +11,6 @@ public interface IPerkItem {
     ResourceLocation getPerkId();
     PerkData getPerkData();
     int getLevel();
+    int getColor();
     Map<ResourceLocation, Integer> getSkills();
 }

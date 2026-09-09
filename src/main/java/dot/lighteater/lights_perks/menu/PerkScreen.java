@@ -30,40 +30,10 @@ public class PerkScreen extends AbstractContainerScreen<PerkMenu> {
                     "textures/gui/container/inventory.png"
             );
 
-    private static final ResourceLocation soloSlotTexture =
+    private static final ResourceLocation perkMenuTexture =
             new ResourceLocation(
                     "lights_perks",
-                    "textures/gui/container/slot.png"
-            );
-
-    private static final ResourceLocation inactiveSlotTexture =
-            new ResourceLocation(
-                    "lights_perks",
-                    "textures/gui/container/inactive_slot.png"
-            );
-
-    private static final ResourceLocation LEVEL_1_TEXTURE =
-            new ResourceLocation(
-                    "lights_perks",
-                    "textures/gui/container/slot_levels_1.png"
-            );
-
-    private static final ResourceLocation LEVEL_2_TEXTURE =
-            new ResourceLocation(
-                    "lights_perks",
-                    "textures/gui/container/slot_levels_2.png"
-            );
-
-    private static final ResourceLocation LEVEL_3_TEXTURE =
-            new ResourceLocation(
-                    "lights_perks",
-                    "textures/gui/container/slot_levels_3.png"
-            );
-
-    private static final ResourceLocation LEVEL_4_TEXTURE =
-            new ResourceLocation(
-                    "lights_perks",
-                    "textures/gui/container/slot_levels_4.png"
+                    "textures/gui/container/perk_menu.png"
             );
 
     List<SkillData> skills;
@@ -228,20 +198,16 @@ public class PerkScreen extends AbstractContainerScreen<PerkMenu> {
          * =========================
          */
 
-        graphics.fill(
-                x,
-                y,
-                x + width,
-                y + height,
-                0xFF202020
-        );
-
-        graphics.fill(
-                x + 2,
-                y + 2,
-                x + width - 2,
-                y + height - 2,
-                0xFF303030
+        graphics.blit(
+                perkMenuTexture,
+        x,
+        y,
+        327,
+        0,
+        80,
+        180,
+        512,
+        512
         );
 
         /*
@@ -352,28 +318,15 @@ public class PerkScreen extends AbstractContainerScreen<PerkMenu> {
             boolean selected =
                     i == currentPage;
 
-            /*
-             * Border
-             */
-            graphics.fill(
+            graphics.blit(
+                    perkMenuTexture,
                     buttonX,
                     y,
-                    buttonX + buttonSize,
-                    y + buttonSize,
-                    0xFF080808
-            );
+                    selected ? 407 : 414,
+                    36,
+                    7,7,
+                    512,512
 
-            /*
-             * Interior
-             */
-            graphics.fill(
-                    buttonX + 1,
-                    y + 1,
-                    buttonX + buttonSize - 1,
-                    y + buttonSize - 1,
-                    selected
-                            ? 0xFFFFFFFF
-                            : 0xFF707070
             );
         }
     }
@@ -393,13 +346,9 @@ public class PerkScreen extends AbstractContainerScreen<PerkMenu> {
          * =========================
          */
 
-        graphics.fill(
-                x,
-                y,
-                x + width,
-                y + height,
-                0xFF080808
-        );
+        graphics.blit(perkMenuTexture,
+                x,y,407,48,68,30,
+                512,512);
 
         /*
          * =========================
@@ -407,10 +356,10 @@ public class PerkScreen extends AbstractContainerScreen<PerkMenu> {
          * =========================
          */
 
-        int innerX = x + 2;
-        int innerY = y + 2;
-        int innerWidth = width - 4;
-        int innerHeight = height - 4;
+        int innerX = x + 3;
+        int innerY = y + 11;
+        int innerWidth = width - 6;
+        int innerHeight = height - 14;
 
         graphics.fill(
                 innerX,
@@ -456,7 +405,7 @@ public class PerkScreen extends AbstractContainerScreen<PerkMenu> {
         int scaledTitleWidth = (int)(originalTitleWidth * titleScale);
 
         int titleX = x + (width - scaledTitleWidth) / 2;
-        int titleY = y + 3;
+        int titleY = y + 5;
 
         drawScaledString(
                 graphics,
@@ -602,7 +551,7 @@ public class PerkScreen extends AbstractContainerScreen<PerkMenu> {
                     levelBarY,
                     sectionEndInt,
                     levelBarY + levelBarHeight,
-                    0xFF080808
+                    0xFF000000
             );
 
 
@@ -690,33 +639,10 @@ public class PerkScreen extends AbstractContainerScreen<PerkMenu> {
         int x = leftPos + imageWidth + 4;
         int y = topPos + 20;
 
-        /*
-         * =========================
-         * OUTER BACKGROUND
-         * =========================
-         */
-
-        graphics.fill(
-                x,
-                y,
-                x + width,
-                y + height,
-                0xFF080808
-        );
-
-        /*
-         * =========================
-         * INNER BACKGROUND
-         * =========================
-         */
-
-        graphics.fill(
-                x + 2,
-                y + 2,
-                x + width - 2,
-                y + height - 2,
-                0xFF303030
-        );
+        graphics.blit(perkMenuTexture,
+                x,y, 177, 0,
+                150, 180,
+                512,512);
 
         /*
          * =========================
@@ -836,33 +762,9 @@ public class PerkScreen extends AbstractContainerScreen<PerkMenu> {
                             0
                     );
 
-            /*
-             * =========================
-             * OUTER BORDER
-             * =========================
-             */
-
-            graphics.fill(
-                    boxX,
-                    boxY,
-                    boxX + boxWidth,
-                    boxY + boxHeight,
-                    0xFF080808
-            );
-
-            /*
-             * =========================
-             * INTERIOR
-             * =========================
-             */
-
-            graphics.fill(
-                    boxX + 1,
-                    boxY + 1,
-                    boxX + boxWidth - 1,
-                    boxY + boxHeight - 1,
-                    0xFF404040
-            );
+            graphics.blit(perkMenuTexture,
+            boxX,boxY, 421,36, 44,12,
+            512,512);
 
             /*
              * =========================
@@ -1578,7 +1480,6 @@ public class PerkScreen extends AbstractContainerScreen<PerkMenu> {
                 }
             }
         }
-
         return false;
     }
 
@@ -1616,38 +1517,17 @@ public class PerkScreen extends AbstractContainerScreen<PerkMenu> {
 
         this.renderBackground(graphics);
 
-        /*
-         * Main background
-         */
-        graphics.fill(
+        graphics.blit(
+                perkMenuTexture,
                 leftPos,
                 topPos,
-                leftPos + imageWidth,
-                topPos + imageHeight,
-                0xFF202020
-        );
-
-        /*
-         * Perk section
-         */
-        graphics.fill(
-                leftPos + 4,
-                topPos + 20,
-                leftPos + 172,
-                topPos + 95,
-                0xFF303030
-        );
-
-        /*
-         * Inventory section
-         */
-        graphics.fill(
-                leftPos + 4,
-                topPos + 93,
-                leftPos + 172,
-                topPos + 196,
-                0xFF403030
-        );
+                0,
+                0,
+                176,
+                200,
+                512,
+                512
+                );
 
         renderPlayerModel(graphics, mouseX, mouseY);
 
@@ -1691,13 +1571,17 @@ public class PerkScreen extends AbstractContainerScreen<PerkMenu> {
                 continue;
             }
 
-            ResourceLocation texture;
+            int uOffset = 407;
+            int vOffset = 0;
 
             switch (level) {
-                case 1 -> texture = LEVEL_1_TEXTURE;
-                case 2 -> texture = LEVEL_2_TEXTURE;
-                case 3 -> texture = LEVEL_3_TEXTURE;
-                case 4 -> texture = LEVEL_4_TEXTURE;
+                case 1 -> {
+                }
+                case 2 ->
+                        uOffset += 18;
+                case 3 ->
+                        uOffset += 36;
+                case 4 -> vOffset += 18;
                 default -> {
                     continue;
                 }
@@ -1710,15 +1594,15 @@ public class PerkScreen extends AbstractContainerScreen<PerkMenu> {
                     topPos + slot.y - 1;
 
             graphics.blit(
-                    texture,
+                    perkMenuTexture,
                     x,
                     y,
-                    0,
-                    0,
+                    uOffset,
+                    vOffset,
                     18,
                     18,
-                    18,
-                    18
+                    512,
+                    512
             );
         }
     }
@@ -1736,14 +1620,14 @@ public class PerkScreen extends AbstractContainerScreen<PerkMenu> {
             return;
         }
 
-        int x = leftPos + 20;
-        int y = topPos + 85;
+        int x = leftPos + 25;
+        int y = topPos + 80;
 
         InventoryScreen.renderEntityInInventoryFollowsMouse(
                 graphics,
                 x,
                 y,
-                30,
+                25,
                 (float) (x - mouseX),
                 (float) (y - mouseY),
                 player
@@ -1756,21 +1640,16 @@ public class PerkScreen extends AbstractContainerScreen<PerkMenu> {
             int y,
             boolean enabled
     ) {
-        ResourceLocation texture =
-                enabled
-                        ? soloSlotTexture
-                        : inactiveSlotTexture;
-
         graphics.blit(
-                texture,
+                perkMenuTexture,
                 x,
                 y,
-                0,
-                0,
+                enabled ? 425 : 443,
                 18,
                 18,
                 18,
-                18
+                512,
+                512
         );
     }
 

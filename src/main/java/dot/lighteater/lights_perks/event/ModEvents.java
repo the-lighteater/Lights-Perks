@@ -12,6 +12,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.item.ItemEntity;
@@ -196,15 +197,40 @@ public class ModEvents {
 
         ItemConfigData data = ItemConfigManager.get(stack);
 
+        /*
+         * Built-in skills
+         */
         if (data != null) {
+
             event.getToolTip().add(
                     Component.literal("Built-In Skills")
             );
-            for (Map.Entry<String, Integer> entry : data.builtin_skills.entrySet()) {
-                SkillData skillData = SkillManager.get(new ResourceLocation(entry.getKey()));
+
+            for (Map.Entry<String, Integer> entry :
+                    data.builtin_skills.entrySet()) {
+
+                SkillData skillData =
+                        SkillManager.get(
+                                new ResourceLocation(entry.getKey())
+                        );
+
+                if (skillData == null) {
+                    continue;
+                }
+
+                int color = (int) Long.parseLong(
+                        skillData.color.replace("0x", ""),
+                        16
+                );
 
                 event.getToolTip().add(
-                        Component.literal(skillData.title + ": Level " + entry.getValue())
+                        Component.literal(
+                                skillData.title +
+                                        ": Level " +
+                                        entry.getValue()
+                        ).withStyle(
+                                style -> style.withColor(color)
+                        )
                 );
             }
         }
@@ -219,7 +245,10 @@ public class ModEvents {
         CompoundTag tag = stack.getTag();
 
         if (tag == null ||
-                !tag.contains("lights_perks:sockets", Tag.TAG_LIST)) {
+                !tag.contains(
+                        "lights_perks:sockets",
+                        Tag.TAG_LIST
+                )) {
             return;
         }
 
@@ -228,53 +257,12 @@ public class ModEvents {
                 Tag.TAG_COMPOUND
         );
 
+        /*
+         * Determine whether at least one socket
+         * actually contains a perk.
+         */
         boolean hasPerks = false;
 
-        /*
-         * First determine whether there are
-         * actually any perk items.
-         */
-        for (int i = 0; i < sockets.size(); i++) {
-
-            CompoundTag socket = sockets.getCompound(i);
-
-            if (!socket.contains(
-                    "Item",
-                    Tag.TAG_COMPOUND
-            )) {
-                continue;
-            }
-
-            ItemStack perkStack = ItemStack.of(
-                    socket.getCompound("Item")
-            );
-
-            if (!perkStack.isEmpty()
-                    && perkStack.getItem() instanceof IPerkItem) {
-
-                hasPerks = true;
-                break;
-            }
-        }
-
-        /*
-         * Don't add an empty "Perk Slots" section.
-         */
-        if (!hasPerks) {
-            return;
-        }
-
-        event.getToolTip().add(
-                Component.literal("")
-        );
-
-        event.getToolTip().add(
-                Component.literal("Perk Slots")
-        );
-
-        /*
-         * Render each perk.
-         */
         for (int i = 0; i < sockets.size(); i++) {
 
             CompoundTag socket =
@@ -292,25 +280,97 @@ public class ModEvents {
                             socket.getCompound("Item")
                     );
 
+            if (!perkStack.isEmpty() &&
+                    perkStack.getItem() instanceof IPerkItem) {
+
+                hasPerks = true;
+                break;
+            }
+        }
+
+        /*
+         * Don't add an empty "Perk Slots" section.
+         */
+        if (!hasPerks) {
+            //return;
+        }
+
+        event.getToolTip().add(
+                Component.literal("")
+        );
+
+        event.getToolTip().add(
+                Component.literal("Perk Slots")
+        );
+
+        /*
+         * Display each socket that actually
+         * contains a perk.
+         */
+        for (int i = 0; i < sockets.size(); i++) {
+
+            CompoundTag socket =
+                    sockets.getCompound(i);
+
+            /*
+             * Get the maximum level of this socket.
+             */
+            int maxLevel =
+                    socket.getInt("Level");
+
+            /*
+             * Get the perk stored in this socket.
+             */
+            if (!socket.contains(
+                    "Item",
+                    Tag.TAG_COMPOUND
+            )) {
+                continue;
+            }
+
+            ItemStack perkStack =
+                    ItemStack.of(
+                            socket.getCompound("Item")
+                    );
+
+            /*
+             * The Lv. value is the socket's
+             * maximum level, NOT the perk's level.
+             */
+            MutableComponent levelText =
+                    Component.literal(
+                            "◇ Lv." + maxLevel + " "
+                    );
+
             if (perkStack.isEmpty()) {
+                event.getToolTip().add(
+                        levelText);
                 continue;
             }
 
             if (!(perkStack.getItem()
                     instanceof IPerkItem perkItem)) {
+                event.getToolTip().add(
+                        levelText);
                 continue;
             }
 
+
             /*
-             * Get the perk's skill information.
+             * The perk item's name uses
+             * the color provided by the perk item.
              */
-            int level =
-                    perkItem.getLevel();
+            Component perkName =
+                    perkStack.getHoverName()
+                            .copy()
+                            .withStyle(
+                                    style -> style.withColor(
+                                            perkItem.getColor()
+                                    )
+                            );
 
             event.getToolTip().add(
-                    Component.literal(
-                            "◇ Lv." + level + " "
-                    ).append(perkStack.getHoverName())
+                    levelText.append(perkName)
             );
         }
     }
