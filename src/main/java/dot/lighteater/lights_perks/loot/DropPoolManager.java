@@ -18,26 +18,16 @@ import java.util.List;
 
 public class DropPoolManager {
 
-    public static final TagKey<Item> DROP_ITEMS =
-            ItemTags.create(
-                    new ResourceLocation(
-                            UpgradeScrolls.MODID,
-                            "perk_drop_pool"
-                    )
-            );
+    public static boolean canDrop(
+            LivingEntity entity,
+            String entityTagId
+    ) {
+        TagKey<EntityType<?>> tag = TagKey.create(
+                Registries.ENTITY_TYPE,
+                new ResourceLocation(entityTagId)
+        );
 
-    public static final TagKey<EntityType<?>> DROP_ENTITIES =
-            TagKey.create(
-                    Registries.ENTITY_TYPE,
-                    new ResourceLocation(
-                            UpgradeScrolls.MODID,
-                            "mob_drop_entities"
-                    )
-            );
-
-
-    public static boolean canDrop(LivingEntity entity) {
-        return entity.getType().is(DROP_ENTITIES);
+        return entity.getType().is(tag);
     }
 
     public static ItemStack getRandomDrop(RandomSource random, String poolId) {

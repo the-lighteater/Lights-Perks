@@ -82,8 +82,6 @@ public class AddSuspicousItemModifier extends LootModifier {
             }
         }
 
-        // Drop chance
-        double chance = Config.LOOT_TABLE_DROP_CHANCE.get();
         float roll = context.getRandom().nextFloat();
 
         UpgradeScrolls.LOGGER.debug(

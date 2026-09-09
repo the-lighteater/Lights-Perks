@@ -74,28 +74,6 @@ public class AddItemModifier extends LootModifier {
                 generatedLoot.size()
         );
 
-        // Check conditions
-        for (LootItemCondition condition : this.conditions) {
-
-            boolean passed = condition.test(context);
-
-            UpgradeScrolls.LOGGER.debug(
-                    "[AddItemModifier] Condition {} -> {}",
-                    condition.getClass().getSimpleName(),
-                    passed
-            );
-
-            if (!passed) {
-                UpgradeScrolls.LOGGER.debug(
-                        "[AddItemModifier] Condition failed. No pool item added."
-                );
-
-                return generatedLoot;
-            }
-        }
-
-        // Drop chance
-        double chance = Config.LOOT_TABLE_DROP_CHANCE.get();
         float roll = context.getRandom().nextFloat();
 
         UpgradeScrolls.LOGGER.debug(
@@ -109,14 +87,14 @@ public class AddItemModifier extends LootModifier {
                     "[AddItemModifier] Chance failed. No pool item added."
             );
 
+            UpgradeScrolls.LOGGER.debug(
+                    "[AddItemModifier] AFTER: {} items",
+                    generatedLoot.size()
+            );
+
             return generatedLoot;
         }
 
-        UpgradeScrolls.LOGGER.debug(
-                "[AddItemModifier] Chance succeeded. Selecting random pool item."
-        );
-
-        // Get random item from the pool
         ItemStack drop = DropPoolManager.getRandomDrop(
                 context.getRandom(),
                 perk_pool_id
@@ -127,21 +105,29 @@ public class AddItemModifier extends LootModifier {
                     "[AddItemModifier] Drop pool was empty. No item added."
             );
 
+            UpgradeScrolls.LOGGER.debug(
+                    "[AddItemModifier] AFTER: {} items",
+                    generatedLoot.size()
+            );
+
             return generatedLoot;
         }
 
+        int count = minCount
+                + context.getRandom().nextInt(maxCount - minCount + 1);
+
+        drop.setCount(count);
+
         UpgradeScrolls.LOGGER.debug(
-                "[AddItemModifier] Selected pool item: {} x{}",
+                "[AddItemModifier] Adding {} x{}",
                 drop.getItem(),
-                drop.getCount()
+                count
         );
 
-        // Add to existing loot
         generatedLoot.add(drop);
 
         UpgradeScrolls.LOGGER.debug(
-                "[AddItemModifier] Added {} to loot. New loot count: {}",
-                drop.getItem(),
+                "[AddItemModifier] AFTER: {} items",
                 generatedLoot.size()
         );
 

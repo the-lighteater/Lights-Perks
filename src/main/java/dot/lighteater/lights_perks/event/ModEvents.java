@@ -41,7 +41,7 @@ public class ModEvents {
             return;
         }
 
-        if (!DropPoolManager.canDrop(entity)) {
+        if (!DropPoolManager.canDrop(entity, "mob_drop_entities")) {
             return;
         }
 
