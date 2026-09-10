@@ -30,7 +30,7 @@ public class LoadItems {
         LightsPerks.LOGGER.info("Cleared existing item definitions.");
 
         Path folder = FMLPaths.CONFIGDIR.get()
-                .resolve("upgrade_scrolls")
+                .resolve("lights_perks")
                 .resolve("items");
 
         LightsPerks.LOGGER.info("Looking for item JSONs in: {}", folder.toAbsolutePath());
