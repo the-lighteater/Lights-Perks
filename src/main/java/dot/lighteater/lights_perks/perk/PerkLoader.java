@@ -3,7 +3,7 @@ package dot.lighteater.lights_perks.perk;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
-import dot.lighteater.lights_perks.UpgradeScrolls;
+import dot.lighteater.lights_perks.LightsPerks;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.server.packs.resources.SimpleJsonResourceReloadListener;
@@ -50,14 +50,14 @@ public class PerkLoader extends SimpleJsonResourceReloadListener {
                         perk
                 );
 
-                UpgradeScrolls.LOGGER.info(
+                LightsPerks.LOGGER.info(
                         "[PerkLoader] Loaded perk '{}'",
                         entry.getKey()
                 );
 
             } catch (Exception e) {
 
-                UpgradeScrolls.LOGGER.error(
+                LightsPerks.LOGGER.error(
                         "[PerkLoader] Failed to load perk: {}",
                         entry.getKey(),
                         e
@@ -65,7 +65,7 @@ public class PerkLoader extends SimpleJsonResourceReloadListener {
             }
         }
 
-        UpgradeScrolls.LOGGER.info(
+        LightsPerks.LOGGER.info(
                 "[PerkLoader] Loaded {} perks.",
                 PERKS.size()
         );

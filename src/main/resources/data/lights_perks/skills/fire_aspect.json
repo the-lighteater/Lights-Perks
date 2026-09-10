@@ -1,0 +1,26 @@
+{
+  "title": "Fire Aspect",
+  "skillSynopsis": "Applies Fire Aspect",
+  "skill_id": "lights_perks:fire_aspect",
+  "color": "0xFFE36200",
+  "maxLevel": 1,
+  "bonusLevel": 0,
+
+  "levels": [
+    {
+      "level": 1,
+      "bonus": false,
+      "effects": [
+        "Fire Aspect applied to piece(s) that have points"
+      ],
+      "skillEffects": [
+        {
+          "type": "enchantment",
+          "enchantment": "minecraft:fire_aspect",
+          "application": "per_item",
+          "level": 1
+        }
+      ]
+    }
+  ]
+}

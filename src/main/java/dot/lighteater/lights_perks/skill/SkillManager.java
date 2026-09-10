@@ -1,6 +1,5 @@
 package dot.lighteater.lights_perks.skill;
 
-import dot.lighteater.lights_perks.UpgradeScrolls;
 import dot.lighteater.lights_perks.helpers.EquipmentType;
 import dot.lighteater.lights_perks.item_config.ItemConfigData;
 import dot.lighteater.lights_perks.item_config.ItemConfigManager;
@@ -14,11 +13,13 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraftforge.registries.ForgeRegistries;
 
 import java.nio.charset.StandardCharsets;
@@ -34,6 +35,9 @@ public class SkillManager {
 
     private static final String ITEM_TAG =
             "Item";
+
+    private static final String PERK_ENCHANTS_TAG =
+            "lights_perks:perk_enchants";
 
     private static final Map<UUID, Map<ResourceLocation, Integer>>
             PLAYER_SKILL_POINTS = new HashMap<>();
@@ -145,41 +149,103 @@ public class SkillManager {
          */
         boolean bonusChanged = updateBonusSkills(player);
 
+        if (player.tickCount % 100 == 0) {
+            applySkillEffects(player);
+        }
+
         /*
          * Only rebuild the player's attribute modifiers
          * if something affecting their skills changed.
          */
         if (pointsChanged || equipmentPointsChanged || bonusChanged) {
-
-            UpgradeScrolls.LOGGER.debug(
-                    "[SkillManager] Skill state changed for {}",
-                    player.getName().getString()
-            );
-
-            UpgradeScrolls.LOGGER.debug(
-                    "[SkillManager] Old points: {}",
-                    oldPoints
-            );
-
-            UpgradeScrolls.LOGGER.debug(
-                    "[SkillManager] New points: {}",
-                    newPoints
-            );
-
-            UpgradeScrolls.LOGGER.debug(
-                    "[SkillManager] Old equipment points: {}",
-                    oldEquipmentPoints
-            );
-
-            UpgradeScrolls.LOGGER.debug(
-                    "[SkillManager] New equipment points: {}",
-                    newEquipmentPoints
-            );
+            clearEnchantmentTags(player);
 
             clearSkillModifiers(player);
 
+            applySkillEnchantments(player);
+
             applySkillModifiers(player);
+
+            applySkillEffects(player);
         }
+    }
+
+    private static void applySkillEffects(Player player) {
+
+        for (SkillData skill : getAllSkills()) {
+
+            ResourceLocation skillId =
+                    new ResourceLocation(skill.skill_id);
+
+            int currentLevel =
+                    getPlayerSkillLevel(
+                            player,
+                            skillId
+                    );
+
+            if (currentLevel <= 0) {
+                continue;
+            }
+
+            SkillLevelData level =
+                    getActiveSkillLevel(
+                            player,
+                            skillId
+                    );
+
+            if (level == null ||
+                    level.skillEffects == null) {
+                continue;
+            }
+
+            for (SkillEffectData effect : level.skillEffects) {
+
+                if (!"effect".equals(effect.type)) {
+                    continue;
+                }
+
+                applyPlayerEffect(
+                        player,
+                        skillId,
+                        effect
+                );
+            }
+        }
+    }
+
+    private static void applyPlayerEffect(
+            Player player,
+            ResourceLocation skillId,
+            SkillEffectData effect
+    ) {
+        if (effect.effect == null) {
+            return;
+        }
+
+        ResourceLocation effectId =
+                ResourceLocation.parse(effect.effect);
+
+        var mobEffect =
+                ForgeRegistries.MOB_EFFECTS.getValue(effectId);
+
+        if (mobEffect == null) {
+            return;
+        }
+
+        int amplifier =
+                Math.max(0, effect.strength - 1);
+
+        MobEffectInstance instance =
+                new MobEffectInstance(
+                        mobEffect,
+                        effect.duration,
+                        amplifier,
+                        false,
+                        true,
+                        true
+                );
+
+        player.addEffect(instance);
     }
 
     public static Map<ResourceLocation, Integer> getPlayerSkillPointsScreen(
@@ -627,36 +693,8 @@ public class SkillManager {
                         skillPoints,
                         Integer::sum
                 );
-
-//            UpgradeScrolls.LOGGER.debug(
-//                    "[SkillManager] {} provides {} point(s) to {} from {}",
-//                    perkStack.getItem(),
-//                    skillPoints,
-//                    skillId,
-//                    equipmentType
-//            );
             }
         }
-    }
-
-    private static Map<ResourceLocation, Integer> debugPoints = null;
-
-    public static void debugSkills(Player player) {
-
-        Map<ResourceLocation, Integer> current =
-                getPlayerSkillPoints(player);
-
-        if (!current.equals(debugPoints)) {
-
-            debugPoints = new HashMap<>(current);
-
-            UpgradeScrolls.LOGGER.debug(
-                    "[SkillManager] Player skill points: {}",
-                    current
-            );
-        }
-
-
     }
 
     public static int getPlayerSkillLevel(
@@ -781,6 +819,165 @@ public class SkillManager {
         }
     }
 
+    private static void applySkillEnchantments(Player player) {
+
+        Map<ResourceLocation, Map<EquipmentType, Integer>> equipmentPoints =
+                getPlayerSkillPointsByEquipment(player);
+
+        for (SkillData skill : getAllSkills()) {
+
+            ResourceLocation skillId =
+                    new ResourceLocation(skill.skill_id);
+
+            Map<EquipmentType, Integer> skillEquipmentPoints =
+                    equipmentPoints.get(skillId);
+
+            if (skillEquipmentPoints == null ||
+                    skillEquipmentPoints.isEmpty()) {
+                continue;
+            }
+
+            int currentLevel =
+                    getPlayerSkillLevel(
+                            player,
+                            skillId
+                    );
+
+            if (currentLevel <= 0) {
+                continue;
+            }
+
+            SkillLevelData level =
+                    getActiveSkillLevel(
+                            player,
+                            skillId
+                    );
+
+            if (level == null ||
+                    level.skillEffects == null) {
+                continue;
+            }
+
+            for (SkillEffectData effect : level.skillEffects) {
+
+                if (!"enchantment".equals(effect.type)) {
+                    continue;
+                }
+
+                if (!"per_item".equals(effect.application)) {
+                    continue;
+                }
+
+                applyPerItemEnchantment(
+                        player,
+                        skillId,
+                        effect,
+                        skillEquipmentPoints
+                );
+            }
+        }
+    }
+
+    private static void applyPerItemEnchantment(
+            Player player,
+            ResourceLocation skillId,
+            SkillEffectData effect,
+            Map<EquipmentType, Integer> skillEquipmentPoints
+    ) {
+        if (effect.enchantment == null) {
+            return;
+        }
+
+        ResourceLocation enchantmentId =
+                ResourceLocation.parse(effect.enchantment);
+
+        Enchantment enchantment =
+                ForgeRegistries.ENCHANTMENTS.getValue(enchantmentId);
+
+        if (enchantment == null) {
+            return;
+        }
+
+        int enchantmentLevel =
+                effect.level;
+
+        /*
+         * Apply to every equipment slot that
+         * supplied points for this skill.
+         */
+        for (Map.Entry<EquipmentType, Integer> entry :
+                skillEquipmentPoints.entrySet()) {
+
+            EquipmentType equipmentType =
+                    entry.getKey();
+
+            int points =
+                    entry.getValue();
+
+            if (points <= 0) {
+                continue;
+            }
+
+            ItemStack stack =
+                    getEquipmentStack(
+                            player,
+                            equipmentType
+                    );
+
+            if (stack.isEmpty()) {
+                continue;
+            }
+
+            addPerkEnchantment(
+                    stack,
+                    enchantmentId,
+                    enchantmentLevel
+            );
+        }
+    }
+
+    private static void addPerkEnchantment(
+            ItemStack stack,
+            ResourceLocation enchantmentId,
+            int level
+    ) {
+        CompoundTag tag =
+                stack.getOrCreateTag();
+
+        CompoundTag perkEnchants;
+
+        if (tag.contains(
+                PERK_ENCHANTS_TAG,
+                Tag.TAG_COMPOUND
+        )) {
+            perkEnchants =
+                    tag.getCompound(PERK_ENCHANTS_TAG);
+        } else {
+            perkEnchants =
+                    new CompoundTag();
+
+            tag.put(
+                    PERK_ENCHANTS_TAG,
+                    perkEnchants
+            );
+        }
+
+        int existingLevel =
+                perkEnchants.getInt(
+                        enchantmentId.toString()
+                );
+
+        /*
+         * Keep the highest perk-provided level.
+         */
+        if (level > existingLevel) {
+            perkEnchants.putInt(
+                    enchantmentId.toString(),
+                    level
+            );
+        }
+    }
+
     private static void applyAttributeModifier(
             Player player,
             ResourceLocation skillId,
@@ -795,14 +992,6 @@ public class SkillManager {
                 );
 
         if (attribute == null) {
-            UpgradeScrolls.LOGGER.warn(
-                    "[SkillManager] Failed to apply attribute modifier: " +
-                            "attribute '{}' does not exist for skill {} level {}",
-                    effect.attribute,
-                    skillId,
-                    level
-            );
-
             return;
         }
 
@@ -821,20 +1010,6 @@ public class SkillManager {
         AttributeModifier.Operation operation =
                 parseOperation(effect.operation);
 
-        UpgradeScrolls.LOGGER.debug(
-                "[SkillManager] Applying skill modifier: " +
-                        "Player={}, Skill={}, Level={}, EffectIndex={}, " +
-                        "Attribute={}, Amount={}, Operation={}, UUID={}",
-                player.getGameProfile().getName(),
-                skillId,
-                level,
-                effectIndex,
-                effect.attribute,
-                effect.amount,
-                operation,
-                uuid
-        );
-
         AttributeModifier modifier =
                 new AttributeModifier(
                         uuid,
@@ -844,12 +1019,6 @@ public class SkillManager {
                 );
 
         attribute.addTransientModifier(modifier);
-
-        UpgradeScrolls.LOGGER.debug(
-                "[SkillManager] Successfully applied modifier '{}' to {}",
-                modifier.getName(),
-                player.getGameProfile().getName()
-        );
     }
 
     private static AttributeModifier.Operation parseOperation(
@@ -871,11 +1040,6 @@ public class SkillManager {
                     AttributeModifier.Operation.MULTIPLY_TOTAL;
 
             default -> {
-                UpgradeScrolls.LOGGER.warn(
-                        "Unknown attribute operation '{}', defaulting to addition",
-                        operation
-                );
-
                 yield AttributeModifier.Operation.ADDITION;
             }
         };
@@ -940,6 +1104,24 @@ public class SkillManager {
         }
     }
 
+    private static void clearEnchantmentTags(Player player) {
+
+        for (ItemStack stack : getEquipment(player)) {
+
+            if (stack.isEmpty()) {
+                continue;
+            }
+
+            CompoundTag tag = stack.getTag();
+
+            if (tag == null) {
+                continue;
+            }
+
+            tag.remove(PERK_ENCHANTS_TAG);
+        }
+    }
+
     private static AttributeInstance getAttribute(
             Player player,
             String attributeId
@@ -951,11 +1133,6 @@ public class SkillManager {
                 ForgeRegistries.ATTRIBUTES.getValue(id);
 
         if (attribute == null) {
-            UpgradeScrolls.LOGGER.warn(
-                    "Unknown attribute '{}'",
-                    attributeId
-            );
-
             return null;
         }
 
@@ -971,5 +1148,31 @@ public class SkillManager {
                 player.getMainHandItem(),
                 player.getOffhandItem()
         );
+    }
+
+    private static ItemStack getEquipmentStack(
+            Player player,
+            EquipmentType type
+    ) {
+        return switch (type) {
+
+            case HELMET ->
+                    player.getInventory().armor.get(3);
+
+            case CHESTPLATE ->
+                    player.getInventory().armor.get(2);
+
+            case LEGGINGS ->
+                    player.getInventory().armor.get(1);
+
+            case BOOTS ->
+                    player.getInventory().armor.get(0);
+
+            case MAIN_HAND ->
+                    player.getMainHandItem();
+
+            case OFF_HAND ->
+                    player.getOffhandItem();
+        };
     }
 }

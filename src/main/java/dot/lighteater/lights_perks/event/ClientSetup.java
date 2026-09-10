@@ -1,6 +1,6 @@
 package dot.lighteater.lights_perks.event;
 
-import dot.lighteater.lights_perks.UpgradeScrolls;
+import dot.lighteater.lights_perks.LightsPerks;
 import dot.lighteater.lights_perks.menu.ModMenus;
 import dot.lighteater.lights_perks.menu.PerkScreen;
 import net.minecraft.client.gui.screens.MenuScreens;
@@ -10,7 +10,7 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 
 @Mod.EventBusSubscriber(
-        modid = UpgradeScrolls.MODID,
+        modid = LightsPerks.MODID,
         bus = Mod.EventBusSubscriber.Bus.MOD,
         value = Dist.CLIENT
 )

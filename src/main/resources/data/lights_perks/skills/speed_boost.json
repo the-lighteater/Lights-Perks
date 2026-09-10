@@ -1,0 +1,55 @@
+{
+  "title": "Speed Boost",
+  "skillSynopsis": "Gives you Speed Boost",
+  "skill_id": "lights_perks:speed_boost",
+  "color": "0xFF7A3030",
+  "maxLevel": 3,
+  "bonusLevel": 0,
+
+  "levels": [
+    {
+      "level": 1,
+      "bonus": false,
+      "effects": [
+        "+10% faster movement speed"
+      ],
+      "skillEffects": [
+        {
+          "type": "effect",
+          "effect": "minecraft:speed",
+          "duration": 200,
+          "strength": 1
+        }
+      ]
+    },
+    {
+      "level": 2,
+      "bonus": false,
+      "effects": [
+        "+20% faster movement speed"
+      ],
+      "skillEffects": [
+        {
+          "type": "effect",
+          "effect": "minecraft:speed",
+          "duration": 200,
+          "strength": 2
+        }
+      ]
+    },    {
+      "level": 3,
+      "bonus": false,
+      "effects": [
+        "+30% faster movement speed"
+      ],
+      "skillEffects": [
+        {
+          "type": "effect",
+          "effect": "minecraft:speed",
+          "duration": 200,
+          "strength": 3
+        }
+      ]
+    }
+  ]
+}

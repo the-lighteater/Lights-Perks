@@ -1,6 +1,6 @@
 package dot.lighteater.lights_perks.skill;
 
-import dot.lighteater.lights_perks.UpgradeScrolls;
+import dot.lighteater.lights_perks.LightsPerks;
 import dot.lighteater.lights_perks.helpers.EquipmentType;
 import dot.lighteater.lights_perks.perk.IPerkItem;
 import net.minecraft.resources.ResourceLocation;
@@ -134,7 +134,7 @@ public class SkillCalculator {
 
                 if (skill == null) {
 
-                    UpgradeScrolls.LOGGER.warn(
+                    LightsPerks.LOGGER.warn(
                             "[SkillCalculator] Unknown skill: {}",
                             skillId
                     );

@@ -1,8 +1,8 @@
 package dot.lighteater.lights_perks.event;
 
+import dot.lighteater.lights_perks.LightsPerks;
 import dot.lighteater.lights_perks.ModKeyBindings;
 import dot.lighteater.lights_perks.ModNetwork;
-import dot.lighteater.lights_perks.UpgradeScrolls;
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.event.TickEvent;
@@ -10,7 +10,7 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
 @Mod.EventBusSubscriber(
-        modid = UpgradeScrolls.MODID,
+        modid = LightsPerks.MODID,
         value = Dist.CLIENT
 )
 public class ClientEvents {

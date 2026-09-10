@@ -1,6 +1,6 @@
 package dot.lighteater.lights_perks.item;
 
-import dot.lighteater.lights_perks.UpgradeScrolls;
+import dot.lighteater.lights_perks.LightsPerks;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.*;
@@ -10,7 +10,7 @@ import net.minecraftforge.registries.RegistryObject;
 
 public class ModCreativeModTabs {
     public static final DeferredRegister<CreativeModeTab> CREATIVE_MODE_TABS =
-            DeferredRegister.create(Registries.CREATIVE_MODE_TAB, UpgradeScrolls.MODID);
+            DeferredRegister.create(Registries.CREATIVE_MODE_TAB, LightsPerks.MODID);
 
     public static final RegistryObject<CreativeModeTab> UPGRADE_SCROLLS = CREATIVE_MODE_TABS.register("lights_perks", () -> CreativeModeTab.builder()
             .withTabsBefore(CreativeModeTabs.COMBAT)

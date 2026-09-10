@@ -3,7 +3,7 @@ package dot.lighteater.lights_perks.menu;
 import com.mojang.blaze3d.systems.RenderSystem;
 import dot.lighteater.lights_perks.ClientConfig;
 import dot.lighteater.lights_perks.ModKeyBindings;
-import dot.lighteater.lights_perks.UpgradeScrolls;
+import dot.lighteater.lights_perks.LightsPerks;
 import dot.lighteater.lights_perks.helpers.EquipmentType;
 import dot.lighteater.lights_perks.skill.*;
 import net.minecraft.client.Minecraft;
@@ -23,25 +23,23 @@ import java.util.List;
 import java.util.Map;
 
 public class PerkScreen extends AbstractContainerScreen<PerkMenu> {
-
-    private static final ResourceLocation SLOT_TEXTURE =
+    private static final ResourceLocation perkMenuTexture =
             new ResourceLocation(
-                    "minecraft",
-                    "textures/gui/container/inventory.png"
+                    "lights_perks",
+                    "textures/gui/container/perk_menu.png"
             );
 
     List<SkillData> skills;
 
     private boolean submenuOpen = false;
-    private boolean helpOpen = false;
 
     private SkillData selectedSkill = null;
 
     private int skillPage = 0;
     private int skillLevelPage = 0;
 
-    private static final int SKILLS_PER_PAGE = 4;
-    private static final int LEVELS_PER_PAGE = 3;
+    private static final int SKILLS_PER_PAGE = 5;
+    private static final int LEVELS_PER_PAGE = 4;
 
     private Map<ResourceLocation, Integer> points =
             new HashMap<>();
@@ -91,10 +89,6 @@ public class PerkScreen extends AbstractContainerScreen<PerkMenu> {
 
         renderHelpButton(graphics);
 
-        if (helpOpen) {
-            renderHelpBox(graphics);
-        }
-
         this.renderTooltip(graphics, mouseX, mouseY);
     }
 
@@ -106,6 +100,10 @@ public class PerkScreen extends AbstractContainerScreen<PerkMenu> {
         if (minecraft.player != null) {
 
             player = minecraft.player;
+
+            if (player.tickCount % ClientConfig.SYNC_PER_TICK_SCREEN.get() != 0) {
+                return;
+            }
 
             points = SkillManager.getPlayerSkillPointsScreen(player);
 
@@ -181,10 +179,8 @@ public class PerkScreen extends AbstractContainerScreen<PerkMenu> {
         }
 
         int width = 80;
-        int height = 180;
 
         int x = leftPos - width - 4;
-        int y = topPos + 20;
 
         /*
          * =========================
@@ -192,20 +188,16 @@ public class PerkScreen extends AbstractContainerScreen<PerkMenu> {
          * =========================
          */
 
-        graphics.fill(
-                x,
-                y,
-                x + width,
-                y + height,
-                0xFF202020
-        );
-
-        graphics.fill(
-                x + 2,
-                y + 2,
-                x + width - 2,
-                y + height - 2,
-                0xFF303030
+        graphics.blit(
+                perkMenuTexture,
+        x,
+        topPos,
+        327,
+        0,
+        80,
+        201,
+        512,
+        512
         );
 
         /*
@@ -216,9 +208,9 @@ public class PerkScreen extends AbstractContainerScreen<PerkMenu> {
 
         graphics.drawString(
                 font,
-                "Perks",
+                "Skills",
                 x + 6,
-                y + 6,
+                topPos + 6,
                 0xFFFFFF
         );
 
@@ -229,7 +221,7 @@ public class PerkScreen extends AbstractContainerScreen<PerkMenu> {
          */
 
         int boxX = x + 6;
-        int boxY = y + 22;
+        int boxY = topPos + 22;
         int boxWidth = width - 12;
         int boxHeight = 30;
         int spacing = 3;
@@ -282,7 +274,7 @@ public class PerkScreen extends AbstractContainerScreen<PerkMenu> {
             renderPageButtons(
                     graphics,
                     x,
-                    y + height - 13,
+                    topPos + 200 - 8,
                     width,
                     pageCount,
                     skillPage
@@ -316,28 +308,15 @@ public class PerkScreen extends AbstractContainerScreen<PerkMenu> {
             boolean selected =
                     i == currentPage;
 
-            /*
-             * Border
-             */
-            graphics.fill(
+            graphics.blit(
+                    perkMenuTexture,
                     buttonX,
                     y,
-                    buttonX + buttonSize,
-                    y + buttonSize,
-                    0xFF080808
-            );
+                    selected ? 407 : 414,
+                    36,
+                    7,7,
+                    512,512
 
-            /*
-             * Interior
-             */
-            graphics.fill(
-                    buttonX + 1,
-                    y + 1,
-                    buttonX + buttonSize - 1,
-                    y + buttonSize - 1,
-                    selected
-                            ? 0xFFFFFFFF
-                            : 0xFF707070
             );
         }
     }
@@ -357,13 +336,9 @@ public class PerkScreen extends AbstractContainerScreen<PerkMenu> {
          * =========================
          */
 
-        graphics.fill(
-                x,
-                y,
-                x + width,
-                y + height,
-                0xFF080808
-        );
+        graphics.blit(perkMenuTexture,
+                x,y,407,48,68,30,
+                512,512);
 
         /*
          * =========================
@@ -371,10 +346,10 @@ public class PerkScreen extends AbstractContainerScreen<PerkMenu> {
          * =========================
          */
 
-        int innerX = x + 2;
-        int innerY = y + 2;
-        int innerWidth = width - 4;
-        int innerHeight = height - 4;
+        int innerX = x + 3;
+        int innerY = y + 11;
+        int innerWidth = width - 6;
+        int innerHeight = height - 14;
 
         graphics.fill(
                 innerX,
@@ -420,7 +395,7 @@ public class PerkScreen extends AbstractContainerScreen<PerkMenu> {
         int scaledTitleWidth = (int)(originalTitleWidth * titleScale);
 
         int titleX = x + (width - scaledTitleWidth) / 2;
-        int titleY = y + 3;
+        int titleY = y + 5;
 
         drawScaledString(
                 graphics,
@@ -566,7 +541,7 @@ public class PerkScreen extends AbstractContainerScreen<PerkMenu> {
                     levelBarY,
                     sectionEndInt,
                     levelBarY + levelBarHeight,
-                    0xFF080808
+                    0xFF000000
             );
 
 
@@ -645,42 +620,17 @@ public class PerkScreen extends AbstractContainerScreen<PerkMenu> {
         }
 
         int width = 150;
-        int height = 180;
 
         /*
          * Place it immediately to the right
          * of the main menu.
          */
         int x = leftPos + imageWidth + 4;
-        int y = topPos + 20;
 
-        /*
-         * =========================
-         * OUTER BACKGROUND
-         * =========================
-         */
-
-        graphics.fill(
-                x,
-                y,
-                x + width,
-                y + height,
-                0xFF080808
-        );
-
-        /*
-         * =========================
-         * INNER BACKGROUND
-         * =========================
-         */
-
-        graphics.fill(
-                x + 2,
-                y + 2,
-                x + width - 2,
-                y + height - 2,
-                0xFF303030
-        );
+        graphics.blit(perkMenuTexture,
+                x,topPos, 177, 0,
+                150, 201,
+                512,512);
 
         /*
          * =========================
@@ -692,9 +642,41 @@ public class PerkScreen extends AbstractContainerScreen<PerkMenu> {
                 font,
                 skillData.title,
                 x + 6,
-                y + 6,
+                topPos + 6,
                 0xFFFFFF
         );
+
+        /*
+         * =========================
+         * SYNOPSIS
+         * =========================
+         */
+
+        int contentX = x + 6;
+        int contentWidth = width - 12;
+
+        int synopsisY = topPos + 18;
+
+        List<String> synopsisLines =
+                wrapText(
+                        skillData.skillSynopsis,
+                        contentWidth,
+                        0.6F
+                );
+
+        for (String line : synopsisLines) {
+
+            drawScaledString(
+                    graphics,
+                    line,
+                    contentX,
+                    synopsisY,
+                    0.5F,
+                    0xFFFFFFFF
+            );
+
+            synopsisY += 7;
+        }
 
         /*
          * =========================
@@ -702,12 +684,15 @@ public class PerkScreen extends AbstractContainerScreen<PerkMenu> {
          * =========================
          */
 
+        int equipmentY =
+                synopsisY;
+
         renderSkillEquipmentSources(
                 graphics,
                 skillData,
-                x + 6,
-                y + 22,
-                width - 12
+                contentX,
+                equipmentY,
+                contentWidth
         );
 
         /*
@@ -716,13 +701,75 @@ public class PerkScreen extends AbstractContainerScreen<PerkMenu> {
          * =========================
          */
 
+        int levelsY =
+                equipmentY + 27 + 4;
+
         renderSkillLevels(
                 graphics,
                 skillData,
-                x + 6,
-                y + 53,
-                width - 12
+                contentX,
+                levelsY,
+                contentWidth
         );
+    }
+
+    private List<String> wrapText(
+            String text,
+            int maxWidth,
+            float scale
+    ) {
+        List<String> lines = new ArrayList<>();
+
+        if (text == null || text.isBlank()) {
+            return lines;
+        }
+
+        String[] words = text.split("\\s+");
+
+        StringBuilder currentLine =
+                new StringBuilder();
+
+        for (String word : words) {
+
+            String testLine;
+
+            if (currentLine.length() == 0) {
+                testLine = word;
+            } else {
+                testLine =
+                        currentLine
+                                + " "
+                                + word;
+            }
+
+            int scaledWidth =
+                    (int) (font.width(testLine) * scale);
+
+            if (scaledWidth <= maxWidth) {
+
+                currentLine = new StringBuilder(testLine);
+
+            } else {
+
+                if (currentLine.length() > 0) {
+                    lines.add(currentLine.toString());
+                }
+
+                /*
+                 * If a single word is wider than the
+                 * available space, allow it onto its
+                 * own line rather than losing it.
+                 */
+                currentLine =
+                        new StringBuilder(word);
+            }
+        }
+
+        if (currentLine.length() > 0) {
+            lines.add(currentLine.toString());
+        }
+
+        return lines;
     }
 
     private void renderSkillEquipmentSources(
@@ -800,33 +847,9 @@ public class PerkScreen extends AbstractContainerScreen<PerkMenu> {
                             0
                     );
 
-            /*
-             * =========================
-             * OUTER BORDER
-             * =========================
-             */
-
-            graphics.fill(
-                    boxX,
-                    boxY,
-                    boxX + boxWidth,
-                    boxY + boxHeight,
-                    0xFF080808
-            );
-
-            /*
-             * =========================
-             * INTERIOR
-             * =========================
-             */
-
-            graphics.fill(
-                    boxX + 1,
-                    boxY + 1,
-                    boxX + boxWidth - 1,
-                    boxY + boxHeight - 1,
-                    0xFF404040
-            );
+            graphics.blit(perkMenuTexture,
+            boxX,boxY, 421,36, 44,12,
+            512,512);
 
             /*
              * =========================
@@ -985,13 +1008,10 @@ public class PerkScreen extends AbstractContainerScreen<PerkMenu> {
 
         if (pageCount > 1) {
 
-            int buttonY =
-                    y + 105;
-
             renderPageButtons(
                     graphics,
                     x,
-                    buttonY,
+                    topPos + 200 - 8,
                     width,
                     pageCount,
                     skillLevelPage
@@ -1031,9 +1051,7 @@ public class PerkScreen extends AbstractContainerScreen<PerkMenu> {
                 y + 1,
                 x + buttonSize - 1,
                 y + buttonSize - 1,
-                helpOpen
-                        ? 0xFF505050
-                        : 0xFF707070
+                0xFF707070
         );
 
         /*
@@ -1042,7 +1060,7 @@ public class PerkScreen extends AbstractContainerScreen<PerkMenu> {
          * =========================
          */
 
-        String text = helpOpen ? "X" : "?";
+        String text = "?";
 
         int textWidth = font.width(text);
 
@@ -1051,136 +1069,6 @@ public class PerkScreen extends AbstractContainerScreen<PerkMenu> {
                 text,
                 x + (buttonSize - textWidth) / 2,
                 y + 2,
-                0xFFFFFFFF
-        );
-    }
-
-    private void renderHelpBox(GuiGraphics graphics) {
-
-        int width = 150;
-        int height = 130;
-
-        /*
-         * Center the help box over the main menu.
-         */
-        int x =
-                leftPos + (imageWidth - width) / 2;
-
-        int y =
-                topPos + (imageHeight - height) / 2;
-
-        /*
-         * =========================
-         * OUTER BORDER
-         * =========================
-         */
-
-        graphics.fill(
-                x,
-                y,
-                x + width,
-                y + height,
-                0xFF080808
-        );
-
-        /*
-         * =========================
-         * INNER BACKGROUND
-         * =========================
-         */
-
-        graphics.fill(
-                x + 2,
-                y + 2,
-                x + width - 2,
-                y + height - 2,
-                0xFF303030
-        );
-
-        /*
-         * =========================
-         * TITLE
-         * =========================
-         */
-
-        graphics.drawString(
-                font,
-                "Perk Menu Help",
-                x + 6,
-                y + 6,
-                0xFFFFFFFF
-        );
-
-        /*
-         * =========================
-         * HELP TEXT
-         * =========================
-         */
-
-        int textX = x + 6;
-        int textY = y + 22;
-
-        int textColor = 0xFFD0D0D0;
-
-        graphics.drawString(
-                font,
-                "Perks can be attached to",
-                textX,
-                textY,
-                textColor
-        );
-
-        graphics.drawString(
-                font,
-                "your equipped items using",
-                textX,
-                textY + 10,
-                textColor
-        );
-
-        graphics.drawString(
-                font,
-                "the perk slots.",
-                textX,
-                textY + 20,
-                textColor
-        );
-
-        graphics.drawString(
-                font,
-                "Select a perk on the left",
-                textX,
-                textY + 38,
-                textColor
-        );
-
-        graphics.drawString(
-                font,
-                "to view its levels and",
-                textX,
-                textY + 48,
-                textColor
-        );
-
-        graphics.drawString(
-                font,
-                "equipment bonuses.",
-                textX,
-                textY + 58,
-                textColor
-        );
-
-        /*
-         * =========================
-         * CLOSE INSTRUCTION
-         * =========================
-         */
-
-        graphics.drawString(
-                font,
-                "Click ? to close.",
-                textX,
-                y + height - 16,
                 0xFFFFFFFF
         );
     }
@@ -1307,10 +1195,6 @@ public class PerkScreen extends AbstractContainerScreen<PerkMenu> {
             return false;
         }
 
-        if (button != 0) {
-            return false;
-        }
-
         /*
          * =========================
          * HELP BUTTON
@@ -1330,13 +1214,10 @@ public class PerkScreen extends AbstractContainerScreen<PerkMenu> {
                 && mouseY >= helpButtonY
                 && mouseY < helpButtonY + helpButtonSize) {
 
-            helpOpen = !helpOpen;
+            Minecraft.getInstance().setScreen(
+                    new HelpScreen(this)
+            );
 
-            /*
-             * Help box is now handling the UI,
-             * so don't allow the click to interact
-             * with anything underneath it.
-             */
             return true;
         }
 
@@ -1348,10 +1229,6 @@ public class PerkScreen extends AbstractContainerScreen<PerkMenu> {
          * Prevent clicking anything underneath
          * the help box.
          */
-
-        if (helpOpen) {
-            return true;
-        }
 
         /*
          * Everything below this point is your
@@ -1369,13 +1246,11 @@ public class PerkScreen extends AbstractContainerScreen<PerkMenu> {
          * when rendering the perk boxes.
          */
         int width = 80;
-        int height = 180;
 
         int x = leftPos - width - 4;
-        int y = topPos + 20;
 
         int boxX = x + 6;
-        int boxY = y + 22;
+        int boxY = topPos + 22;
         int boxWidth = width - 12;
         int boxHeight = 30;
         int spacing = 3;
@@ -1410,7 +1285,7 @@ public class PerkScreen extends AbstractContainerScreen<PerkMenu> {
 
                 skillLevelPage = 0;
 
-                UpgradeScrolls.LOGGER.debug(
+                LightsPerks.LOGGER.debug(
                         "[PerkScreen] Selected skill: {}",
                         selectedSkill.title
                 );
@@ -1431,7 +1306,7 @@ public class PerkScreen extends AbstractContainerScreen<PerkMenu> {
             int pageSpacing = 2;
 
             int buttonY =
-                    y + height - 13;
+                    topPos + 200 - 8;
 
             int totalWidth =
                     pageCount * buttonSize
@@ -1485,19 +1360,12 @@ public class PerkScreen extends AbstractContainerScreen<PerkMenu> {
         if (selectedSkill != null) {
 
             int skillWidth = 150;
-            int skillHeight = 280;
 
             int skillX =
                     leftPos + imageWidth + 4;
 
-            int skillY =
-                    topPos + 20;
-
             int levelsX =
                     skillX + 6;
-
-            int levelsY =
-                    skillY + 53;
 
             int levelsWidth =
                     skillWidth - 12;
@@ -1514,7 +1382,7 @@ public class PerkScreen extends AbstractContainerScreen<PerkMenu> {
                 int pageSpacing = 2;
 
                 int buttonY =
-                        levelsY + 105;
+                       topPos + 200 - 8;
 
                 int totalWidth =
                         pageLevelsCount * buttonSize
@@ -1530,6 +1398,12 @@ public class PerkScreen extends AbstractContainerScreen<PerkMenu> {
                             startX
                                     + page * (buttonSize + pageSpacing);
 
+//                    UpgradeScrolls.LOGGER.debug("Button Click at: {} and {}, page buttons at X: {}-{}, and Y: {}-{}",
+//                            mouseX, mouseY,
+//                            buttonX, buttonX + buttonSize,
+//                            buttonY, buttonY + buttonSize
+//                    );
+
                     if (mouseX >= buttonX
                             && mouseX < buttonX + buttonSize
                             && mouseY >= buttonY
@@ -1542,7 +1416,6 @@ public class PerkScreen extends AbstractContainerScreen<PerkMenu> {
                 }
             }
         }
-
         return false;
     }
 
@@ -1580,38 +1453,17 @@ public class PerkScreen extends AbstractContainerScreen<PerkMenu> {
 
         this.renderBackground(graphics);
 
-        /*
-         * Main background
-         */
-        graphics.fill(
+        graphics.blit(
+                perkMenuTexture,
                 leftPos,
                 topPos,
-                leftPos + imageWidth,
-                topPos + imageHeight,
-                0xFF202020
-        );
-
-        /*
-         * Perk section
-         */
-        graphics.fill(
-                leftPos + 4,
-                topPos + 20,
-                leftPos + 172,
-                topPos + 95,
-                0xFF303030
-        );
-
-        /*
-         * Inventory section
-         */
-        graphics.fill(
-                leftPos + 4,
-                topPos + 93,
-                leftPos + 172,
-                topPos + 196,
-                0xFF403030
-        );
+                0,
+                0,
+                176,
+                201,
+                512,
+                512
+                );
 
         renderPlayerModel(graphics, mouseX, mouseY);
 
@@ -1633,10 +1485,6 @@ public class PerkScreen extends AbstractContainerScreen<PerkMenu> {
     }
 
     private void renderPerkSlotLevels(GuiGraphics graphics) {
-
-        if (helpOpen)
-            return;
-
         for (Slot slot : menu.slots) {
 
             if (!(slot instanceof PerkSlot perkSlot)) {
@@ -1647,33 +1495,46 @@ public class PerkScreen extends AbstractContainerScreen<PerkMenu> {
                     perkSlot.getPerkContainer();
 
             int level =
-                    container.getSocketLevel(perkSlot.getContainerSlot());
+                    container.getSocketLevel(
+                            perkSlot.getContainerSlot()
+                    );
 
-            if (level == 0) continue;
+            if (level <= 0) {
+                continue;
+            }
+
+            int uOffset = 407;
+            int vOffset = 0;
+
+            switch (level) {
+                case 1 -> {
+                }
+                case 2 ->
+                        uOffset += 18;
+                case 3 ->
+                        uOffset += 36;
+                case 4 -> vOffset += 18;
+                default -> {
+                    continue;
+                }
+            }
 
             int x =
-                    leftPos + slot.x;
+                    leftPos + slot.x - 1;
 
             int y =
-                    topPos + slot.y;
+                    topPos + slot.y - 1;
 
-            String text =
-                    String.valueOf(level);
-
-            /*
-             * Draw in the bottom-right corner
-             * of the slot.
-             */
-            int textWidth =
-                    font.width(text);
-
-            graphics.drawString(
-                    font,
-                    text,
-                    x + 18 - textWidth - 2,
-                    y + 18 - 9,
-                    0xFFFFFFFF,
-                    true
+            graphics.blit(
+                    perkMenuTexture,
+                    x,
+                    y,
+                    uOffset,
+                    vOffset,
+                    18,
+                    18,
+                    512,
+                    512
             );
         }
     }
@@ -1687,18 +1548,18 @@ public class PerkScreen extends AbstractContainerScreen<PerkMenu> {
 
         LocalPlayer player = minecraft.player;
 
-        if (player == null || helpOpen) {
+        if (player == null) {
             return;
         }
 
-        int x = leftPos + 20;
-        int y = topPos + 85;
+        int x = leftPos + 25;
+        int y = topPos + 80;
 
         InventoryScreen.renderEntityInInventoryFollowsMouse(
                 graphics,
                 x,
                 y,
-                30,
+                25,
                 (float) (x - mouseX),
                 (float) (y - mouseY),
                 player
@@ -1711,43 +1572,16 @@ public class PerkScreen extends AbstractContainerScreen<PerkMenu> {
             int y,
             boolean enabled
     ) {
-        /*
-         * Outer border
-         */
-        graphics.fill(
+        graphics.blit(
+                perkMenuTexture,
                 x,
                 y,
-                x + 18,
-                y + 18,
-                enabled
-                        ? 0xFF101010
-                        : 0xFF080808
-        );
-
-        /*
-         * Inner slot
-         */
-        graphics.fill(
-                x + 1,
-                y + 1,
-                x + 17,
-                y + 17,
-                enabled
-                        ? 0xFF8B8B8B
-                        : 0xFF404040
-        );
-
-        /*
-         * Inner shadow/highlight
-         */
-        graphics.fill(
-                x + 2,
-                y + 2,
-                x + 16,
-                y + 16,
-                enabled
-                        ? 0xFF373737
-                        : 0xFF202020
+                enabled ? 425 : 443,
+                18,
+                18,
+                18,
+                512,
+                512
         );
     }
 
@@ -1771,7 +1605,6 @@ public class PerkScreen extends AbstractContainerScreen<PerkMenu> {
         /*
          * Inventory section
          */
-        if (!helpOpen) {
             graphics.drawString(
                     font,
                     "Inventory",
@@ -1779,7 +1612,6 @@ public class PerkScreen extends AbstractContainerScreen<PerkMenu> {
                     97,
                     0xFFFFFF
             );
-        }
     }
 
     private void renderEquipmentItems(GuiGraphics graphics) {

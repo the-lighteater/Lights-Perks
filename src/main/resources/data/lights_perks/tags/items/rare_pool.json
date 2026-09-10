@@ -1,0 +1,10 @@
+{
+  "replace": false,
+  "values": [
+    "lights_perks:mending_perk",
+    "lights_perks:star_power_perk",
+    "lights_perks:regeneration_perk",
+    "lights_perks:heavy_hitter_perk",
+    "lights_perks:fortune_perk"
+  ]
+}

@@ -1,0 +1,26 @@
+{
+  "title": "Looting",
+  "skillSynopsis": "Improves the rewards dropped by defeated enemies",
+  "skill_id": "lights_perks:looting",
+  "color": "0xFF00BCD4",
+  "maxLevel": 1,
+  "bonusLevel": 0,
+
+  "levels": [
+    {
+      "level": 1,
+      "bonus": false,
+      "effects": [
+        "Looting I applied to piece(s) that have points"
+      ],
+      "skillEffects": [
+        {
+          "type": "enchantment",
+          "enchantment": "minecraft:looting",
+          "application": "per_item",
+          "level": 1
+        }
+      ]
+    }
+  ]
+}

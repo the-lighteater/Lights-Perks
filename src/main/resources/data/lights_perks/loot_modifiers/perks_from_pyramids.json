@@ -1,0 +1,13 @@
+{
+  "type": "lights_perks:add_item",
+  "chance": 0.4,
+  "conditions": [
+    {
+      "condition": "forge:loot_table_id",
+      "loot_table_id": "minecraft:chests/desert_pyramid"
+    }
+  ],
+  "max_count": 3,
+  "min_count": 1,
+  "perk_pool_id": "lights_perks:common_pool"
+}

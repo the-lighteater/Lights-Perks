@@ -1,0 +1,86 @@
+{
+  "title": "Heavy Hitter",
+  "skillSynopsis": "Greatly increases the force behind your attacks",
+  "skill_id": "lights_perks:heavy_hitter",
+  "color": "0xFF8B4513",
+  "maxLevel": 3,
+  "bonusLevel": 2,
+
+  "levels": [
+    {
+      "level": 1,
+      "bonus": false,
+      "effects": [
+        "+10% Attack Damage"
+      ],
+      "skillEffects": [
+        {
+          "type": "attribute",
+          "attribute": "minecraft:generic.attack_damage",
+          "amount": 0.10,
+          "operation": "multiply_base"
+        }
+      ]
+    },
+    {
+      "level": 2,
+      "bonus": false,
+      "effects": [
+        "+20% Attack Damage"
+      ],
+      "skillEffects": [
+        {
+          "type": "attribute",
+          "attribute": "minecraft:generic.attack_damage",
+          "amount": 0.20,
+          "operation": "multiply_base"
+        }
+      ]
+    },
+    {
+      "level": 3,
+      "bonus": false,
+      "effects": [
+        "+30% Attack Damage"
+      ],
+      "skillEffects": [
+        {
+          "type": "attribute",
+          "attribute": "minecraft:generic.attack_damage",
+          "amount": 0.30,
+          "operation": "multiply_base"
+        }
+      ]
+    },
+    {
+      "level": 4,
+      "bonus": true,
+      "effects": [
+        "+45% Attack Damage"
+      ],
+      "skillEffects": [
+        {
+          "type": "attribute",
+          "attribute": "minecraft:generic.attack_damage",
+          "amount": 0.45,
+          "operation": "multiply_base"
+        }
+      ]
+    },
+    {
+      "level": 5,
+      "bonus": true,
+      "effects": [
+        "+60% Attack Damage"
+      ],
+      "skillEffects": [
+        {
+          "type": "attribute",
+          "attribute": "minecraft:generic.attack_damage",
+          "amount": 0.60,
+          "operation": "multiply_base"
+        }
+      ]
+    }
+  ]
+}

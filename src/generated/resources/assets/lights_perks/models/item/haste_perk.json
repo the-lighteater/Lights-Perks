@@ -1,6 +1,6 @@
 {
   "parent": "minecraft:item/generated",
   "textures": {
-    "layer0": "lights_perks:item/strength_perk"
+    "layer0": "lights_perks:item/haste_perk"
   }
 }

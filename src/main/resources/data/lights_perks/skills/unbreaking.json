@@ -1,0 +1,26 @@
+{
+  "title": "Unbreaking",
+  "skillSynopsis": "Applies Unbreaking",
+  "skill_id": "lights_perks:unbreaking",
+  "color": "0xFF27C8F5",
+  "maxLevel": 1,
+  "bonusLevel": 0,
+
+  "levels": [
+    {
+      "level": 1,
+      "bonus": false,
+      "effects": [
+        "Unbreaking applied to piece(s) that have points"
+      ],
+      "skillEffects": [
+        {
+          "type": "enchantment",
+          "enchantment": "minecraft:unbreaking",
+          "application": "per_item",
+          "level": 1
+        }
+      ]
+    }
+  ]
+}

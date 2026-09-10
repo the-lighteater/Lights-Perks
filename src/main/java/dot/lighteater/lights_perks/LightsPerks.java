@@ -5,6 +5,7 @@ import dot.lighteater.lights_perks.block.ModBlocks;
 import dot.lighteater.lights_perks.item.LoadItems;
 import dot.lighteater.lights_perks.item.ModCreativeModTabs;
 import dot.lighteater.lights_perks.item.ModItems;
+import dot.lighteater.lights_perks.loot.ModLootModifiers;
 import dot.lighteater.lights_perks.menu.ModMenus;
 import dot.lighteater.lights_perks.perk.PerkLoader;
 import dot.lighteater.lights_perks.skill.SkillLoader;
@@ -23,14 +24,14 @@ import org.slf4j.Logger;
 // Naming conventions and file management is credited to Kaupenjoe and his excellent 1.20.1 Forge Modding Tutorials.
 // The link to his work will be credited in the description on CurseForge
 
-@Mod(UpgradeScrolls.MODID)
-public class UpgradeScrolls
+@Mod(LightsPerks.MODID)
+public class LightsPerks
 {
 
     public static final String MODID = "lights_perks";
     public static final Logger LOGGER = LogUtils.getLogger();
 
-    public UpgradeScrolls(FMLJavaModLoadingContext context)
+    public LightsPerks(FMLJavaModLoadingContext context)
     {
         IEventBus modEventBus = context.getModEventBus();
 
@@ -44,6 +45,7 @@ public class UpgradeScrolls
         ModItems.register(modEventBus);
 
         ModBlocks.register(modEventBus);
+        ModLootModifiers.register(modEventBus);
 
         SkillRuntimeLoader.loadSkills();
 
@@ -54,6 +56,7 @@ public class UpgradeScrolls
         // Register our mod's ForgeConfigSpec so that Forge can create and load the config file for us
         context.registerConfig(ModConfig.Type.COMMON, Config.SPEC);
         context.registerConfig(ModConfig.Type.CLIENT, ClientConfig.SPEC);
+        context.registerConfig(ModConfig.Type.SERVER, ServerConfig.SPEC);
     }
 
     private void onAddReloadListeners(AddReloadListenerEvent event) {

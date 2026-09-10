@@ -9,6 +9,7 @@ import java.util.Map;
 public class SkillData {
 
     public String title;
+    public String skillSynopsis;
     public String skill_id;
     public String color;
 

@@ -5,8 +5,7 @@
     },
     "slots": [
       1,
-      2,
-      3
+      2
     ]
   },
 
@@ -16,7 +15,6 @@
     },
     "slots": [
       2,
-      3,
       4
     ]
   },
@@ -28,6 +26,53 @@
     "slots": [
       1,
       2
+    ]
+  },
+
+  "minecraft:diamond_helmet": {
+    "slots": [
+      2
+    ]
+  },
+
+  "minecraft:diamond_leggings": {
+    "slots": [
+      2,
+      1
+    ]
+  },
+
+  "minecraft:netherite_chestplate": {
+    "builtin_skills": {
+      "lights_perks:attack_up": 3
+    },
+    "slots": [
+      1,
+      2,
+      4
+    ]
+  },
+
+  "minecraft:netherite_helmet": {
+    "slots": [
+      2,
+      1
+    ]
+  },
+
+  "minecraft:netherite_leggings": {
+    "slots": [
+      2,
+      1,
+      1
+    ]
+  },
+
+  "minecraft:netherite_boots": {
+    "slots": [
+      1,
+      1,
+      1
     ]
   }
 }

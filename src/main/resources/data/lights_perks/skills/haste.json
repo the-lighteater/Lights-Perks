@@ -1,0 +1,71 @@
+{
+  "title": "Haste",
+  "skillSynopsis": "Improves your mining and attack speed",
+  "skill_id": "lights_perks:haste",
+  "color": "0xFFFFC107",
+  "maxLevel": 3,
+  "bonusLevel": 1,
+
+  "levels": [
+    {
+      "level": 1,
+      "bonus": false,
+      "effects": [
+        "Haste I"
+      ],
+      "skillEffects": [
+        {
+          "type": "effect",
+          "effect": "minecraft:haste",
+          "duration": 200,
+          "strength": 0
+        }
+      ]
+    },
+    {
+      "level": 2,
+      "bonus": false,
+      "effects": [
+        "Haste II"
+      ],
+      "skillEffects": [
+        {
+          "type": "effect",
+          "effect": "minecraft:haste",
+          "duration": 200,
+          "strength": 1
+        }
+      ]
+    },
+    {
+      "level": 3,
+      "bonus": false,
+      "effects": [
+        "Haste III"
+      ],
+      "skillEffects": [
+        {
+          "type": "effect",
+          "effect": "minecraft:haste",
+          "duration": 200,
+          "strength": 2
+        }
+      ]
+    },
+    {
+      "level": 4,
+      "bonus": true,
+      "effects": [
+        "Haste IV"
+      ],
+      "skillEffects": [
+        {
+          "type": "effect",
+          "effect": "minecraft:haste",
+          "duration": 200,
+          "strength": 3
+        }
+      ]
+    }
+  ]
+}

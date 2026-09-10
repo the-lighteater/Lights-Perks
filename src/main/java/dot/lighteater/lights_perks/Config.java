@@ -5,10 +5,15 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.config.ModConfigEvent;
 
-@Mod.EventBusSubscriber(modid = UpgradeScrolls.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
-public class Config
-{
-    private static final ForgeConfigSpec.Builder BUILDER = new ForgeConfigSpec.Builder();
+@Mod.EventBusSubscriber(
+        modid = LightsPerks.MODID,
+        bus = Mod.EventBusSubscriber.Bus.MOD
+)
+public class Config {
+
+    private static final ForgeConfigSpec.Builder BUILDER =
+            new ForgeConfigSpec.Builder();
+
     public static final ForgeConfigSpec SPEC;
 
     static {
@@ -16,7 +21,6 @@ public class Config
     }
 
     @SubscribeEvent
-    static void onLoad(final ModConfigEvent event)
-    {
+    static void onLoad(final ModConfigEvent event) {
     }
 }

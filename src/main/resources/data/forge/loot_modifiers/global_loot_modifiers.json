@@ -1,0 +1,17 @@
+{
+  "entries": [
+    "lights_perks:perks_from_mineshafts",
+    "lights_perks:perks_from_jungle_temple",
+    "lights_perks:perks_from_ruined_portal",
+    "lights_perks:perks_from_pyramids",
+    "lights_perks:perks_from_buried_treasure",
+    "lights_perks:perks_from_ancient_cities",
+    "lights_perks:perks_from_suspicious_sand_pyramid",
+    "lights_perks:perks_from_suspicious_sand_well",
+    "lights_perks:perks_from_suspicious_sand_trail_ruins_common",
+    "lights_perks:perks_from_suspicious_sand_trail_ruins_rare",
+    "lights_perks:perks_from_suspicious_sand_warm_ruins",
+    "lights_perks:perks_from_suspicious_sand_cold_ruins"
+  ],
+  "replace": false
+}

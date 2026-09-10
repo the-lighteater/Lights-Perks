@@ -1,0 +1,140 @@
+package dot.lighteater.lights_perks.loot;
+
+import com.google.common.base.Suppliers;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
+import dot.lighteater.lights_perks.LightsPerks;
+import it.unimi.dsi.fastutil.objects.ObjectArrayList;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.storage.loot.LootContext;
+import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
+import net.minecraftforge.common.loot.IGlobalLootModifier;
+import net.minecraftforge.common.loot.LootModifier;
+import org.jetbrains.annotations.NotNull;
+
+import java.util.function.Supplier;
+
+public class AddItemModifier extends LootModifier {
+
+    public static final Supplier<Codec<AddItemModifier>> CODEC =
+            Suppliers.memoize(() ->
+                    RecordCodecBuilder.create(inst ->
+                            codecStart(inst)
+                                    .and(
+                                            Codec.INT
+                                                    .fieldOf("min_count")
+                                                    .forGetter(m -> m.minCount)
+                                    )
+                                    .and(
+                                            Codec.INT
+                                                    .fieldOf("max_count")
+                                                    .forGetter(m -> m.maxCount)
+                                    )
+                                    .and(
+                                            Codec.FLOAT
+                                                    .fieldOf("chance")
+                                                    .forGetter(m -> m.chance)
+                                    )
+                                    .and(
+                                            Codec.STRING
+                                                    .fieldOf("perk_pool_id")
+                                                    .forGetter(m -> m.perk_pool_id)
+                                    )
+                                    .apply(inst, AddItemModifier::new)
+                    )
+            );
+    private final int minCount;
+    private final int maxCount;
+    private final float chance;
+    private final String perk_pool_id;
+
+    public AddItemModifier(LootItemCondition[] conditionsIn,
+                                    int minCount, int maxCount, float chance, String perk_pool_id) {
+        super(conditionsIn);
+
+        LightsPerks.LOGGER.debug(
+                "[AddSuspicousItemModifier] Created with {} conditions",
+                conditionsIn.length
+        );
+
+        this.minCount = minCount;
+        this.maxCount = maxCount;
+        this.chance = chance;
+        this.perk_pool_id = perk_pool_id;
+    }
+
+    @Override
+    protected @NotNull ObjectArrayList<ItemStack> doApply(
+            ObjectArrayList<ItemStack> generatedLoot,
+            LootContext context
+    ) {
+        LightsPerks.LOGGER.debug(
+                "[AddItemModifier] doApply called. Existing loot count: {}",
+                generatedLoot.size()
+        );
+
+        float roll = context.getRandom().nextFloat();
+
+        LightsPerks.LOGGER.debug(
+                "[AddItemModifier] Chance roll: {} / required < {}",
+                roll,
+                chance
+        );
+
+        if (roll >= chance) {
+            LightsPerks.LOGGER.debug(
+                    "[AddItemModifier] Chance failed. No pool item added."
+            );
+
+            LightsPerks.LOGGER.debug(
+                    "[AddItemModifier] AFTER: {} items",
+                    generatedLoot.size()
+            );
+
+            return generatedLoot;
+        }
+
+        ItemStack drop = DropPoolManager.getRandomDrop(
+                context.getRandom(),
+                perk_pool_id
+        );
+
+        if (drop.isEmpty()) {
+            LightsPerks.LOGGER.debug(
+                    "[AddItemModifier] Drop pool was empty. No item added."
+            );
+
+            LightsPerks.LOGGER.debug(
+                    "[AddItemModifier] AFTER: {} items",
+                    generatedLoot.size()
+            );
+
+            return generatedLoot;
+        }
+
+        int count = minCount
+                + context.getRandom().nextInt(maxCount - minCount + 1);
+
+        drop.setCount(count);
+
+        LightsPerks.LOGGER.debug(
+                "[AddItemModifier] Adding {} x{}",
+                drop.getItem(),
+                count
+        );
+
+        generatedLoot.add(drop);
+
+        LightsPerks.LOGGER.debug(
+                "[AddItemModifier] AFTER: {} items",
+                generatedLoot.size()
+        );
+
+        return generatedLoot;
+    }
+
+    @Override
+    public Codec<? extends IGlobalLootModifier> codec() {
+        return CODEC.get();
+    }
+}

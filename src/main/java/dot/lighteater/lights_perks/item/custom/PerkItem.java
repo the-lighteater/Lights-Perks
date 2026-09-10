@@ -21,6 +21,8 @@ public class PerkItem extends Item implements IPerkItem {
 
     private final ResourceLocation perkId;
 
+    private final String color = "0xFF7A1030";
+
     public PerkItem(
             Properties properties,
             ResourceLocation perkId
@@ -36,6 +38,13 @@ public class PerkItem extends Item implements IPerkItem {
 
     public PerkData getPerkData() {
         return PerkLoader.get(perkId);
+    }
+
+    public int getColor() {
+        return (int) Long.parseLong(
+                color.replace("0x", ""),
+                16
+        );
     }
 
     public int getLevel() {

@@ -2,7 +2,7 @@ package dot.lighteater.lights_perks.skill;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
-import dot.lighteater.lights_perks.UpgradeScrolls;
+import dot.lighteater.lights_perks.LightsPerks;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.server.packs.resources.SimpleJsonResourceReloadListener;
@@ -44,7 +44,7 @@ public class SkillLoader extends SimpleJsonResourceReloadListener {
 
             } catch (Exception e) {
 
-                UpgradeScrolls.LOGGER.error(
+                LightsPerks.LOGGER.error(
                         "[SkillLoader] Failed to load skill: {}",
                         entry.getKey(),
                         e
@@ -52,7 +52,7 @@ public class SkillLoader extends SimpleJsonResourceReloadListener {
             }
         }
 
-        UpgradeScrolls.LOGGER.info(
+        LightsPerks.LOGGER.info(
                 "[SkillLoader] Loaded {} skills.",
                 SkillManager.getAll().size()
         );

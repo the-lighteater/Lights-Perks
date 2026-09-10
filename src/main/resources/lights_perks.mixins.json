@@ -1,0 +1,13 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "dot.lighteater.lights_perks.mixin",
+  "compatibilityLevel": "JAVA_17",
+  "refmap": "lights_perks.refmap.json",
+  "mixins": [
+    "EnchantmentHelperMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

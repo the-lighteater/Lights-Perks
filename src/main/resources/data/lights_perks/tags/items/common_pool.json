@@ -1,0 +1,14 @@
+{
+  "replace": false,
+  "values": [
+    "lights_perks:attack_up_perk",
+    "lights_perks:speed_boost_perk",
+    "lights_perks:unbreaking_perk",
+    "lights_perks:iron_skin_perk",
+    "lights_perks:haste_perk",
+    "lights_perks:looting_perk",
+    "lights_perks:fire_aspect_perk",
+    "lights_perks:resistance_perk",
+    "lights_perks:night_vision_perk"
+  ]
+}
