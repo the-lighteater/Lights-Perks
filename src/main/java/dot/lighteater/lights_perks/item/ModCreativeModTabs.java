@@ -12,9 +12,9 @@ public class ModCreativeModTabs {
     public static final DeferredRegister<CreativeModeTab> CREATIVE_MODE_TABS =
             DeferredRegister.create(Registries.CREATIVE_MODE_TAB, LightsPerks.MODID);
 
-    public static final RegistryObject<CreativeModeTab> UPGRADE_SCROLLS = CREATIVE_MODE_TABS.register("lights_perks", () -> CreativeModeTab.builder()
+    public static final RegistryObject<CreativeModeTab> LIGHTS_PERKS = CREATIVE_MODE_TABS.register("lights_perks", () -> CreativeModeTab.builder()
             .withTabsBefore(CreativeModeTabs.COMBAT)
-            .icon(() -> ModItems.LOOTING_PERK.get().getDefaultInstance()) // Testing
+            .icon(() -> new ItemStack(ModItems.LOOTING_PERK.get())) // Testing
             .title(Component.translatable("creativetab.lights_perks"))
             .displayItems((parameters, output) -> {
                 for (RegistryObject<Item> item : ModItems.ITEMS.getEntries()) {

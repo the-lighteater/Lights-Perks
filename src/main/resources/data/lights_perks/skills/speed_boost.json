@@ -11,7 +11,7 @@
       "level": 1,
       "bonus": false,
       "effects": [
-        "+10% faster movement speed"
+        "+20% faster movement speed"
       ],
       "skillEffects": [
         {
@@ -26,7 +26,7 @@
       "level": 2,
       "bonus": false,
       "effects": [
-        "+20% faster movement speed"
+        "+40% faster movement speed"
       ],
       "skillEffects": [
         {
@@ -40,7 +40,7 @@
       "level": 3,
       "bonus": false,
       "effects": [
-        "+30% faster movement speed"
+        "+60% faster movement speed"
       ],
       "skillEffects": [
         {
