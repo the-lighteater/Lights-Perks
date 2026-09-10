@@ -1,6 +1,5 @@
 package dot.lighteater.lights_perks.skill;
 
-import dot.lighteater.lights_perks.UpgradeScrolls;
 import dot.lighteater.lights_perks.helpers.EquipmentType;
 import dot.lighteater.lights_perks.item_config.ItemConfigData;
 import dot.lighteater.lights_perks.item_config.ItemConfigManager;

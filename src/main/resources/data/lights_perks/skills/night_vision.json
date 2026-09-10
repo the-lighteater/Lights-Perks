@@ -1,0 +1,26 @@
+{
+  "title": "Night Vision",
+  "skillSynopsis": "Allows you to see clearly in dark environments",
+  "skill_id": "lights_perks:night_vision",
+  "color": "0xFF6A5ACD",
+  "maxLevel": 1,
+  "bonusLevel": 0,
+
+  "levels": [
+    {
+      "level": 1,
+      "bonus": false,
+      "effects": [
+        "Permanent Night Vision"
+      ],
+      "skillEffects": [
+        {
+          "type": "effect",
+          "effect": "minecraft:night_vision",
+          "duration": 300,
+          "strength": 0
+        }
+      ]
+    }
+  ]
+}

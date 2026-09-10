@@ -1,0 +1,26 @@
+{
+  "title": "Fortune",
+  "skillSynopsis": "Improves the rewards dropped by mining",
+  "skill_id": "lights_perks:fortune",
+  "color": "0xFF9C27B0",
+  "maxLevel": 1,
+  "bonusLevel": 0,
+
+  "levels": [
+    {
+      "level": 1,
+      "bonus": false,
+      "effects": [
+        "Fortune I applied to piece(s) that have points"
+      ],
+      "skillEffects": [
+        {
+          "type": "enchantment",
+          "enchantment": "minecraft:fortune",
+          "application": "per_item",
+          "level": 1
+        }
+      ]
+    }
+  ]
+}

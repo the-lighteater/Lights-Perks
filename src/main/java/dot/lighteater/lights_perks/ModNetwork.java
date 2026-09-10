@@ -9,7 +9,7 @@ public class ModNetwork {
     private static final String PROTOCOL = "1";
 
     public static final SimpleChannel CHANNEL = NetworkRegistry.newSimpleChannel(
-            new ResourceLocation(UpgradeScrolls.MODID, "main"),
+            new ResourceLocation(LightsPerks.MODID, "main"),
             () -> PROTOCOL,
             PROTOCOL::equals,
             PROTOCOL::equals
@@ -33,7 +33,7 @@ public class ModNetwork {
     }
 
     public static void sendOpenPerkMenu() {
-        UpgradeScrolls.LOGGER.debug("Sending packet");
+        LightsPerks.LOGGER.debug("Sending packet");
         CHANNEL.sendToServer(new OpenPerkMenuPacket());
     }
 }

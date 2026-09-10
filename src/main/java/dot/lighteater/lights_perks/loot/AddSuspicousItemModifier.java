@@ -3,8 +3,7 @@ package dot.lighteater.lights_perks.loot;
 import com.google.common.base.Suppliers;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import dot.lighteater.lights_perks.Config;
-import dot.lighteater.lights_perks.UpgradeScrolls;
+import dot.lighteater.lights_perks.LightsPerks;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.storage.loot.LootContext;
@@ -42,7 +41,7 @@ public class AddSuspicousItemModifier extends LootModifier {
                                     float chance, String perk_pool_id) {
         super(conditionsIn);
 
-        UpgradeScrolls.LOGGER.debug(
+        LightsPerks.LOGGER.debug(
                 "[AddSuspicousItemModifier] Created with {} conditions",
                 conditionsIn.length
         );
@@ -57,7 +56,7 @@ public class AddSuspicousItemModifier extends LootModifier {
             ObjectArrayList<ItemStack> generatedLoot,
             LootContext context
     ) {
-        UpgradeScrolls.LOGGER.debug(
+        LightsPerks.LOGGER.debug(
                 "[AddSuspicousItemModifier] doApply called. Existing loot count: {}",
                 generatedLoot.size()
         );
@@ -67,14 +66,14 @@ public class AddSuspicousItemModifier extends LootModifier {
 
             boolean passed = condition.test(context);
 
-            UpgradeScrolls.LOGGER.debug(
+            LightsPerks.LOGGER.debug(
                     "[AddSuspicousItemModifier] Condition {} -> {}",
                     condition.getClass().getSimpleName(),
                     passed
             );
 
             if (!passed) {
-                UpgradeScrolls.LOGGER.debug(
+                LightsPerks.LOGGER.debug(
                         "[AddSuspicousItemModifier] Condition failed. No pool item supplied."
                 );
 
@@ -84,21 +83,21 @@ public class AddSuspicousItemModifier extends LootModifier {
 
         float roll = context.getRandom().nextFloat();
 
-        UpgradeScrolls.LOGGER.debug(
+        LightsPerks.LOGGER.debug(
                 "[AddSuspicousItemModifier] Chance roll: {} / required < {}",
                 roll,
                 chance
         );
 
         if (roll >= chance) {
-            UpgradeScrolls.LOGGER.debug(
+            LightsPerks.LOGGER.debug(
                     "[AddSuspicousItemModifier] Chance failed. Normal archaeology loot will remain."
             );
 
             return generatedLoot;
         }
 
-        UpgradeScrolls.LOGGER.debug(
+        LightsPerks.LOGGER.debug(
                 "[AddSuspicousItemModifier] Chance succeeded. Selecting random pool item."
         );
 
@@ -109,21 +108,21 @@ public class AddSuspicousItemModifier extends LootModifier {
         );
 
         if (drop.isEmpty()) {
-            UpgradeScrolls.LOGGER.debug(
+            LightsPerks.LOGGER.debug(
                     "[AddSuspicousItemModifier] Drop pool was empty. Normal archaeology loot will remain."
             );
 
             return generatedLoot;
         }
 
-        UpgradeScrolls.LOGGER.debug(
+        LightsPerks.LOGGER.debug(
                 "[AddSuspicousItemModifier] Selected pool item: {} x{}",
                 drop.getItem(),
                 drop.getCount()
         );
 
         // Replace archaeology loot
-        UpgradeScrolls.LOGGER.debug(
+        LightsPerks.LOGGER.debug(
                 "[AddSuspicousItemModifier] Clearing {} existing archaeology loot entries.",
                 generatedLoot.size()
         );
@@ -132,7 +131,7 @@ public class AddSuspicousItemModifier extends LootModifier {
 
         generatedLoot.add(drop);
 
-        UpgradeScrolls.LOGGER.debug(
+        LightsPerks.LOGGER.debug(
                 "[AddSuspicousItemModifier] Replaced archaeology loot with {}. New loot count: {}",
                 drop.getItem(),
                 generatedLoot.size()

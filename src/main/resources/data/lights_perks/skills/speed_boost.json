@@ -1,5 +1,6 @@
 {
   "title": "Speed Boost",
+  "skillSynopsis": "Gives you Speed Boost",
   "skill_id": "lights_perks:speed_boost",
   "color": "0xFF7A3030",
   "maxLevel": 3,

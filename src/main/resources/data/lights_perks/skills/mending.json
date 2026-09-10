@@ -1,5 +1,6 @@
 {
   "title": "Mending",
+  "skillSynopsis": "Adds Mending to any item that has points (from built-in skills or perks).",
   "skill_id": "lights_perks:mending",
   "color": "0xFF7A5030",
   "maxLevel": 1,

@@ -1,5 +1,6 @@
 {
   "title": "Star Power",
+  "skillSynopsis": "Improves your recovery and jumping ability",
   "skill_id": "lights_perks:star_power",
   "color": "0xFF7A6060",
   "maxLevel": 5,
@@ -10,47 +11,132 @@
       "level": 1,
       "bonus": false,
       "effects": [
-        "+5 Attack Damage"
+        "Regeneration I",
+        "Jump Boost I"
+      ],
+      "skillEffects": [
+        {
+          "type": "effect",
+          "effect": "minecraft:regeneration",
+          "duration": 200,
+          "strength": 0
+        },
+        {
+          "type": "effect",
+          "effect": "minecraft:jump_boost",
+          "duration": 200,
+          "strength": 0
+        }
       ]
     },
     {
       "level": 2,
       "bonus": false,
       "effects": [
-        "+10 Attack Damage",
-        "+5% Attack Speed"
+        "Regeneration I",
+        "Jump Boost I"
+      ],
+      "skillEffects": [
+        {
+          "type": "effect",
+          "effect": "minecraft:regeneration",
+          "duration": 200,
+          "strength": 0
+        },
+        {
+          "type": "effect",
+          "effect": "minecraft:jump_boost",
+          "duration": 200,
+          "strength": 0
+        }
       ]
     },
     {
       "level": 3,
       "bonus": false,
       "effects": [
-        "+15 Attack Damage",
-        "+10% Attack Speed"
+        "Regeneration II",
+        "Jump Boost I"
+      ],
+      "skillEffects": [
+        {
+          "type": "effect",
+          "effect": "minecraft:regeneration",
+          "duration": 200,
+          "strength": 1
+        },
+        {
+          "type": "effect",
+          "effect": "minecraft:jump_boost",
+          "duration": 200,
+          "strength": 0
+        }
       ]
     },
     {
       "level": 4,
       "bonus": false,
       "effects": [
-        "+25 Attack Damage",
-        "+120% Attack Speed"
+        "Regeneration II",
+        "Jump Boost II"
+      ],
+      "skillEffects": [
+        {
+          "type": "effect",
+          "effect": "minecraft:regeneration",
+          "duration": 200,
+          "strength": 1
+        },
+        {
+          "type": "effect",
+          "effect": "minecraft:jump_boost",
+          "duration": 200,
+          "strength": 1
+        }
       ]
     },
     {
       "level": 5,
       "bonus": false,
       "effects": [
-        "+25 Attack Damage",
-        "+120% Attack Speed"
+        "Regeneration II",
+        "Jump Boost II"
+      ],
+      "skillEffects": [
+        {
+          "type": "effect",
+          "effect": "minecraft:regeneration",
+          "duration": 200,
+          "strength": 1
+        },
+        {
+          "type": "effect",
+          "effect": "minecraft:jump_boost",
+          "duration": 200,
+          "strength": 1
+        }
       ]
     },
     {
       "level": 6,
       "bonus": true,
       "effects": [
-        "+25 Attack Damage",
-        "+120% Attack Speed"
+        "Regeneration III",
+        "Jump Boost II"
+      ],
+      "skillEffects": [
+        {
+          "type": "effect",
+          "effect": "minecraft:regeneration",
+          "duration": 200,
+          "strength": 2
+        },
+        {
+          "type": "effect",
+          "effect": "minecraft:jump_boost",
+          "duration": 200,
+          "strength": 1
+        }
       ]
     }
   ]

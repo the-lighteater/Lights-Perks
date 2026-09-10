@@ -1,14 +1,14 @@
 package dot.lighteater.lights_perks.event;
 
-import dot.lighteater.lights_perks.Config;
+import dot.lighteater.lights_perks.LightsPerks;
 import dot.lighteater.lights_perks.ServerConfig;
-import dot.lighteater.lights_perks.UpgradeScrolls;
 import dot.lighteater.lights_perks.loot.DropPoolManager;
 import dot.lighteater.lights_perks.perk.IPerkItem;
 import dot.lighteater.lights_perks.item_config.ItemConfigData;
 import dot.lighteater.lights_perks.item_config.ItemConfigManager;
 import dot.lighteater.lights_perks.skill.SkillData;
 import dot.lighteater.lights_perks.skill.SkillManager;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
@@ -29,8 +29,22 @@ import java.util.Map;
 
 // Events handled by the mod.
 
-@Mod.EventBusSubscriber(modid = UpgradeScrolls.MODID)
+@Mod.EventBusSubscriber(modid = LightsPerks.MODID)
 public class ModEvents {
+
+    private static final Map<String, String> mobPools = Map.of(
+            "minecraft:enderman", "lights_perks:rare_pool",
+            "minecraft:zombie", "lights_perks:common_pool",
+            "minecraft:skeleton", "lights_perks:common_pool",
+            "minecraft:warden", "lights_perks:rare_pool"
+    );
+
+    private static final Map<String, Double> mobChances = Map.of(
+            "minecraft:enderman", 0.05,
+            "minecraft:zombie", 0.10,
+            "minecraft:skeleton", 0.10,
+            "minecraft:warden", 1.0
+    );
 
     @SubscribeEvent
     public static void onLivingDrops(LivingDropsEvent event) {
@@ -41,31 +55,58 @@ public class ModEvents {
             return;
         }
 
-        if (!DropPoolManager.canDrop(entity, "mob_drop_entities")) {
+        /*
+         * Get the entity ID.
+         */
+        String entityId = entity.getEncodeId();
+
+        /*
+         * Get the item pool for this mob.
+         */
+        String poolId = mobPools.get(entityId);
+
+        /*
+         * This mob isn't configured to drop anything.
+         */
+        if (poolId == null) {
             return;
         }
 
-        // Drop chance
-        float roll = entity.getRandom().nextFloat();
-        double chance = Config.MOB_DROP_CHANCE.get();
+        /*
+         * Get the configured chance.
+         */
+        double chance =
+                mobChances.getOrDefault(entityId, 0.0);
+
+        /*
+         * Roll drop chance.
+         */
+        float roll =
+                entity.getRandom().nextFloat();
 
         if (roll >= chance) {
             return;
         }
 
-        // Get random item from the pool
-        ItemStack drop = DropPoolManager.getRandomDrop(
-                entity.getRandom(),
-                "lights_perks:perk_drop_pool"
-        );
+        /*
+         * Get random item from the configured pool.
+         */
+        ItemStack drop =
+                DropPoolManager.getRandomDrop(
+                        entity.getRandom(),
+                        poolId
+                );
 
-        // Nothing in the pool
+        /*
+         * Nothing in the pool.
+         */
         if (drop.isEmpty()) {
             return;
         }
 
-
-        // Add it to the drops
+        /*
+         * Add the drop.
+         */
         event.getDrops().add(
                 new ItemEntity(
                         entity.level(),
@@ -100,8 +141,6 @@ public class ModEvents {
             if (isPerkable(stack)) initializeSockets(stack);
         }
 
-        applyPerks(player);
-
         if (event.player.level().isClientSide) {
             return;
         }
@@ -109,42 +148,15 @@ public class ModEvents {
         SkillManager.updatePlayerSkills(event.player);
     }
 
-    private static void applyPerks(Player player) {
-
-        applyStack(player, player.getMainHandItem());
-        applyStack(player, player.getOffhandItem());
-
-        for (ItemStack armor : player.getInventory().armor) {
-            applyStack(player, armor);
-        }
-    }
-
-    private static void applyStack(Player player, ItemStack stack) {
-
-        CompoundTag tag = stack.getTag();
-
-        if (tag == null || !tag.contains("lights_perks:sockets"))
-            return;
-
-        ListTag sockets = tag.getList("lights_perks:sockets", Tag.TAG_COMPOUND);
-
-        for (int i = 0; i < sockets.size(); i++) {
-
-            CompoundTag socket = sockets.getCompound(i);
-
-            ItemStack socketItem = ItemStack.of(socket.getCompound("Item"));
-
-            if (socketItem.isEmpty()) continue;
-
-            if (socketItem.getItem() instanceof IPerkItem perkItem) {
-            }
-        }
-    }
-
     public static void initializeSockets(ItemStack item) {
 
-        if (item.isEmpty()) return;
-        if (!isPerkable(item)) return;
+        if (item.isEmpty()) {
+            return;
+        }
+
+        if (!isPerkable(item)) {
+            return;
+        }
 
         boolean dataLoaded = false;
 
@@ -154,12 +166,67 @@ public class ModEvents {
 
             ListTag sockets = new ListTag();
 
-            int slotSize = 2;
+            int slotSize = 1;
 
-            ItemConfigData slotData = ItemConfigManager.get(item);
-            if (slotData != null && slotData.slots != null) {
-                slotSize = slotData.slots.size();
-                dataLoaded = true;
+            LightsPerks.LOGGER.debug(
+                    "[ModEvents] Initializing sockets for item: {} | ID: {}",
+                    item,
+                    BuiltInRegistries.ITEM.getKey(item.getItem())
+            );
+
+            ItemConfigData slotData = null;
+
+            try {
+
+                LightsPerks.LOGGER.debug(
+                        "[ModEvents] Attempting to load ItemConfigData for: {}",
+                        BuiltInRegistries.ITEM.getKey(item.getItem())
+                );
+
+                slotData = ItemConfigManager.get(item);
+
+                if (slotData == null) {
+
+                    LightsPerks.LOGGER.debug(
+                            "[ModEvents] ItemConfigData is NULL for: {}",
+                            BuiltInRegistries.ITEM.getKey(item.getItem())
+                    );
+
+                } else {
+
+                    LightsPerks.LOGGER.debug(
+                            "[ModEvents] ItemConfigData loaded for: {} | slots={}",
+                            BuiltInRegistries.ITEM.getKey(item.getItem()),
+                            slotData.slots
+                    );
+
+                    if (slotData.slots == null) {
+
+                        LightsPerks.LOGGER.debug(
+                                "[ModEvents] ItemConfigData.slots is NULL for: {}",
+                                BuiltInRegistries.ITEM.getKey(item.getItem())
+                        );
+
+                    } else {
+
+                        LightsPerks.LOGGER.debug(
+                                "[ModEvents] ItemConfigData.slots size={} for: {}",
+                                slotData.slots.size(),
+                                BuiltInRegistries.ITEM.getKey(item.getItem())
+                        );
+
+                        slotSize = slotData.slots.size();
+                        dataLoaded = true;
+                    }
+                }
+
+            } catch (Exception e) {
+
+                LightsPerks.LOGGER.error(
+                        "[ModEvents] FAILED to load ItemConfigData for: {}",
+                        BuiltInRegistries.ITEM.getKey(item.getItem()),
+                        e
+                );
             }
 
             for (int i = 0; i < slotSize; i++) {
@@ -167,14 +234,28 @@ public class ModEvents {
                 int socketLevel = 1;
 
                 if (dataLoaded) {
+
                     socketLevel = slotData.slots.get(i);
-                    UpgradeScrolls.LOGGER.debug("[ModEvents] Loaded {} with socket #{} that has level {}",
+
+                    LightsPerks.LOGGER.debug(
+                            "[ModEvents] Loaded {} with socket #{} that has level {}",
                             item,
                             i,
-                            socketLevel);
+                            socketLevel
+                    );
+
+                } else {
+
+                    LightsPerks.LOGGER.debug(
+                            "[ModEvents] Using default socket #{} level {} for {}",
+                            i,
+                            socketLevel,
+                            BuiltInRegistries.ITEM.getKey(item.getItem())
+                    );
                 }
 
                 CompoundTag socket = new CompoundTag();
+
                 socket.putInt(
                         "Slot",
                         i
@@ -206,37 +287,41 @@ public class ModEvents {
          * Built-in skills
          */
         if (data != null) {
+            if (data.builtin_skills != null) {
+                if (!data.builtin_skills.isEmpty()) {
 
-            event.getToolTip().add(
-                    Component.literal("Built-In Skills")
-            );
+                    event.getToolTip().add(
+                            Component.literal("Built-In Skills")
+                    );
 
-            for (Map.Entry<String, Integer> entry :
-                    data.builtin_skills.entrySet()) {
+                    for (Map.Entry<String, Integer> entry :
+                            data.builtin_skills.entrySet()) {
 
-                SkillData skillData =
-                        SkillManager.get(
-                                new ResourceLocation(entry.getKey())
+                        SkillData skillData =
+                                SkillManager.get(
+                                        new ResourceLocation(entry.getKey())
+                                );
+
+                        if (skillData == null) {
+                            continue;
+                        }
+
+                        int color = (int) Long.parseLong(
+                                skillData.color.replace("0x", ""),
+                                16
                         );
 
-                if (skillData == null) {
-                    continue;
+                        event.getToolTip().add(
+                                Component.literal(
+                                        skillData.title +
+                                                ": Level " +
+                                                entry.getValue()
+                                ).withStyle(
+                                        style -> style.withColor(color)
+                                )
+                        );
+                    }
                 }
-
-                int color = (int) Long.parseLong(
-                        skillData.color.replace("0x", ""),
-                        16
-                );
-
-                event.getToolTip().add(
-                        Component.literal(
-                                skillData.title +
-                                        ": Level " +
-                                        entry.getValue()
-                        ).withStyle(
-                                style -> style.withColor(color)
-                        )
-                );
             }
         }
 

@@ -3,8 +3,7 @@ package dot.lighteater.lights_perks.loot;
 import com.google.common.base.Suppliers;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import dot.lighteater.lights_perks.Config;
-import dot.lighteater.lights_perks.UpgradeScrolls;
+import dot.lighteater.lights_perks.LightsPerks;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.storage.loot.LootContext;
@@ -53,7 +52,7 @@ public class AddItemModifier extends LootModifier {
                                     int minCount, int maxCount, float chance, String perk_pool_id) {
         super(conditionsIn);
 
-        UpgradeScrolls.LOGGER.debug(
+        LightsPerks.LOGGER.debug(
                 "[AddSuspicousItemModifier] Created with {} conditions",
                 conditionsIn.length
         );
@@ -69,25 +68,25 @@ public class AddItemModifier extends LootModifier {
             ObjectArrayList<ItemStack> generatedLoot,
             LootContext context
     ) {
-        UpgradeScrolls.LOGGER.debug(
+        LightsPerks.LOGGER.debug(
                 "[AddItemModifier] doApply called. Existing loot count: {}",
                 generatedLoot.size()
         );
 
         float roll = context.getRandom().nextFloat();
 
-        UpgradeScrolls.LOGGER.debug(
+        LightsPerks.LOGGER.debug(
                 "[AddItemModifier] Chance roll: {} / required < {}",
                 roll,
                 chance
         );
 
         if (roll >= chance) {
-            UpgradeScrolls.LOGGER.debug(
+            LightsPerks.LOGGER.debug(
                     "[AddItemModifier] Chance failed. No pool item added."
             );
 
-            UpgradeScrolls.LOGGER.debug(
+            LightsPerks.LOGGER.debug(
                     "[AddItemModifier] AFTER: {} items",
                     generatedLoot.size()
             );
@@ -101,11 +100,11 @@ public class AddItemModifier extends LootModifier {
         );
 
         if (drop.isEmpty()) {
-            UpgradeScrolls.LOGGER.debug(
+            LightsPerks.LOGGER.debug(
                     "[AddItemModifier] Drop pool was empty. No item added."
             );
 
-            UpgradeScrolls.LOGGER.debug(
+            LightsPerks.LOGGER.debug(
                     "[AddItemModifier] AFTER: {} items",
                     generatedLoot.size()
             );
@@ -118,7 +117,7 @@ public class AddItemModifier extends LootModifier {
 
         drop.setCount(count);
 
-        UpgradeScrolls.LOGGER.debug(
+        LightsPerks.LOGGER.debug(
                 "[AddItemModifier] Adding {} x{}",
                 drop.getItem(),
                 count
@@ -126,7 +125,7 @@ public class AddItemModifier extends LootModifier {
 
         generatedLoot.add(drop);
 
-        UpgradeScrolls.LOGGER.debug(
+        LightsPerks.LOGGER.debug(
                 "[AddItemModifier] AFTER: {} items",
                 generatedLoot.size()
         );

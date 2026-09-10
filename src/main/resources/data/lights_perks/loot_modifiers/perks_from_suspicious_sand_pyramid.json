@@ -7,5 +7,5 @@
       "loot_table_id": "minecraft:archaeology/desert_pyramid"
     }
   ],
-  "perk_pool_id": "lights_perks:perk_drop_pool"
+  "perk_pool_id": "lights_perks:common_pools"
 }

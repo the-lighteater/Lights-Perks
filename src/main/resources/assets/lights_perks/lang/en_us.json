@@ -1,6 +1,19 @@
 {
-  "item.lights_perks.attack_up_perk": "Attack Up",
-  "item.lights_perks.star_power_perk": "Star Power",
+  "item.lights_perks.attack_up_perk": "Attack Up Perk",
+  "item.lights_perks.star_power_perk": "Star Power Perk",
+  "item.lights_perks.fire_aspect_perk": "Fire Aspect Perk",
+  "item.lights_perks.fortune_perk": "Fortune Perk",
+  "item.lights_perks.haste_perk": "Haste Perk",
+  "item.lights_perks.iron_skin_perk": "Iron Skin Perk",
+  "item.lights_perks.heavy_hitter_perk": "Heavy Hitter Perk",
+  "item.lights_perks.looting_perk": "Looting Perk",
+  "item.lights_perks.mending_perk": "Mending Perk",
+  "item.lights_perks.night_vision_perk": "Night Vision Perk",
+  "item.lights_perks.regeneration_perk": "Regeneration Perk",
+  "item.lights_perks.resistance_perk": "Resistance Perk",
+  "item.lights_perks.speed_boost_perk": "Speed Boost Perk",
+  "item.lights_perks.unbreaking_perk": "Unbreaking Perk",
+
 
   "key.categories.lights_perks": "Light's Perks Keybinds",
 

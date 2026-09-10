@@ -1,0 +1,56 @@
+{
+  "title": "Regeneration",
+  "skillSynopsis": "Gradually restores your health during combat",
+  "skill_id": "lights_perks:regeneration",
+  "color": "0xFF35D07F",
+  "maxLevel": 3,
+  "bonusLevel": 0,
+
+  "levels": [
+    {
+      "level": 1,
+      "bonus": false,
+      "effects": [
+        "Regeneration I"
+      ],
+      "skillEffects": [
+        {
+          "type": "effect",
+          "effect": "minecraft:regeneration",
+          "duration": 200,
+          "strength": 0
+        }
+      ]
+    },
+    {
+      "level": 2,
+      "bonus": false,
+      "effects": [
+        "Regeneration II"
+      ],
+      "skillEffects": [
+        {
+          "type": "effect",
+          "effect": "minecraft:regeneration",
+          "duration": 200,
+          "strength": 1
+        }
+      ]
+    },
+    {
+      "level": 3,
+      "bonus": false,
+      "effects": [
+        "Regeneration III"
+      ],
+      "skillEffects": [
+        {
+          "type": "effect",
+          "effect": "minecraft:regeneration",
+          "duration": 200,
+          "strength": 2
+        }
+      ]
+    }
+  ]
+}

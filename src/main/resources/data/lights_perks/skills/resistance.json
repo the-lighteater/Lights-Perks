@@ -1,0 +1,56 @@
+{
+  "title": "Resistance",
+  "skillSynopsis": "Reduces the damage you receive",
+  "skill_id": "lights_perks:resistance",
+  "color": "0xFF536DFE",
+  "maxLevel": 2,
+  "bonusLevel": 1,
+
+  "levels": [
+    {
+      "level": 1,
+      "bonus": false,
+      "effects": [
+        "Resistance I"
+      ],
+      "skillEffects": [
+        {
+          "type": "effect",
+          "effect": "minecraft:resistance",
+          "duration": 200,
+          "strength": 0
+        }
+      ]
+    },
+    {
+      "level": 2,
+      "bonus": false,
+      "effects": [
+        "Resistance II"
+      ],
+      "skillEffects": [
+        {
+          "type": "effect",
+          "effect": "minecraft:resistance",
+          "duration": 200,
+          "strength": 1
+        }
+      ]
+    },
+    {
+      "level": 3,
+      "bonus": true,
+      "effects": [
+        "Resistance III"
+      ],
+      "skillEffects": [
+        {
+          "type": "effect",
+          "effect": "minecraft:resistance",
+          "duration": 200,
+          "strength": 2
+        }
+      ]
+    }
+  ]
+}

@@ -1,5 +1,6 @@
 {
   "title": "Attack Up",
+  "skillSynopsis": "Slightly increases your attack damage and speed",
   "skill_id": "lights_perks:attack_up",
   "color": "0xFF7A1030",
   "maxLevel": 5,
@@ -10,14 +11,21 @@
       "level": 1,
       "bonus": false,
       "effects": [
-        "+5 Attack Damage"
+        "+0.5 Attack Damage",
+        "+2% Attack Speed"
       ],
       "skillEffects": [
         {
           "type": "attribute",
           "attribute": "minecraft:generic.attack_damage",
-          "amount": 5.0,
+          "amount": 0.5,
           "operation": "addition"
+        },
+        {
+          "type": "attribute",
+          "attribute": "minecraft:generic.attack_speed",
+          "amount": 0.02,
+          "operation": "multiply_base"
         }
       ]
     },
@@ -25,15 +33,21 @@
       "level": 2,
       "bonus": false,
       "effects": [
-        "+10 Attack Damage",
-        "+5% Attack Speed"
+        "+1 Attack Damage",
+        "+4% Attack Speed"
       ],
       "skillEffects": [
         {
           "type": "attribute",
           "attribute": "minecraft:generic.attack_damage",
-          "amount": 10.0,
+          "amount": 1.0,
           "operation": "addition"
+        },
+        {
+          "type": "attribute",
+          "attribute": "minecraft:generic.attack_speed",
+          "amount": 0.04,
+          "operation": "multiply_base"
         }
       ]
     },
@@ -41,15 +55,21 @@
       "level": 3,
       "bonus": false,
       "effects": [
-        "+15 Attack Damage",
-        "+10% Attack Speed"
+        "+1.5 Attack Damage",
+        "+6% Attack Speed"
       ],
       "skillEffects": [
         {
           "type": "attribute",
           "attribute": "minecraft:generic.attack_damage",
-          "amount": 15.0,
+          "amount": 1.5,
           "operation": "addition"
+        },
+        {
+          "type": "attribute",
+          "attribute": "minecraft:generic.attack_speed",
+          "amount": 0.06,
+          "operation": "multiply_base"
         }
       ]
     },
@@ -57,15 +77,21 @@
       "level": 4,
       "bonus": false,
       "effects": [
-        "+25 Attack Damage",
-        "+120% Attack Speed"
+        "+2 Attack Damage",
+        "+8% Attack Speed"
       ],
       "skillEffects": [
         {
           "type": "attribute",
           "attribute": "minecraft:generic.attack_damage",
-          "amount": 25.0,
+          "amount": 2.0,
           "operation": "addition"
+        },
+        {
+          "type": "attribute",
+          "attribute": "minecraft:generic.attack_speed",
+          "amount": 0.08,
+          "operation": "multiply_base"
         }
       ]
     },
@@ -73,15 +99,21 @@
       "level": 5,
       "bonus": false,
       "effects": [
-        "+25 Attack Damage",
-        "+120% Attack Speed"
+        "+2.5 Attack Damage",
+        "+10% Attack Speed"
       ],
       "skillEffects": [
         {
           "type": "attribute",
           "attribute": "minecraft:generic.attack_damage",
-          "amount": 30.0,
+          "amount": 2.5,
           "operation": "addition"
+        },
+        {
+          "type": "attribute",
+          "attribute": "minecraft:generic.attack_speed",
+          "amount": 0.10,
+          "operation": "multiply_base"
         }
       ]
     },
@@ -89,15 +121,21 @@
       "level": 6,
       "bonus": true,
       "effects": [
-        "+25 Attack Damage",
-        "+120% Attack Speed"
+        "+3 Attack Damage",
+        "+12% Attack Speed"
       ],
       "skillEffects": [
         {
           "type": "attribute",
           "attribute": "minecraft:generic.attack_damage",
-          "amount": 40.0,
+          "amount": 3.0,
           "operation": "addition"
+        },
+        {
+          "type": "attribute",
+          "attribute": "minecraft:generic.attack_speed",
+          "amount": 0.12,
+          "operation": "multiply_base"
         }
       ]
     },
@@ -105,15 +143,21 @@
       "level": 7,
       "bonus": true,
       "effects": [
-        "+25 Attack Damage",
-        "+120% Attack Speed"
+        "+3.5 Attack Damage",
+        "+14% Attack Speed"
       ],
       "skillEffects": [
         {
           "type": "attribute",
           "attribute": "minecraft:generic.attack_damage",
-          "amount": 50.0,
+          "amount": 3.5,
           "operation": "addition"
+        },
+        {
+          "type": "attribute",
+          "attribute": "minecraft:generic.attack_speed",
+          "amount": 0.14,
+          "operation": "multiply_base"
         }
       ]
     },
@@ -121,15 +165,21 @@
       "level": 8,
       "bonus": true,
       "effects": [
-        "+25 Attack Damage",
-        "+120% Attack Speed"
+        "+4 Attack Damage",
+        "+16% Attack Speed"
       ],
       "skillEffects": [
         {
           "type": "attribute",
           "attribute": "minecraft:generic.attack_damage",
-          "amount": 70.0,
+          "amount": 4.0,
           "operation": "addition"
+        },
+        {
+          "type": "attribute",
+          "attribute": "minecraft:generic.attack_speed",
+          "amount": 0.16,
+          "operation": "multiply_base"
         }
       ]
     }

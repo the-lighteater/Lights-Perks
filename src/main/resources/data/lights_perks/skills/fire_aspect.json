@@ -1,5 +1,6 @@
 {
   "title": "Fire Aspect",
+  "skillSynopsis": "Applies Fire Aspect",
   "skill_id": "lights_perks:fire_aspect",
   "color": "0xFFE36200",
   "maxLevel": 1,

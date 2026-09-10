@@ -1,6 +1,5 @@
 package dot.lighteater.lights_perks.loot;
 
-import dot.lighteater.lights_perks.UpgradeScrolls;
 import net.minecraft.core.Holder;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;

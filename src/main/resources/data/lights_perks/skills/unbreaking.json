@@ -1,5 +1,6 @@
 {
   "title": "Unbreaking",
+  "skillSynopsis": "Applies Unbreaking",
   "skill_id": "lights_perks:unbreaking",
   "color": "0xFF27C8F5",
   "maxLevel": 1,

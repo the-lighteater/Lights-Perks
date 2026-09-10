@@ -3,7 +3,7 @@ package dot.lighteater.lights_perks.menu;
 import com.mojang.blaze3d.systems.RenderSystem;
 import dot.lighteater.lights_perks.ClientConfig;
 import dot.lighteater.lights_perks.ModKeyBindings;
-import dot.lighteater.lights_perks.UpgradeScrolls;
+import dot.lighteater.lights_perks.LightsPerks;
 import dot.lighteater.lights_perks.helpers.EquipmentType;
 import dot.lighteater.lights_perks.skill.*;
 import net.minecraft.client.Minecraft;
@@ -32,7 +32,6 @@ public class PerkScreen extends AbstractContainerScreen<PerkMenu> {
     List<SkillData> skills;
 
     private boolean submenuOpen = false;
-    private boolean helpOpen = false;
 
     private SkillData selectedSkill = null;
 
@@ -89,10 +88,6 @@ public class PerkScreen extends AbstractContainerScreen<PerkMenu> {
         }
 
         renderHelpButton(graphics);
-
-        if (helpOpen) {
-            renderHelpBox(graphics);
-        }
 
         this.renderTooltip(graphics, mouseX, mouseY);
     }
@@ -213,7 +208,7 @@ public class PerkScreen extends AbstractContainerScreen<PerkMenu> {
 
         graphics.drawString(
                 font,
-                "Perks",
+                "Skills",
                 x + 6,
                 topPos + 6,
                 0xFFFFFF
@@ -653,16 +648,51 @@ public class PerkScreen extends AbstractContainerScreen<PerkMenu> {
 
         /*
          * =========================
+         * SYNOPSIS
+         * =========================
+         */
+
+        int contentX = x + 6;
+        int contentWidth = width - 12;
+
+        int synopsisY = topPos + 18;
+
+        List<String> synopsisLines =
+                wrapText(
+                        skillData.skillSynopsis,
+                        contentWidth,
+                        0.6F
+                );
+
+        for (String line : synopsisLines) {
+
+            drawScaledString(
+                    graphics,
+                    line,
+                    contentX,
+                    synopsisY,
+                    0.5F,
+                    0xFFFFFFFF
+            );
+
+            synopsisY += 7;
+        }
+
+        /*
+         * =========================
          * EQUIPMENT SOURCES
          * =========================
          */
 
+        int equipmentY =
+                synopsisY;
+
         renderSkillEquipmentSources(
                 graphics,
                 skillData,
-                x + 6,
-                topPos + 22,
-                width - 12
+                contentX,
+                equipmentY,
+                contentWidth
         );
 
         /*
@@ -671,13 +701,75 @@ public class PerkScreen extends AbstractContainerScreen<PerkMenu> {
          * =========================
          */
 
+        int levelsY =
+                equipmentY + 27 + 4;
+
         renderSkillLevels(
                 graphics,
                 skillData,
-                x + 6,
-                topPos + 53,
-                width - 12
+                contentX,
+                levelsY,
+                contentWidth
         );
+    }
+
+    private List<String> wrapText(
+            String text,
+            int maxWidth,
+            float scale
+    ) {
+        List<String> lines = new ArrayList<>();
+
+        if (text == null || text.isBlank()) {
+            return lines;
+        }
+
+        String[] words = text.split("\\s+");
+
+        StringBuilder currentLine =
+                new StringBuilder();
+
+        for (String word : words) {
+
+            String testLine;
+
+            if (currentLine.length() == 0) {
+                testLine = word;
+            } else {
+                testLine =
+                        currentLine
+                                + " "
+                                + word;
+            }
+
+            int scaledWidth =
+                    (int) (font.width(testLine) * scale);
+
+            if (scaledWidth <= maxWidth) {
+
+                currentLine = new StringBuilder(testLine);
+
+            } else {
+
+                if (currentLine.length() > 0) {
+                    lines.add(currentLine.toString());
+                }
+
+                /*
+                 * If a single word is wider than the
+                 * available space, allow it onto its
+                 * own line rather than losing it.
+                 */
+                currentLine =
+                        new StringBuilder(word);
+            }
+        }
+
+        if (currentLine.length() > 0) {
+            lines.add(currentLine.toString());
+        }
+
+        return lines;
     }
 
     private void renderSkillEquipmentSources(
@@ -959,9 +1051,7 @@ public class PerkScreen extends AbstractContainerScreen<PerkMenu> {
                 y + 1,
                 x + buttonSize - 1,
                 y + buttonSize - 1,
-                helpOpen
-                        ? 0xFF505050
-                        : 0xFF707070
+                0xFF707070
         );
 
         /*
@@ -970,7 +1060,7 @@ public class PerkScreen extends AbstractContainerScreen<PerkMenu> {
          * =========================
          */
 
-        String text = helpOpen ? "X" : "?";
+        String text = "?";
 
         int textWidth = font.width(text);
 
@@ -979,136 +1069,6 @@ public class PerkScreen extends AbstractContainerScreen<PerkMenu> {
                 text,
                 x + (buttonSize - textWidth) / 2,
                 y + 2,
-                0xFFFFFFFF
-        );
-    }
-
-    private void renderHelpBox(GuiGraphics graphics) {
-
-        int width = 150;
-        int height = 130;
-
-        /*
-         * Center the help box over the main menu.
-         */
-        int x =
-                leftPos + (imageWidth - width) / 2;
-
-        int y =
-                topPos + (imageHeight - height) / 2;
-
-        /*
-         * =========================
-         * OUTER BORDER
-         * =========================
-         */
-
-        graphics.fill(
-                x,
-                y,
-                x + width,
-                y + height,
-                0xFF080808
-        );
-
-        /*
-         * =========================
-         * INNER BACKGROUND
-         * =========================
-         */
-
-        graphics.fill(
-                x + 2,
-                y + 2,
-                x + width - 2,
-                y + height - 2,
-                0xFF303030
-        );
-
-        /*
-         * =========================
-         * TITLE
-         * =========================
-         */
-
-        graphics.drawString(
-                font,
-                "Perk Menu Help",
-                x + 6,
-                y + 6,
-                0xFFFFFFFF
-        );
-
-        /*
-         * =========================
-         * HELP TEXT
-         * =========================
-         */
-
-        int textX = x + 6;
-        int textY = y + 22;
-
-        int textColor = 0xFFD0D0D0;
-
-        graphics.drawString(
-                font,
-                "Perks can be attached to",
-                textX,
-                textY,
-                textColor
-        );
-
-        graphics.drawString(
-                font,
-                "your equipped items using",
-                textX,
-                textY + 10,
-                textColor
-        );
-
-        graphics.drawString(
-                font,
-                "the perk slots.",
-                textX,
-                textY + 20,
-                textColor
-        );
-
-        graphics.drawString(
-                font,
-                "Select a perk on the left",
-                textX,
-                textY + 38,
-                textColor
-        );
-
-        graphics.drawString(
-                font,
-                "to view its levels and",
-                textX,
-                textY + 48,
-                textColor
-        );
-
-        graphics.drawString(
-                font,
-                "equipment bonuses.",
-                textX,
-                textY + 58,
-                textColor
-        );
-
-        /*
-         * =========================
-         * CLOSE INSTRUCTION
-         * =========================
-         */
-
-        graphics.drawString(
-                font,
-                "Click ? to close.",
-                textX,
-                y + height - 16,
                 0xFFFFFFFF
         );
     }
@@ -1254,13 +1214,10 @@ public class PerkScreen extends AbstractContainerScreen<PerkMenu> {
                 && mouseY >= helpButtonY
                 && mouseY < helpButtonY + helpButtonSize) {
 
-            helpOpen = !helpOpen;
+            Minecraft.getInstance().setScreen(
+                    new HelpScreen(this)
+            );
 
-            /*
-             * Help box is now handling the UI,
-             * so don't allow the click to interact
-             * with anything underneath it.
-             */
             return true;
         }
 
@@ -1272,10 +1229,6 @@ public class PerkScreen extends AbstractContainerScreen<PerkMenu> {
          * Prevent clicking anything underneath
          * the help box.
          */
-
-        if (helpOpen) {
-            return true;
-        }
 
         /*
          * Everything below this point is your
@@ -1332,7 +1285,7 @@ public class PerkScreen extends AbstractContainerScreen<PerkMenu> {
 
                 skillLevelPage = 0;
 
-                UpgradeScrolls.LOGGER.debug(
+                LightsPerks.LOGGER.debug(
                         "[PerkScreen] Selected skill: {}",
                         selectedSkill.title
                 );
@@ -1532,10 +1485,6 @@ public class PerkScreen extends AbstractContainerScreen<PerkMenu> {
     }
 
     private void renderPerkSlotLevels(GuiGraphics graphics) {
-
-        if (helpOpen)
-            return;
-
         for (Slot slot : menu.slots) {
 
             if (!(slot instanceof PerkSlot perkSlot)) {
@@ -1599,7 +1548,7 @@ public class PerkScreen extends AbstractContainerScreen<PerkMenu> {
 
         LocalPlayer player = minecraft.player;
 
-        if (player == null || helpOpen) {
+        if (player == null) {
             return;
         }
 
@@ -1656,7 +1605,6 @@ public class PerkScreen extends AbstractContainerScreen<PerkMenu> {
         /*
          * Inventory section
          */
-        if (!helpOpen) {
             graphics.drawString(
                     font,
                     "Inventory",
@@ -1664,7 +1612,6 @@ public class PerkScreen extends AbstractContainerScreen<PerkMenu> {
                     97,
                     0xFFFFFF
             );
-        }
     }
 
     private void renderEquipmentItems(GuiGraphics graphics) {

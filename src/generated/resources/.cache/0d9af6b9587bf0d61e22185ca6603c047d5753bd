@@ -1,7 +1,15 @@
-// 1.20.1	2026-09-03T14:44:23.7557436	Item Models: lights_perks
+// 1.20.1	2026-09-09T16:24:01.41884	Item Models: lights_perks
 d9fb141842d960936dd03ce9a9d21c603fe3c8e8 assets/lights_perks/models/item/attack_up_perk.json
-504c90b9f85b24665af2b88d494fb0aec0b1bc63 assets/lights_perks/models/item/fire_scroll.json
+229b2495abf225988295f8fcfa242c39a578c05b assets/lights_perks/models/item/fire_aspect_perk.json
+d58ea3a3cc196c77e841c9ef6f6ba7067919e89a assets/lights_perks/models/item/fortune_perk.json
+c5ef30723e0a1f097da96628bbcd84a891dcb161 assets/lights_perks/models/item/haste_perk.json
+f07c0103cd5ca542f25f4c7abd76aef8b770c9ab assets/lights_perks/models/item/heavy_hitter_perk.json
+9cee610eb2455b2b6cfee5580ae5cd57fff2826f assets/lights_perks/models/item/iron_skin_perk.json
+b2924a0421d296d4eeb1aa1d17cac343818b78d9 assets/lights_perks/models/item/looting_perk.json
 3f95b8e3768436f988f6e2cbd524f3e1d2d60910 assets/lights_perks/models/item/mending_perk.json
+04d76c15223150e13bc6219ea0ef6c3cb037363a assets/lights_perks/models/item/night_vision_perk.json
+509ee25c889ab94e24a74a1db1eca8d84b6af024 assets/lights_perks/models/item/regeneration_perk.json
+284755ca32a1fd10921d7a31f5a53aac91d54a55 assets/lights_perks/models/item/resistance_perk.json
 10ffd1d37d4106279b07bac38c9fb2ea1c08df61 assets/lights_perks/models/item/speed_boost_perk.json
 fbe24215c137b80dc353b73a1ee974b43c384e70 assets/lights_perks/models/item/star_power_perk.json
-f199ada5e4283756dc0af3a011b5686e7a31f418 assets/lights_perks/models/item/strength_perk.json
+6bf850d0999980c7d680c5ad3a8d1063d9fe8fb8 assets/lights_perks/models/item/unbreaking_perk.json

@@ -1,0 +1,13 @@
+{
+  "type": "lights_perks:add_item",
+  "chance": 0.1,
+  "conditions": [
+    {
+      "condition": "forge:loot_table_id",
+      "loot_table_id": "minecraft:chests/buried_treasure"
+    }
+  ],
+  "max_count": 3,
+  "min_count": 1,
+  "perk_pool_id": "lights_perks:rare_pool"
+}

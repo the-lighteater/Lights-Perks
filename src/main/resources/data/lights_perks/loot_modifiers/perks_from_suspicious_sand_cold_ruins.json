@@ -1,0 +1,11 @@
+{
+  "type": "lights_perks:add_sus_item",
+  "chance": 0.25,
+  "conditions": [
+    {
+      "condition": "forge:loot_table_id",
+      "loot_table_id": "minecraft:archaeology/ocean_ruin_cold"
+    }
+  ],
+  "perk_pool_id": "lights_perks:common_pool"
+}

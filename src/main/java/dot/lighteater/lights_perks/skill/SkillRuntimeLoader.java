@@ -3,7 +3,7 @@ package dot.lighteater.lights_perks.skill;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonParseException;
-import dot.lighteater.lights_perks.UpgradeScrolls;
+import dot.lighteater.lights_perks.LightsPerks;
 import net.minecraftforge.fml.loading.FMLPaths;
 
 import java.io.IOException;
@@ -45,7 +45,7 @@ public class SkillRuntimeLoader {
 
         } catch (IOException e) {
 
-            UpgradeScrolls.LOGGER.error(
+            LightsPerks.LOGGER.error(
                     "Failed to create skills directory: {}",
                     SKILLS_DIRECTORY,
                     e
@@ -63,14 +63,14 @@ public class SkillRuntimeLoader {
 
         } catch (IOException e) {
 
-            UpgradeScrolls.LOGGER.error(
+            LightsPerks.LOGGER.error(
                     "Failed to read skills directory: {}",
                     SKILLS_DIRECTORY,
                     e
             );
         }
 
-        UpgradeScrolls.LOGGER.info(
+        LightsPerks.LOGGER.info(
                 "Loaded {} skills.",
                 SKILLS.size()
         );
@@ -97,7 +97,7 @@ public class SkillRuntimeLoader {
 
             if (skill == null) {
 
-                UpgradeScrolls.LOGGER.error(
+                LightsPerks.LOGGER.error(
                         "Skill file {} produced a null SkillData.",
                         path
                 );
@@ -107,7 +107,7 @@ public class SkillRuntimeLoader {
 
             SKILLS.put(skillId, skill);
 
-            UpgradeScrolls.LOGGER.info(
+            LightsPerks.LOGGER.info(
                     "Loaded skill '{}' ({})",
                     skill.title,
                     skillId
@@ -115,7 +115,7 @@ public class SkillRuntimeLoader {
 
         } catch (JsonParseException e) {
 
-            UpgradeScrolls.LOGGER.error(
+            LightsPerks.LOGGER.error(
                     "Invalid skill JSON: {}",
                     path,
                     e
@@ -123,7 +123,7 @@ public class SkillRuntimeLoader {
 
         } catch (IOException e) {
 
-            UpgradeScrolls.LOGGER.error(
+            LightsPerks.LOGGER.error(
                     "Failed to read skill file: {}",
                     path,
                     e

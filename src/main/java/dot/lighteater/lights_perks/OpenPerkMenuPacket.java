@@ -25,18 +25,18 @@ public class OpenPerkMenuPacket {
 
         context.enqueueWork(() -> {
 
-            UpgradeScrolls.LOGGER.debug("Recieved packet");
+            LightsPerks.LOGGER.debug("Recieved packet");
 
             ServerPlayer player = context.getSender();
 
             if (player == null)
                 return;
 
-            UpgradeScrolls.LOGGER.debug("Recieved packet 2");
+            LightsPerks.LOGGER.debug("Recieved packet 2");
 
             try {
 
-                UpgradeScrolls.LOGGER.debug("Before openScreen");
+                LightsPerks.LOGGER.debug("Before openScreen");
 
                 NetworkHooks.openScreen(
                         player,
@@ -53,31 +53,31 @@ public class OpenPerkMenuPacket {
                                     Inventory inventory,
                                     Player player
                             ) {
-                                UpgradeScrolls.LOGGER.debug("Creating PerkMenu");
+                                LightsPerks.LOGGER.debug("Creating PerkMenu");
 
                                 PerkMenu menu = new PerkMenu(
                                         containerId,
                                         inventory
                                 );
 
-                                UpgradeScrolls.LOGGER.debug("PerkMenu created");
+                                LightsPerks.LOGGER.debug("PerkMenu created");
 
                                 return menu;
                             }
                         }
                 );
 
-                UpgradeScrolls.LOGGER.debug("After openScreen");
+                LightsPerks.LOGGER.debug("After openScreen");
 
             } catch (Exception e) {
 
-                UpgradeScrolls.LOGGER.error(
+                LightsPerks.LOGGER.error(
                         "Failed to open PerkMenu",
                         e
                 );
             }
 
-            UpgradeScrolls.LOGGER.debug("Recieved packet 4");
+            LightsPerks.LOGGER.debug("Recieved packet 4");
         });
 
         context.setPacketHandled(true);

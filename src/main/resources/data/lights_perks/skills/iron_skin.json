@@ -1,0 +1,71 @@
+{
+  "title": "Iron Skin",
+  "skillSynopsis": "Boosts your armor",
+  "skill_id": "lights_perks:iron_skin",
+  "color": "0xFF708090",
+  "maxLevel": 4,
+  "bonusLevel": 0,
+
+  "levels": [
+    {
+      "level": 1,
+      "bonus": false,
+      "effects": [
+        "+2 Armor"
+      ],
+      "skillEffects": [
+        {
+          "type": "attribute",
+          "attribute": "minecraft:generic.armor",
+          "amount": 2.0,
+          "operation": "addition"
+        }
+      ]
+    },
+    {
+      "level": 2,
+      "bonus": false,
+      "effects": [
+        "+4 Armor"
+      ],
+      "skillEffects": [
+        {
+          "type": "attribute",
+          "attribute": "minecraft:generic.armor",
+          "amount": 4.0,
+          "operation": "addition"
+        }
+      ]
+    },
+    {
+      "level": 3,
+      "bonus": false,
+      "effects": [
+        "+6 Armor"
+      ],
+      "skillEffects": [
+        {
+          "type": "attribute",
+          "attribute": "minecraft:generic.armor",
+          "amount": 6.0,
+          "operation": "addition"
+        }
+      ]
+    },
+    {
+      "level": 4,
+      "bonus": false,
+      "effects": [
+        "+8 Armor"
+      ],
+      "skillEffects": [
+        {
+          "type": "attribute",
+          "attribute": "minecraft:generic.armor",
+          "amount": 8.0,
+          "operation": "addition"
+        }
+      ]
+    }
+  ]
+}
