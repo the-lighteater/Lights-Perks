@@ -14,13 +14,12 @@ public class ModCreativeModTabs {
 
     public static final RegistryObject<CreativeModeTab> UPGRADE_SCROLLS = CREATIVE_MODE_TABS.register("lights_perks", () -> CreativeModeTab.builder()
             .withTabsBefore(CreativeModeTabs.COMBAT)
-            .icon(() -> Items.DIAMOND_SWORD.getDefaultInstance()) // Testing
+            .icon(() -> ModItems.LOOTING_PERK.get().getDefaultInstance()) // Testing
             .title(Component.translatable("creativetab.lights_perks"))
             .displayItems((parameters, output) -> {
                 for (RegistryObject<Item> item : ModItems.ITEMS.getEntries()) {
                     output.accept(item.get());
                 }
-
             }).build());
 
     public static void register(IEventBus eventBus){
