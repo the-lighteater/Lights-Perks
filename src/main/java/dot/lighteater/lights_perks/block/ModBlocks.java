@@ -1,6 +1,6 @@
 package dot.lighteater.lights_perks.block;
 
-import dot.lighteater.lights_perks.UpgradeScrolls;
+import dot.lighteater.lights_perks.LightsPerks;
 import dot.lighteater.lights_perks.item.ModItems;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
@@ -15,7 +15,7 @@ import java.util.function.Supplier;
 
 public class ModBlocks {
     public static final DeferredRegister<Block> BLOCKS =
-            DeferredRegister.create(ForgeRegistries.BLOCKS, UpgradeScrolls.MODID);
+            DeferredRegister.create(ForgeRegistries.BLOCKS, LightsPerks.MODID);
 
     public static final RegistryObject<Block> MULTIBLOCK_CENTER =
             registerBlock(
