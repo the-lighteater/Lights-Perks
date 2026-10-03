@@ -13,6 +13,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
@@ -96,6 +97,24 @@ public class SkillManager {
         skills.addAll(SkillRuntimeLoader.getSkills());
 
         return skills;
+    }
+
+    public static void tickPlayer(ServerPlayer player) {
+        boolean activationChanged =
+                SkillActivationManager.tick(player);
+
+        if (activationChanged) {
+            refreshPlayerSkillEffects(player);
+        }
+    }
+
+    public static void refreshPlayerSkillEffects(Player player) {
+        clearEnchantmentTags(player);
+        clearSkillModifiers(player);
+
+        applySkillEnchantments(player);
+        applySkillModifiers(player);
+        applySkillEffects(player);
     }
 
     /*
@@ -198,6 +217,14 @@ public class SkillManager {
                 continue;
             }
 
+            if (!SkillActivationManager.isActive(
+                    player,
+                    skillId,
+                    level
+            )) {
+                continue;
+            }
+
             for (SkillEffectData effect : level.skillEffects) {
 
                 if (!"effect".equals(effect.type)) {
@@ -232,8 +259,7 @@ public class SkillManager {
             return;
         }
 
-        int amplifier =
-                Math.max(0, effect.strength - 1);
+        int amplifier = Math.max(0, effect.strength);
 
         MobEffectInstance instance =
                 new MobEffectInstance(
@@ -799,6 +825,14 @@ public class SkillManager {
                 continue;
             }
 
+            if (!SkillActivationManager.isActive(
+                    player,
+                    skillId,
+                    level
+            )) {
+                continue;
+            }
+
             for (int i = 0; i < level.skillEffects.size(); i++) {
 
                 SkillEffectData effect =
@@ -855,6 +889,14 @@ public class SkillManager {
 
             if (level == null ||
                     level.skillEffects == null) {
+                continue;
+            }
+
+            if (!SkillActivationManager.isActive(
+                    player,
+                    skillId,
+                    level
+            )) {
                 continue;
             }
 

@@ -1,0 +1,31 @@
+
+{
+  "title": "Sprint Attack",
+  "skillSynopsis": "Gain attack damage while sprinting",
+  "skill_id": "lights_perks:sprint_attack",
+  "color": "0xFF7A1030",
+  "maxLevel": 1,
+  "bonusLevel": 0,
+  "levels": [
+    {
+      "level": 1,
+      "bonus": false,
+      "activation": {
+        "mode": "conditional",
+        "condition": "sprinting",
+        "conditionPolicy": "while_true"
+      },
+      "effects": [
+        "+3 Attack Damage while sprinting"
+      ],
+      "skillEffects": [
+        {
+          "type": "attribute",
+          "attribute": "minecraft:generic.attack_damage",
+          "amount": 3.0,
+          "operation": "addition"
+        }
+      ]
+    }
+  ]
+}

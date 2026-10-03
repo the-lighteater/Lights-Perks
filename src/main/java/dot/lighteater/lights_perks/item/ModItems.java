@@ -43,6 +43,10 @@ public class ModItems {
             () -> new PerkItem(new Item.Properties(), new ResourceLocation(LightsPerks.MODID, "star_power_perk")));
     public static final RegistryObject<Item> UNBREAKING_PERK = ITEMS.register("unbreaking_perk",
             () -> new PerkItem(new Item.Properties(), new ResourceLocation(LightsPerks.MODID, "unbreaking_perk")));
+    public static final RegistryObject<Item> MINING_SURGE = ITEMS.register("mining_surge",
+            () -> new PerkItem(new Item.Properties(), new ResourceLocation(LightsPerks.MODID, "mining_surge")));
+    public static final RegistryObject<Item> SPRINT_ATTACK = ITEMS.register("sprint_attack",
+            () -> new PerkItem(new Item.Properties(), new ResourceLocation(LightsPerks.MODID, "sprint_attack")));
 
     public static void register(IEventBus eventBus) {
 

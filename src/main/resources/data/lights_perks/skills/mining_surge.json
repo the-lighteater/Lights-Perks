@@ -1,0 +1,33 @@
+
+{
+  "title": "Mining Surge",
+  "skillSynopsis": "Gain Haste after mining a block",
+  "skill_id": "lights_perks:mining_surge",
+  "color": "0xFFFFC107",
+  "maxLevel": 1,
+  "bonusLevel": 0,
+  "levels": [
+    {
+      "level": 1,
+      "bonus": false,
+      "activation": {
+        "mode": "timed",
+        "trigger": "block_mined",
+        "duration": 100,
+        "cooldown": 200,
+        "retrigger": true
+      },
+      "effects": [
+        "Haste I for 5 seconds"
+      ],
+      "skillEffects": [
+        {
+          "type": "effect",
+          "effect": "minecraft:haste",
+          "duration": 100,
+          "strength": 0
+        }
+      ]
+    }
+  ]
+}
