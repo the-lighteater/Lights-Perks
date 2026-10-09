@@ -1,5 +1,6 @@
 package dot.lighteater.lights_perks.item.custom;
 
+import dot.lighteater.lights_perks.LightsPerks;
 import dot.lighteater.lights_perks.perk.IPerkItem;
 import dot.lighteater.lights_perks.perk.PerkData;
 import dot.lighteater.lights_perks.perk.PerkLoader;
@@ -14,14 +15,25 @@ import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 public class PerkItem extends Item implements IPerkItem {
 
     private final ResourceLocation perkId;
+    private final String displayName;
 
-    private final String color = "0xFF7A1030";
+    public PerkItem(
+            Properties properties,
+            ResourceLocation perkId,
+            String displayName
+    ) {
+        super(properties);
+
+        this.perkId = perkId;
+        this.displayName = displayName;
+    }
 
     public PerkItem(
             Properties properties,
@@ -30,6 +42,7 @@ public class PerkItem extends Item implements IPerkItem {
         super(properties);
 
         this.perkId = perkId;
+        this.displayName = null;
     }
 
     public ResourceLocation getPerkId() {
@@ -40,11 +53,16 @@ public class PerkItem extends Item implements IPerkItem {
         return PerkLoader.get(perkId);
     }
 
-    public int getColor() {
-        return (int) Long.parseLong(
-                color.replace("0x", ""),
-                16
-        );
+    @Override
+    public Component getName(ItemStack stack) {
+
+        if (displayName == null
+                || displayName.isBlank()) {
+
+            return super.getName(stack);
+        }
+
+        return Component.literal(displayName);
     }
 
     public int getLevel() {
@@ -67,10 +85,10 @@ public class PerkItem extends Item implements IPerkItem {
         }
 
         Map<ResourceLocation, Integer> result =
-                new java.util.HashMap<>();
+                new HashMap<>();
 
-        for (Map.Entry<String, Integer> entry
-                : data.skills.entrySet()) {
+        for (Map.Entry<String, Integer> entry :
+                data.skills.entrySet()) {
 
             result.put(
                     new ResourceLocation(entry.getKey()),
@@ -81,49 +99,111 @@ public class PerkItem extends Item implements IPerkItem {
         return result;
     }
 
-    @Override
-    public void appendHoverText(
-            ItemStack pStack,
-            @Nullable Level pLevel,
-            List<Component> pTooltipComponents,
-            TooltipFlag pIsAdvanced
-    ) {
-        super.appendHoverText(
-                pStack,
-                pLevel,
-                pTooltipComponents,
-                pIsAdvanced
-        );
+    public int getColor() {
 
-        Map<ResourceLocation, Integer> skills = getSkills();
+        Map<ResourceLocation, Integer> skills =
+                getSkills();
 
-        if (skills == null) {
-            return;
+        if (skills.isEmpty()) {
+            return 0xFFFFFFFF;
         }
 
-        pTooltipComponents.add(
-                Component.literal("Level: " + getLevel())
-        );
+        ResourceLocation primarySkillId =
+                skills.keySet().iterator().next();
 
-        for (Map.Entry<ResourceLocation, Integer> entry : skills.entrySet()) {
+        SkillData skill =
+                SkillManager.get(primarySkillId);
 
-            ResourceLocation skillId = entry.getKey();
+        if (skill == null
+                || skill.color == null
+                || skill.color.isBlank()) {
 
-            SkillData skillData = SkillManager.get(skillId);
+            return 0xFFFFFFFF;
+        }
 
-            String skillName = skillData.title;
-            int level = entry.getValue();
+        try {
 
-            int color = (int) Long.parseLong(
-                    skillData.color.replace("0x", ""),
+            return (int) Long.parseLong(
+                    skill.color
+                            .replace("0x", "")
+                            .replace("#", ""),
                     16
             );
 
-            pTooltipComponents.add(
+        } catch (NumberFormatException e) {
+
+            return 0xFFFFFFFF;
+        }
+    }
+
+    @Override
+    public void appendHoverText(
+            ItemStack stack,
+            @Nullable Level level,
+            List<Component> tooltip,
+            TooltipFlag flag
+    ) {
+
+        super.appendHoverText(
+                stack,
+                level,
+                tooltip,
+                flag
+        );
+
+        tooltip.add(
+                Component.literal(
+                        "Level: " + getLevel()
+                )
+        );
+
+        for (Map.Entry<ResourceLocation, Integer> entry :
+                getSkills().entrySet()) {
+
+            ResourceLocation skillId =
+                    entry.getKey();
+
+            SkillData skillData =
+                    SkillManager.get(skillId);
+
+            if (skillData == null) {
+                continue;
+            }
+
+            String skillName =
+                    skillData.title;
+
+            int skillLevel =
+                    entry.getValue();
+
+            int color;
+
+            try {
+
+                color = (int) Long.parseLong(
+                        skillData.color
+                                .replace("0x", "")
+                                .replace("#", ""),
+                        16
+                );
+
+            } catch (Exception e) {
+
+                color = 0xFFFFFFFF;
+            }
+
+            int finalColor = color;
+            tooltip.add(
                     Component.literal(skillName)
-                            .withStyle(style -> style.withColor(color))
+                            .withStyle(
+                                    style ->
+                                            style.withColor(finalColor)
+                            )
                             .append(
-                                    Component.literal(": Level " + level)
+                                    Component.literal(
+                                            ": Level " +
+                                                    skillLevel
+                                    )
                             )
             );
         }

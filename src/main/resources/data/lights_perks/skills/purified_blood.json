@@ -1,0 +1,31 @@
+{
+  "title": "Purified Blood",
+  "skillSynopsis": "Recover after Poison leaves your body.",
+  "skill_id": "lights_perks:purified_blood",
+  "color": "0xFF27C8F5",
+  "maxLevel": 1,
+  "bonusLevel": 0,
+  "levels": [
+    {
+      "level": 1,
+      "bonus": false,
+      "effects": [],
+      "skillEffects": [
+        {
+          "type": "effect",
+          "effect": "minecraft:regeneration",
+          "duration": 100,
+          "strength": 0
+        }
+      ],
+      "activation": {
+        "mode": "timed",
+        "trigger": "on_ended:minecraft:poison",
+        "duration": 100,
+        "cooldown": 0,
+        "retrigger": false,
+        "showNotification": true
+      }
+    }
+  ]
+}

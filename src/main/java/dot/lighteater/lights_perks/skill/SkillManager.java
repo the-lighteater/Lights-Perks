@@ -1,5 +1,6 @@
 package dot.lighteater.lights_perks.skill;
 
+import dot.lighteater.lights_perks.LightsPerks;
 import dot.lighteater.lights_perks.helpers.EquipmentType;
 import dot.lighteater.lights_perks.item_config.ItemConfigData;
 import dot.lighteater.lights_perks.item_config.ItemConfigManager;
@@ -29,6 +30,9 @@ import java.util.*;
 public class SkillManager {
 
     private static final Map<ResourceLocation, SkillData> SKILLS =
+            new HashMap<>();
+
+    private static final Map<ResourceLocation, SkillData> RUNTIME_SKILLS =
             new HashMap<>();
 
     private static final String SOCKETS_TAG =
@@ -63,16 +67,68 @@ public class SkillManager {
             ResourceLocation id,
             SkillData skill
     ) {
-        SKILLS.put(id, skill);
+        LightsPerks.LOGGER.debug("[SkillLoader] Skill ID: {}", id);
+
+        if (RUNTIME_SKILLS.containsKey(id)) {
+            return;
+        }
+
+        SKILLS.put(
+                id,
+                skill
+        );
+    }
+
+    public static void registerRuntime(
+            String id,
+            SkillData skill
+    ) {
+        ResourceLocation resourceLocation =
+                ResourceLocation.parse(id);
+
+        boolean replacing =
+                SKILLS.containsKey(resourceLocation);
+
+        LightsPerks.LOGGER.debug(
+                "[SkillManager] Registering runtime skill: id={}, title={}, replacingExisting={}",
+                resourceLocation,
+                skill != null ? skill.title : "null",
+                replacing
+        );
+
+        SKILLS.remove(resourceLocation);
+
+        RUNTIME_SKILLS.put(
+                resourceLocation,
+                skill
+        );
+
+        SKILLS.put(
+                resourceLocation,
+                skill
+        );
+
+        LightsPerks.LOGGER.debug(
+                "[SkillManager] Runtime skill registered: {} | SKILLS size={} | RUNTIME_SKILLS size={}",
+                resourceLocation,
+                SKILLS.size(),
+                RUNTIME_SKILLS.size()
+        );
     }
 
     public static void clear() {
+
         SKILLS.clear();
+
+        SKILLS.putAll(
+                RUNTIME_SKILLS
+        );
     }
 
     public static SkillData get(
             ResourceLocation id
     ) {
+
         return SKILLS.get(id);
     }
 
@@ -91,12 +147,40 @@ public class SkillManager {
     }
 
     public static List<SkillData> getAllSkills() {
-        List<SkillData> skills = new ArrayList<>();
+        return new ArrayList<>(
+                SKILLS.values()
+        );
+    }
 
-        skills.addAll(SkillLoader.getAll());
-        skills.addAll(SkillRuntimeLoader.getSkills());
+    public static Collection<Map.Entry<ResourceLocation, SkillData>> getAllSkillEntries() {
 
-        return skills;
+        Map<ResourceLocation, SkillData> result =
+                new LinkedHashMap<>();
+
+        for (SkillData skill : getAllSkills()) {
+
+            if (skill.skill_id == null
+                    || skill.skill_id.isBlank()) {
+                continue;
+            }
+
+            try {
+
+                ResourceLocation id =
+                        ResourceLocation.parse(
+                                skill.skill_id
+                        );
+
+                result.put(
+                        id,
+                        skill
+                );
+
+            } catch (Exception ignored) {
+            }
+        }
+
+        return result.entrySet();
     }
 
     public static void tickPlayer(ServerPlayer player) {

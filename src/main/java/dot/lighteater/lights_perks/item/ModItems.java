@@ -9,6 +9,8 @@ import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 
+import java.util.List;
+
 
 public class ModItems {
     public static final DeferredRegister<Item> ITEMS =
@@ -43,21 +45,26 @@ public class ModItems {
             () -> new PerkItem(new Item.Properties(), new ResourceLocation(LightsPerks.MODID, "star_power_perk")));
     public static final RegistryObject<Item> UNBREAKING_PERK = ITEMS.register("unbreaking_perk",
             () -> new PerkItem(new Item.Properties(), new ResourceLocation(LightsPerks.MODID, "unbreaking_perk")));
-    public static final RegistryObject<Item> MINING_SURGE = ITEMS.register("mining_surge",
+    public static final RegistryObject<Item> MINING_SURGE_PERK = ITEMS.register("mining_surge",
             () -> new PerkItem(new Item.Properties(), new ResourceLocation(LightsPerks.MODID, "mining_surge")));
-    public static final RegistryObject<Item> SPRINT_ATTACK = ITEMS.register("sprint_attack",
+    public static final RegistryObject<Item> SPRINT_ATTACK_PERK = ITEMS.register("sprint_attack",
             () -> new PerkItem(new Item.Properties(), new ResourceLocation(LightsPerks.MODID, "sprint_attack")));
+    public static final RegistryObject<Item> COALESCENCE_PERK = ITEMS.register("coalescence",
+            () -> new PerkItem(new Item.Properties(), new ResourceLocation(LightsPerks.MODID, "coalescence")));
+    public static final RegistryObject<Item> PURIFIED_BLOOD_PERK = ITEMS.register("purified_blood",
+            () -> new PerkItem(new Item.Properties(), new ResourceLocation(LightsPerks.MODID, "purified_blood")));
+    public static final RegistryObject<Item> WITHERED_FURY_PERK = ITEMS.register("withered_fury",
+            () -> new PerkItem(new Item.Properties(), new ResourceLocation(LightsPerks.MODID, "withered_fury")));
+    public static final RegistryObject<Item> MAXIMUM_MIGHT_PERK = ITEMS.register("maximum_might",
+            () -> new PerkItem(new Item.Properties(), new ResourceLocation(LightsPerks.MODID, "maximum_might")));
 
     public static void register(IEventBus eventBus) {
 
+        LoadItems.register(eventBus, ITEMS);
         ITEMS.register(eventBus);
+    }
 
-        LoadItems.load();
-
-        for (ItemDefinition definition : LoadItems.getDefinitions().values()) {
-
-            ITEMS.register(definition.id,
-                    () -> new JsonItem(definition));
-        }
+    public static List<RegistryObject<Item>> getPerkItems() {
+        return LoadItems.getItems();
     }
 }

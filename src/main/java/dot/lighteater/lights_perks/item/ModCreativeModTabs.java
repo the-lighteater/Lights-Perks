@@ -20,6 +20,11 @@ public class ModCreativeModTabs {
                 for (RegistryObject<Item> item : ModItems.ITEMS.getEntries()) {
                     output.accept(item.get());
                 }
+
+                for (RegistryObject<Item> item :
+                        ModItems.getPerkItems()) {
+                    output.accept(item.get());
+                }
             }).build());
 
     public static void register(IEventBus eventBus){
