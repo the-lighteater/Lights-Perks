@@ -115,7 +115,7 @@ public class PerkScreen extends AbstractContainerScreen<PerkMenu> {
                         0
                 );
 
-                if (skillPoints == 0) {
+                if (skillPoints == 0 && !(ClientConfig.TOGGLE_ALL_SKILLS.get())) {
                     selectedSkill = null;
                 }
             }
@@ -1663,7 +1663,7 @@ public class PerkScreen extends AbstractContainerScreen<PerkMenu> {
             int currentLevel =
                     points.getOrDefault(skillId, 0);
 
-            if (currentLevel > 0) {
+            if (currentLevel > 0 || ClientConfig.TOGGLE_ALL_SKILLS.get()) {
                 visibleSkills.add(skill);
             }
         }

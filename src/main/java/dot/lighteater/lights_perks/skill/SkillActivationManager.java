@@ -278,6 +278,7 @@ public final class SkillActivationManager {
             case "sneaking": return player.isCrouching();
             case "blocking": return player.isBlocking();
             case "on_ground": return player.onGround();
+            case "airborne": return !player.onGround();
             case "underwater": return player.isUnderWater();
             case "burning": return player.isOnFire();
             case "moving": return player.getDeltaMovement().horizontalDistanceSqr() > 0.0001;
@@ -353,6 +354,15 @@ public final class SkillActivationManager {
             changed |= trigger(
                     player,
                     "on_cured_all"
+            );
+        }
+
+        // If a state is based on harmful effects and any harmful effects found.
+        if (hasHarmfulEffects) {
+
+            changed = trigger(
+                    player,
+                    "on_afflicted_all"
             );
         }
 

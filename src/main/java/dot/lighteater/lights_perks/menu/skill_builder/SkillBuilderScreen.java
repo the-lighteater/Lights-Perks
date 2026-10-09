@@ -611,9 +611,6 @@ public class SkillBuilderScreen extends Screen {
     }
 
     private void buildEnchantsPage(JsonObject level) {
-
-        drawPageHeader("Enchantment Effects");
-
         JsonArray skillEffects = getArray(level, "skillEffects");
 
         int y = 175;
@@ -736,8 +733,6 @@ public class SkillBuilderScreen extends Screen {
     }
 
     private void buildEffectsPage(JsonObject level) {
-        drawPageHeader("Effects");
-
         int y = 175;
 
         graphicsEffectEditors.clear();
@@ -813,10 +808,7 @@ public class SkillBuilderScreen extends Screen {
                 Component.literal("+ Add Status Effect"),
                                 button -> addStatusEffect()).bounds(
                                 this.width / 2 + 10,
-                                Math.min(
-                                        y,
-                                        this.height - 75
-                                ),
+                                y,
                                 280,
                                 20
                 ).build();
@@ -917,8 +909,6 @@ public class SkillBuilderScreen extends Screen {
     }
 
     private void buildAttributesPage(JsonObject level) {
-        drawPageHeader("Attribute Modifiers");
-
         attributeEditors.clear();
 
         JsonArray skillEffects = getArray(level, "skillEffects");
@@ -1083,16 +1073,9 @@ public class SkillBuilderScreen extends Screen {
 
     private boolean activationEnabled = false;
 
-    private void buildConditionsPage(
-            JsonObject level
-    ) {
+    private void buildConditionsPage(JsonObject level) {
 
-        drawPageHeader(
-                "Activation Conditions"
-        );
-
-        int x =
-                this.width / 2 + 10;
+        int x = this.width / 2 + 10;
 
         boolean hasActivation =
                 level.has("activation")
@@ -1911,11 +1894,6 @@ public class SkillBuilderScreen extends Screen {
         addRenderableWidget(
                 widget
         );
-    }
-
-    private void drawPageHeader(
-            String text
-    ) {
     }
 
     private void openJsonEditor() {
@@ -2841,37 +2819,22 @@ public class SkillBuilderScreen extends Screen {
         }
     }
 
-    private static class DisplayEffectEditor {
-
-        private final JsonArray array;
-        private final int index;
-        private final EditBox box;
-
-        private DisplayEffectEditor(
-                JsonArray array,
-                int index,
-                EditBox box
-        ) {
-
-            this.array = array;
-            this.index = index;
-            this.box = box;
-        }
+    private record DisplayEffectEditor(JsonArray array, int index, EditBox box) {
 
         private void save() {
 
-            if (index >= 0
-                    && index < array.size()) {
+                if (index >= 0
+                        && index < array.size()) {
 
-                array.set(
-                        index,
-                        new com.google.gson.JsonPrimitive(
-                                box.getValue()
-                        )
-                );
+                    array.set(
+                            index,
+                            new com.google.gson.JsonPrimitive(
+                                    box.getValue()
+                            )
+                    );
+                }
             }
         }
-    }
 
     @Override
     public void onClose() {

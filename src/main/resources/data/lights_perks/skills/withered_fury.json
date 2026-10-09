@@ -9,7 +9,10 @@
     {
       "level": 1,
       "bonus": false,
-      "effects": [],
+      "effects": [
+        "Gives 15% movement speed for 5 seconds",
+        "Gives 20% attack speed for 5 seconds"
+      ],
       "skillEffects": [
         {
           "type": "attribute",

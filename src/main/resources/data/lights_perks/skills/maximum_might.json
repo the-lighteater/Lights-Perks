@@ -1,8 +1,8 @@
 {
   "title": "Maximum Might",
-  "skillSynopsis": "Increases attack damage, movement speed when max health",
+  "skillSynopsis": "Increases attack damage if stamina is kept full.",
   "skill_id": "lights_perks:maximum_might",
-  "color": "0xFFF54927",
+  "color": "0xFFd63aa7",
   "maxLevel": 3,
   "bonusLevel": 0,
   "levels": [
@@ -10,8 +10,7 @@
       "level": 1,
       "bonus": false,
       "effects": [
-        "10% movement speed",
-        "10% attack damage"
+        "Attack Damage +10%"
       ],
       "skillEffects": [
         {
@@ -19,21 +18,15 @@
           "attribute": "minecraft:generic.attack_damage",
           "amount": 0.1,
           "operation": "multiply_total"
-        },
-        {
-          "type": "attribute",
-          "attribute": "minecraft:generic.movement_speed",
-          "amount": 0.1,
-          "operation": "multiply_total"
         }
       ],
       "activation": {
         "mode": "conditional",
-        "condition": "full_health",
+        "condition": "full_stamina",
         "trigger": "",
         "duration": 0,
         "cooldown": 0,
-        "threshold": 0.3,
+        "threshold": 0.0,
         "retrigger": false,
         "conditionPolicy": "while_true",
         "showNotification": true,
@@ -45,30 +38,23 @@
       "level": 2,
       "bonus": false,
       "effects": [
-        "20% movement speed",
-        "20% attack damage"
+        "Attack Damage +15%"
       ],
       "skillEffects": [
         {
           "type": "attribute",
           "attribute": "minecraft:generic.attack_damage",
-          "amount": 0.2,
-          "operation": "multiply_total"
-        },
-        {
-          "type": "attribute",
-          "attribute": "minecraft:generic.movement_speed",
-          "amount": 0.2,
+          "amount": 0.15,
           "operation": "multiply_total"
         }
       ],
       "activation": {
         "mode": "conditional",
-        "condition": "full_health",
+        "condition": "full_stamina",
         "trigger": "",
         "duration": 0,
         "cooldown": 0,
-        "threshold": 0.3,
+        "threshold": 0.0,
         "retrigger": false,
         "conditionPolicy": "while_true",
         "showNotification": true,
@@ -80,30 +66,23 @@
       "level": 3,
       "bonus": false,
       "effects": [
-        "30% movement speed",
-        "30% attack damage"
+        "Attack Damage +20%"
       ],
       "skillEffects": [
         {
           "type": "attribute",
           "attribute": "minecraft:generic.attack_damage",
-          "amount": 0.3,
-          "operation": "multiply_total"
-        },
-        {
-          "type": "attribute",
-          "attribute": "minecraft:generic.movement_speed",
-          "amount": 0.3,
+          "amount": 0.2,
           "operation": "multiply_total"
         }
       ],
       "activation": {
         "mode": "conditional",
-        "condition": "full_health",
+        "condition": "full_stamina",
         "trigger": "",
         "duration": 0,
         "cooldown": 0,
-        "threshold": 0.3,
+        "threshold": 0.0,
         "retrigger": false,
         "conditionPolicy": "while_true",
         "showNotification": true,

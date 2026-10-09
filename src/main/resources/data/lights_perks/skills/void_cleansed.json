@@ -1,0 +1,115 @@
+{
+  "title": "Void Cleansed",
+  "skillSynopsis": "Boosts movement speed and attack speed when cured of Void Touched",
+  "skill_id": "lights_perks:void_cleansed",
+  "color": "0xFFe4c7fe",
+  "maxLevel": 3,
+  "bonusLevel": 0,
+  "levels": [
+    {
+      "level": 1,
+      "bonus": false,
+      "effects": [
+        "Movement Speed +10%",
+        "Attack Speed +10%"
+      ],
+      "skillEffects": [
+        {
+          "type": "attribute",
+          "attribute": "minecraft:generic.attack_speed",
+          "amount": 0.1,
+          "operation": "multiply_total"
+        },
+        {
+          "type": "attribute",
+          "attribute": "minecraft:generic.movement_speed",
+          "amount": 0.1,
+          "operation": "multiply_total"
+        }
+      ],
+      "activation": {
+        "mode": "conditional",
+        "condition": "full_health",
+        "trigger": "on_ended:goety:void_touched",
+        "duration": 200,
+        "cooldown": 600,
+        "threshold": 0.0,
+        "retrigger": false,
+        "conditionPolicy": "while_true",
+        "showNotification": true,
+        "activationMessage": "",
+        "deactivationMessage": ""
+      }
+    },
+    {
+      "level": 2,
+      "bonus": false,
+      "effects": [
+        "Movement Speed +15%",
+        "Attack Speed +15%"
+      ],
+      "skillEffects": [
+        {
+          "type": "attribute",
+          "attribute": "minecraft:generic.attack_speed",
+          "amount": 0.15,
+          "operation": "multiply_total"
+        },
+        {
+          "type": "attribute",
+          "attribute": "minecraft:generic.movement_speed",
+          "amount": 0.15,
+          "operation": "multiply_total"
+        }
+      ],
+      "activation": {
+        "mode": "conditional",
+        "condition": "full_health",
+        "trigger": "on_ended:goety:void_touched",
+        "duration": 200,
+        "cooldown": 600,
+        "threshold": 0.0,
+        "retrigger": false,
+        "conditionPolicy": "while_true",
+        "showNotification": true,
+        "activationMessage": "",
+        "deactivationMessage": ""
+      }
+    },
+    {
+      "level": 2,
+      "bonus": false,
+      "effects": [
+        "Movement Speed +20%",
+        "Attack Speed +20%"
+      ],
+      "skillEffects": [
+        {
+          "type": "attribute",
+          "attribute": "minecraft:generic.attack_speed",
+          "amount": 0.2,
+          "operation": "multiply_total"
+        },
+        {
+          "type": "attribute",
+          "attribute": "minecraft:generic.movement_speed",
+          "amount": 0.2,
+          "operation": "multiply_total"
+        }
+      ],
+      "activation": {
+        "mode": "conditional",
+        "condition": "full_health",
+        "trigger": "on_ended:goety:void_touched",
+        "duration": 200,
+        "cooldown": 600,
+        "threshold": 0.0,
+        "retrigger": false,
+        "conditionPolicy": "while_true",
+        "showNotification": true,
+        "activationMessage": "",
+        "deactivationMessage": ""
+      }
+    }
+  ]
+}

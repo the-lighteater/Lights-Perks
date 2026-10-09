@@ -1,0 +1,178 @@
+{
+  "title": "Heroics",
+  "skillSynopsis": "Increases damage and armor when health is below 35%",
+  "skill_id": "lights_perks:heroics",
+  "color": "0xFF5a9410",
+  "maxLevel": 5,
+  "bonusLevel": 0,
+  "levels": [
+    {
+      "level": 1,
+      "bonus": false,
+      "effects": [
+        "Armor +5"
+      ],
+      "skillEffects": [
+        {
+          "type": "attribute",
+          "attribute": "minecraft:generic.armor",
+          "amount": 5.0,
+          "operation": "addition"
+        }
+      ],
+      "activation": {
+        "mode": "conditional",
+        "condition": "low_health",
+        "trigger": "",
+        "duration": 0,
+        "cooldown": 0,
+        "threshold": 0.35,
+        "retrigger": false,
+        "conditionPolicy": "while_true",
+        "showNotification": true,
+        "activationMessage": "",
+        "deactivationMessage": ""
+      }
+    },
+    {
+      "level": 2,
+      "bonus": false,
+      "effects": [
+        "Attack Damage +10%",
+        "Armor +5"
+      ],
+      "skillEffects": [
+        {
+          "type": "attribute",
+          "attribute": "minecraft:generic.attack_damage",
+          "amount": 0.1,
+          "operation": "multiply_total"
+        },
+        {
+          "type": "attribute",
+          "attribute": "minecraft:generic.armor",
+          "amount": 5.0,
+          "operation": "addition"
+        }
+      ],
+      "activation": {
+        "mode": "conditional",
+        "condition": "low_health",
+        "trigger": "",
+        "duration": 0,
+        "cooldown": 0,
+        "threshold": 0.35,
+        "retrigger": false,
+        "conditionPolicy": "while_true",
+        "showNotification": true,
+        "activationMessage": "",
+        "deactivationMessage": ""
+      }
+    },
+    {
+      "level": 3,
+      "bonus": false,
+      "effects": [
+        "Attack Damage +20%",
+        "Armor +5"
+      ],
+      "skillEffects": [
+        {
+          "type": "attribute",
+          "attribute": "minecraft:generic.attack_damage",
+          "amount": 0.2,
+          "operation": "multiply_total"
+        },
+        {
+          "type": "attribute",
+          "attribute": "minecraft:generic.armor",
+          "amount": 5.0,
+          "operation": "addition"
+        }
+      ],
+      "activation": {
+        "mode": "conditional",
+        "condition": "low_health",
+        "trigger": "",
+        "duration": 0,
+        "cooldown": 0,
+        "threshold": 0.35,
+        "retrigger": false,
+        "conditionPolicy": "while_true",
+        "showNotification": true,
+        "activationMessage": "",
+        "deactivationMessage": ""
+      }
+    },
+    {
+      "level": 4,
+      "bonus": false,
+      "effects": [
+        "Attack Damage +20%",
+        "Armor +10"
+      ],
+      "skillEffects": [
+        {
+          "type": "attribute",
+          "attribute": "minecraft:generic.attack_damage",
+          "amount": 0.2,
+          "operation": "multiply_total"
+        },
+        {
+          "type": "attribute",
+          "attribute": "minecraft:generic.armor",
+          "amount": 10.0,
+          "operation": "addition"
+        }
+      ],
+      "activation": {
+        "mode": "conditional",
+        "condition": "low_health",
+        "trigger": "",
+        "duration": 0,
+        "cooldown": 0,
+        "threshold": 0.35,
+        "retrigger": false,
+        "conditionPolicy": "while_true",
+        "showNotification": true,
+        "activationMessage": "",
+        "deactivationMessage": ""
+      }
+    },
+    {
+      "level": 5,
+      "bonus": false,
+      "effects": [
+        "Attack Damage +40%",
+        "Armor +10"
+      ],
+      "skillEffects": [
+        {
+          "type": "attribute",
+          "attribute": "minecraft:generic.attack_damage",
+          "amount": 0.4,
+          "operation": "multiply_total"
+        },
+        {
+          "type": "attribute",
+          "attribute": "minecraft:generic.armor",
+          "amount": 10.0,
+          "operation": "addition"
+        }
+      ],
+      "activation": {
+        "mode": "conditional",
+        "condition": "low_health",
+        "trigger": "",
+        "duration": 0,
+        "cooldown": 0,
+        "threshold": 0.35,
+        "retrigger": false,
+        "conditionPolicy": "while_true",
+        "showNotification": true,
+        "activationMessage": "",
+        "deactivationMessage": ""
+      }
+    }
+  ]
+}

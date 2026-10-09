@@ -5,6 +5,15 @@
     "lights_perks:star_power_perk",
     "lights_perks:regeneration_perk",
     "lights_perks:heavy_hitter_perk",
-    "lights_perks:fortune_perk"
+    "lights_perks:fortune_perk",
+    "lights_perks:mining_surge",
+    "lights_perks:sprint_attack",
+    "lights_perks:coalescence",
+    "lights_perks:purified_blood",
+    "lights_perks:withered_fury",
+    "lights_perks:peak_performance",
+    "lights_perks:airborne",
+    "lights_perks:flawless_armor",
+    "lights_perks:fleetfoot"
   ]
 }

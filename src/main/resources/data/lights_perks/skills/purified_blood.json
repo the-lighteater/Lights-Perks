@@ -9,7 +9,9 @@
     {
       "level": 1,
       "bonus": false,
-      "effects": [],
+      "effects": [
+        "Regeneration II applied for 5 seconds"
+      ],
       "skillEffects": [
         {
           "type": "effect",

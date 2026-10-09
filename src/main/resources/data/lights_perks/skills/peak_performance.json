@@ -1,0 +1,94 @@
+{
+  "title": "Peak Performance",
+  "skillSynopsis": "Increases attack damage when health is full.",
+  "skill_id": "lights_perks:peak_performance",
+  "color": "0xFFF54927",
+  "maxLevel": 3,
+  "bonusLevel": 0,
+  "levels": [
+    {
+      "level": 1,
+      "bonus": false,
+      "effects": [
+        "10% attack damage"
+      ],
+      "skillEffects": [
+        {
+          "type": "attribute",
+          "attribute": "minecraft:generic.attack_damage",
+          "amount": 0.1,
+          "operation": "multiply_total"
+        }
+      ],
+      "activation": {
+        "mode": "conditional",
+        "condition": "full_health",
+        "trigger": "",
+        "duration": 0,
+        "cooldown": 0,
+        "threshold": 0.3,
+        "retrigger": false,
+        "conditionPolicy": "while_true",
+        "showNotification": true,
+        "activationMessage": "",
+        "deactivationMessage": ""
+      }
+    },
+    {
+      "level": 2,
+      "bonus": false,
+      "effects": [
+        "20% attack damage"
+      ],
+      "skillEffects": [
+        {
+          "type": "attribute",
+          "attribute": "minecraft:generic.attack_damage",
+          "amount": 0.2,
+          "operation": "multiply_total"
+        }
+      ],
+      "activation": {
+        "mode": "conditional",
+        "condition": "full_health",
+        "trigger": "",
+        "duration": 0,
+        "cooldown": 0,
+        "threshold": 0.3,
+        "retrigger": false,
+        "conditionPolicy": "while_true",
+        "showNotification": true,
+        "activationMessage": "",
+        "deactivationMessage": ""
+      }
+    },
+    {
+      "level": 3,
+      "bonus": false,
+      "effects": [
+        "30% attack damage"
+      ],
+      "skillEffects": [
+        {
+          "type": "attribute",
+          "attribute": "minecraft:generic.attack_damage",
+          "amount": 0.3,
+          "operation": "multiply_total"
+        }
+      ],
+      "activation": {
+        "mode": "conditional",
+        "condition": "full_health",
+        "trigger": "",
+        "duration": 0,
+        "cooldown": 0,
+        "threshold": 0.3,
+        "retrigger": false,
+        "conditionPolicy": "while_true",
+        "showNotification": true,
+        "activationMessage": "",
+        "deactivationMessage": ""
+      }
+    }
+  ]
+}

@@ -1,0 +1,38 @@
+{
+  "title": "Jump Master",
+  "skillSynopsis": "Increases knockback resistance while in air.",
+  "skill_id": "lights_perks:jump_master",
+  "color": "0xFF494c62",
+  "maxLevel": 1,
+  "bonusLevel": 0,
+  "levels": [
+    {
+      "level": 1,
+      "bonus": false,
+      "effects": [
+        "Increased knockback resistance."
+      ],
+      "skillEffects": [
+        {
+          "type": "attribute",
+          "attribute": "minecraft:knockback_resistance",
+          "amount": 2.0,
+          "operation": "addition"
+        }
+      ],
+      "activation": {
+        "mode": "conditional",
+        "condition": "airborne",
+        "trigger": "",
+        "duration": 0,
+        "cooldown": 0,
+        "threshold": 0.0,
+        "retrigger": false,
+        "conditionPolicy": "while_true",
+        "showNotification": false,
+        "activationMessage": "",
+        "deactivationMessage": ""
+      }
+    }
+  ]
+}
