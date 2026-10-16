@@ -13,6 +13,8 @@ public class ClientConfig
 
     public static final ForgeConfigSpec.ConfigValue<Boolean> TOGGLE_SKILLS_SUBMENU;
 
+    public static final ForgeConfigSpec.ConfigValue<Boolean> TOGGLE_ALL_SKILLS;
+
     public static final ForgeConfigSpec.ConfigValue<Integer> SYNC_PER_TICK_SCREEN;
 
     static {
@@ -20,6 +22,9 @@ public class ClientConfig
 
         TOGGLE_SKILLS_SUBMENU = BUILDER.comment("Enables toggle behavior for submenu, disabled means hold Submenu Key to open submenu")
                 .define("Allows toggle", false);
+
+        TOGGLE_ALL_SKILLS = BUILDER.comment("Enables player to see all skills in game, even if they have 0 points for it.")
+                .define("Allows visibility of all skills", false);
 
         BUILDER.pop();
 

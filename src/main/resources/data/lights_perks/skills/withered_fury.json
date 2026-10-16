@@ -1,0 +1,40 @@
+{
+  "title": "Withered Fury",
+  "skillSynopsis": "Gain increased speed and attack speed when afflicted with Wither.",
+  "skill_id": "lights_perks:withered_fury",
+  "color": "0xFF536DFE",
+  "maxLevel": 1,
+  "bonusLevel": 0,
+  "levels": [
+    {
+      "level": 1,
+      "bonus": false,
+      "effects": [
+        "Gives 15% movement speed for 5 seconds",
+        "Gives 20% attack speed for 5 seconds"
+      ],
+      "skillEffects": [
+        {
+          "type": "attribute",
+          "attribute": "minecraft:generic.movement_speed",
+          "amount": 0.15,
+          "operation": "multiply_base"
+        },
+        {
+          "type": "attribute",
+          "attribute": "minecraft:generic.attack_speed",
+          "amount": 0.20,
+          "operation": "multiply_base"
+        }
+      ],
+      "activation": {
+        "mode": "timed",
+        "trigger": "on_begin:minecraft:wither",
+        "duration": 100,
+        "cooldown": 0,
+        "retrigger": false,
+        "showNotification": true
+      }
+    }
+  ]
+}

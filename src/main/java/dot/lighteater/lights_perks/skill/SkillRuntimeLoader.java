@@ -10,11 +10,6 @@ import java.io.IOException;
 import java.io.Reader;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
 
 public class SkillRuntimeLoader {
 
@@ -22,9 +17,6 @@ public class SkillRuntimeLoader {
             new GsonBuilder()
                     .setPrettyPrinting()
                     .create();
-
-    private static final Map<String, SkillData> SKILLS =
-            new LinkedHashMap<>();
 
     private static final Path SKILLS_DIRECTORY =
             FMLPaths.CONFIGDIR
@@ -37,11 +29,11 @@ public class SkillRuntimeLoader {
 
     public static void loadSkills() {
 
-        SKILLS.clear();
-
         try {
 
-            Files.createDirectories(SKILLS_DIRECTORY);
+            Files.createDirectories(
+                    SKILLS_DIRECTORY
+            );
 
         } catch (IOException e) {
 
@@ -59,7 +51,9 @@ public class SkillRuntimeLoader {
             files
                     .filter(path ->
                             path.toString().endsWith(".json"))
-                    .forEach(SkillRuntimeLoader::loadSkill);
+                    .forEach(
+                            SkillRuntimeLoader::loadSkill
+                    );
 
         } catch (IOException e) {
 
@@ -71,8 +65,8 @@ public class SkillRuntimeLoader {
         }
 
         LightsPerks.LOGGER.info(
-                "Loaded {} skills.",
-                SKILLS.size()
+                "Loaded runtime skills from {}.",
+                SKILLS_DIRECTORY
         );
     }
 
@@ -87,7 +81,8 @@ public class SkillRuntimeLoader {
                         fileName.length() - 5
                 );
 
-        try (Reader reader = Files.newBufferedReader(path)) {
+        try (Reader reader =
+                     Files.newBufferedReader(path)) {
 
             SkillData skill =
                     GSON.fromJson(
@@ -98,17 +93,20 @@ public class SkillRuntimeLoader {
             if (skill == null) {
 
                 LightsPerks.LOGGER.error(
-                        "Skill file {} produced a null SkillData.",
+                        "Skill file {} produced null SkillData.",
                         path
                 );
 
                 return;
             }
 
-            SKILLS.put(skillId, skill);
+            SkillManager.registerRuntime(
+                    skill.skill_id,
+                    skill
+            );
 
             LightsPerks.LOGGER.info(
-                    "Loaded skill '{}' ({})",
+                    "Loaded runtime skill '{}' ({})",
                     skill.title,
                     skillId
             );
@@ -129,27 +127,5 @@ public class SkillRuntimeLoader {
                     e
             );
         }
-    }
-
-    public static List<SkillData> getSkills() {
-
-        return Collections.unmodifiableList(
-                new ArrayList<>(SKILLS.values())
-        );
-    }
-
-    public static SkillData getSkill(String id) {
-
-        return SKILLS.get(id);
-    }
-
-    public static boolean hasSkill(String id) {
-
-        return SKILLS.containsKey(id);
-    }
-
-    public static void clear() {
-
-        SKILLS.clear();
     }
 }

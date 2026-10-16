@@ -9,6 +9,11 @@
     "lights_perks:looting_perk",
     "lights_perks:fire_aspect_perk",
     "lights_perks:resistance_perk",
-    "lights_perks:night_vision_perk"
+    "lights_perks:night_vision_perk",
+    "lights_perks:heroics",
+    "lights_perks:jump_master",
+    "lights_perks:maximum_might",
+    "lights_perks:resuscitate",
+    "lights_perks:void_cleansed"
   ]
 }

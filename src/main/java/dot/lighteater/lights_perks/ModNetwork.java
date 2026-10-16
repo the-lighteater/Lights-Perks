@@ -30,10 +30,29 @@ public class ModNetwork {
                 buffer -> new OpenPerkMenuPacket(),
                 OpenPerkMenuPacket::handle
         );
+
+        CHANNEL.registerMessage(
+                id(),
+                SkillActivationPacket.class,
+                SkillActivationPacket::encode,
+                SkillActivationPacket::new,
+                SkillActivationPacket::handle
+        );
     }
 
     public static void sendOpenPerkMenu() {
         LightsPerks.LOGGER.debug("Sending packet");
         CHANNEL.sendToServer(new OpenPerkMenuPacket());
+    }
+
+    public static void sendSkillActivation(
+            net.minecraft.server.level.ServerPlayer player,
+            String message,
+            boolean activated
+    ) {
+        CHANNEL.send(
+                net.minecraftforge.network.PacketDistributor.PLAYER.with(() -> player),
+                new SkillActivationPacket(message, activated)
+        );
     }
 }

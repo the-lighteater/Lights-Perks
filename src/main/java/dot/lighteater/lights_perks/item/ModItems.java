@@ -9,6 +9,8 @@ import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 
+import java.util.List;
+
 
 public class ModItems {
     public static final DeferredRegister<Item> ITEMS =
@@ -43,17 +45,42 @@ public class ModItems {
             () -> new PerkItem(new Item.Properties(), new ResourceLocation(LightsPerks.MODID, "star_power_perk")));
     public static final RegistryObject<Item> UNBREAKING_PERK = ITEMS.register("unbreaking_perk",
             () -> new PerkItem(new Item.Properties(), new ResourceLocation(LightsPerks.MODID, "unbreaking_perk")));
+    public static final RegistryObject<Item> MINING_SURGE_PERK = ITEMS.register("mining_surge_perk",
+            () -> new PerkItem(new Item.Properties(), new ResourceLocation(LightsPerks.MODID, "mining_surge_perk")));
+    public static final RegistryObject<Item> SPRINT_ATTACK_PERK = ITEMS.register("sprint_attack_perk",
+            () -> new PerkItem(new Item.Properties(), new ResourceLocation(LightsPerks.MODID, "sprint_attack_perk")));
+    public static final RegistryObject<Item> COALESCENCE_PERK = ITEMS.register("coalescence_perk",
+            () -> new PerkItem(new Item.Properties(), new ResourceLocation(LightsPerks.MODID, "coalescence_perk")));
+    public static final RegistryObject<Item> PURIFIED_BLOOD_PERK = ITEMS.register("purified_blood_perk",
+            () -> new PerkItem(new Item.Properties(), new ResourceLocation(LightsPerks.MODID, "purified_blood_perk")));
+    public static final RegistryObject<Item> WITHERED_FURY_PERK = ITEMS.register("withered_fury_perk",
+            () -> new PerkItem(new Item.Properties(), new ResourceLocation(LightsPerks.MODID, "withered_fury_perk")));
+    public static final RegistryObject<Item> PEAK_PERFORMANCE_PERK = ITEMS.register("peak_performance_perk",
+            () -> new PerkItem(new Item.Properties(), new ResourceLocation(LightsPerks.MODID, "peak_performance_perk")));
+    public static final RegistryObject<Item> AIRBORNE_PERK = ITEMS.register("airborne_perk",
+            () -> new PerkItem(new Item.Properties(), new ResourceLocation(LightsPerks.MODID, "airborne_perk")));
+    public static final RegistryObject<Item> FLAWLESS_ARMOR_PERK = ITEMS.register("flawless_armor_perk",
+            () -> new PerkItem(new Item.Properties(), new ResourceLocation(LightsPerks.MODID, "flawless_armor_perk")));
+    public static final RegistryObject<Item> FLEETFOOT_PERK = ITEMS.register("fleetfoot_perk",
+            () -> new PerkItem(new Item.Properties(), new ResourceLocation(LightsPerks.MODID, "fleetfoot_perk")));
+    public static final RegistryObject<Item> HEROICS_PERK = ITEMS.register("heroics_perk",
+            () -> new PerkItem(new Item.Properties(), new ResourceLocation(LightsPerks.MODID, "heroics_perk")));
+    public static final RegistryObject<Item> JUMP_MASTER_PERK = ITEMS.register("jump_master_perk",
+            () -> new PerkItem(new Item.Properties(), new ResourceLocation(LightsPerks.MODID, "jump_master_perk")));
+    public static final RegistryObject<Item> MAXIMUM_MIGHT_PERK = ITEMS.register("maximum_might_perk",
+            () -> new PerkItem(new Item.Properties(), new ResourceLocation(LightsPerks.MODID, "maximum_might_perk")));
+    public static final RegistryObject<Item> RESUSCITATE_PERK = ITEMS.register("resuscitate_perk",
+            () -> new PerkItem(new Item.Properties(), new ResourceLocation(LightsPerks.MODID, "resuscitate_perk")));
+    public static final RegistryObject<Item> VOID_CLEANSED_PERK = ITEMS.register("void_cleansed_perk",
+            () -> new PerkItem(new Item.Properties(), new ResourceLocation(LightsPerks.MODID, "void_cleansed_perk")));
 
     public static void register(IEventBus eventBus) {
 
+        LoadItems.register(eventBus, ITEMS);
         ITEMS.register(eventBus);
+    }
 
-        LoadItems.load();
-
-        for (ItemDefinition definition : LoadItems.getDefinitions().values()) {
-
-            ITEMS.register(definition.id,
-                    () -> new JsonItem(definition));
-        }
+    public static List<RegistryObject<Item>> getPerkItems() {
+        return LoadItems.getItems();
     }
 }

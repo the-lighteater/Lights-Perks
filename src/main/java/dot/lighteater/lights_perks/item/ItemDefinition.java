@@ -4,8 +4,11 @@ public class ItemDefinition {
 
     public String id;
     public String displayName;
-    public String rarity = "common";
+    public String type = "basic";
     public int maxStackSize = 64;
-    public String texture;
 
+    public String itemTexture;
+
+    public ItemDefinition() {
+    }
 }

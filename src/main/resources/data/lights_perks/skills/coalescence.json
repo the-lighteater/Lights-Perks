@@ -1,0 +1,94 @@
+{
+  "title": "Coalescence",
+  "skillSynopsis": "Increases attack damage after recovering from negative effects.",
+  "skill_id": "lights_perks:coalescence",
+  "color": "0xFF681510",
+  "maxLevel": 3,
+  "bonusLevel": 0,
+  "levels": [
+    {
+      "level": 1,
+      "bonus": false,
+      "effects": [
+        "Attack Damage +10%"
+      ],
+      "skillEffects": [
+        {
+          "type": "attribute",
+          "attribute": "minecraft:generic.attack_damage",
+          "amount": 0.1,
+          "operation": "multiply_total"
+        }
+      ],
+      "activation": {
+        "mode": "conditional",
+        "condition": "",
+        "trigger": "on_cured_all",
+        "duration": 400,
+        "cooldown": 800,
+        "threshold": 0.0,
+        "retrigger": false,
+        "conditionPolicy": "while_true",
+        "showNotification": true,
+        "activationMessage": "",
+        "deactivationMessage": ""
+      }
+    },
+    {
+      "level": 2,
+      "bonus": false,
+      "effects": [
+        "Attack Damage +15%"
+      ],
+      "skillEffects": [
+        {
+          "type": "attribute",
+          "attribute": "minecraft:generic.attack_damage",
+          "amount": 0.15,
+          "operation": "multiply_total"
+        }
+      ],
+      "activation": {
+        "mode": "conditional",
+        "condition": "",
+        "trigger": "on_cured_all",
+        "duration": 400,
+        "cooldown": 800,
+        "threshold": 0.0,
+        "retrigger": false,
+        "conditionPolicy": "while_true",
+        "showNotification": true,
+        "activationMessage": "",
+        "deactivationMessage": ""
+      }
+    },
+    {
+      "level": 3,
+      "bonus": false,
+      "effects": [
+        "Attack Damage +20%"
+      ],
+      "skillEffects": [
+        {
+          "type": "attribute",
+          "attribute": "minecraft:generic.attack_damage",
+          "amount": 0.2,
+          "operation": "multiply_total"
+        }
+      ],
+      "activation": {
+        "mode": "conditional",
+        "condition": "",
+        "trigger": "on_cured_all",
+        "duration": 400,
+        "cooldown": 800,
+        "threshold": 0.0,
+        "retrigger": false,
+        "conditionPolicy": "while_true",
+        "showNotification": true,
+        "activationMessage": "",
+        "deactivationMessage": ""
+      }
+    }
+  ]
+}

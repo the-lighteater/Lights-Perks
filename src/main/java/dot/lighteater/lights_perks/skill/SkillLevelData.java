@@ -18,6 +18,8 @@ public class SkillLevelData {
      */
     public List<SkillEffectData> skillEffects;
 
+    public SkillActivationData activation;
+
     public SkillLevelData() {
     }
 
@@ -25,11 +27,13 @@ public class SkillLevelData {
             int level,
             boolean bonus,
             List<String> effects,
-            List<SkillEffectData> skillEffects
+            List<SkillEffectData> skillEffects,
+            SkillActivationData activation
     ) {
         this.level = level;
         this.bonus = bonus;
         this.effects = effects;
         this.skillEffects = skillEffects;
+        this.activation = activation;
     }
 }

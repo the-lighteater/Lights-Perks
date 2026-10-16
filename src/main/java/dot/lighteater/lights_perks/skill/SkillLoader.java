@@ -9,11 +9,14 @@ import net.minecraft.server.packs.resources.SimpleJsonResourceReloadListener;
 import net.minecraft.util.profiling.ProfilerFiller;
 
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.Map;
 
 public class SkillLoader extends SimpleJsonResourceReloadListener {
 
     public static final Gson GSON = new Gson();
+
+    public Map<ResourceLocation, JsonElement> jsonMap = new HashMap<>();
 
     public SkillLoader() {
         super(GSON, "skills");
@@ -56,9 +59,5 @@ public class SkillLoader extends SimpleJsonResourceReloadListener {
                 "[SkillLoader] Loaded {} skills.",
                 SkillManager.getAll().size()
         );
-    }
-
-    public static Collection<SkillData> getAll() {
-        return SkillManager.getAll();
     }
 }

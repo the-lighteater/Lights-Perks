@@ -32,18 +32,18 @@ import java.util.Map;
 @Mod.EventBusSubscriber(modid = LightsPerks.MODID)
 public class ModEvents {
 
-    private static final Map<String, String> mobPools = Map.of(
-            "minecraft:enderman", "lights_perks:rare_pool",
-            "minecraft:zombie", "lights_perks:common_pool",
-            "minecraft:skeleton", "lights_perks:common_pool",
-            "minecraft:warden", "lights_perks:rare_pool"
+    private static final Map<ResourceLocation, String> mobPools = Map.of(
+            new ResourceLocation("minecraft", "enderman"), "lights_perks:rare_pool",
+            new ResourceLocation("minecraft", "zombie"), "lights_perks:common_pool",
+            new ResourceLocation("minecraft", "skeleton"), "lights_perks:common_pool",
+            new ResourceLocation("minecraft", "warden"), "lights_perks:rare_pool"
     );
 
-    private static final Map<String, Double> mobChances = Map.of(
-            "minecraft:enderman", 0.05,
-            "minecraft:zombie", 0.10,
-            "minecraft:skeleton", 0.10,
-            "minecraft:warden", 1.0
+    private static final Map<ResourceLocation, Double> mobChances = Map.of(
+            new ResourceLocation("minecraft", "enderman"), 0.05,
+            new ResourceLocation("minecraft", "zombie"), 0.10,
+            new ResourceLocation("minecraft", "skeleton"), 0.10,
+            new ResourceLocation("minecraft", "warden"), 1.0
     );
 
     @SubscribeEvent
@@ -58,7 +58,12 @@ public class ModEvents {
         /*
          * Get the entity ID.
          */
-        String entityId = entity.getEncodeId();
+        ResourceLocation entityId =
+                BuiltInRegistries.ENTITY_TYPE.getKey(entity.getType());
+
+        if (entityId == null) {
+            return;
+        }
 
         /*
          * Get the item pool for this mob.

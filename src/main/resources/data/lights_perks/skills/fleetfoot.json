@@ -1,0 +1,38 @@
+{
+  "title": "Fleetfoot",
+  "skillSynopsis": "Increases movement speed while crouched.",
+  "skill_id": "lights_perks:fleetfoot",
+  "color": "0xFF074c2d",
+  "maxLevel": 1,
+  "bonusLevel": 0,
+  "levels": [
+    {
+      "level": 1,
+      "bonus": false,
+      "effects": [
+        "Movement Speed +25%"
+      ],
+      "skillEffects": [
+        {
+          "type": "attribute",
+          "attribute": "minecraft:generic.movement_speed",
+          "amount": 0.25,
+          "operation": "multiply_base"
+        }
+      ],
+      "activation": {
+        "mode": "conditional",
+        "condition": "sneaking",
+        "trigger": "",
+        "duration": 0,
+        "cooldown": 0,
+        "threshold": 0.0,
+        "retrigger": false,
+        "conditionPolicy": "while_true",
+        "showNotification": true,
+        "activationMessage": "",
+        "deactivationMessage": ""
+      }
+    }
+  ]
+}

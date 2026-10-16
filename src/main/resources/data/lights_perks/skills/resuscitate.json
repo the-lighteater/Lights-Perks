@@ -1,0 +1,38 @@
+{
+  "title": "Resuscitate",
+  "skillSynopsis": "Increases damage while afflicted with negative effects.",
+  "skill_id": "lights_perks:resuscitate",
+  "color": "0xFF7bedcc",
+  "maxLevel": 1,
+  "bonusLevel": 0,
+  "levels": [
+    {
+      "level": 1,
+      "bonus": false,
+      "effects": [
+        "Attack Damage +25%"
+      ],
+      "skillEffects": [
+        {
+          "type": "attribute",
+          "attribute": "minecraft:generic.attack_damage",
+          "amount": 0.25,
+          "operation": "multiply_total"
+        }
+      ],
+      "activation": {
+        "mode": "conditional",
+        "condition": "sneaking",
+        "trigger": "on_afflicted_all",
+        "duration": 200,
+        "cooldown": 400,
+        "threshold": 0.0,
+        "retrigger": false,
+        "conditionPolicy": "while_true",
+        "showNotification": true,
+        "activationMessage": "",
+        "deactivationMessage": ""
+      }
+    }
+  ]
+}
