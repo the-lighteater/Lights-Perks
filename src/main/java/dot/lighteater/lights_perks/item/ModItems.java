@@ -1,6 +1,7 @@
 package dot.lighteater.lights_perks.item;
 
 import dot.lighteater.lights_perks.LightsPerks;
+import dot.lighteater.lights_perks.item.custom.ChargeBladeItem;
 import dot.lighteater.lights_perks.item.custom.PerkItem;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.*;
@@ -73,6 +74,9 @@ public class ModItems {
             () -> new PerkItem(new Item.Properties(), new ResourceLocation(LightsPerks.MODID, "resuscitate_perk")));
     public static final RegistryObject<Item> VOID_CLEANSED_PERK = ITEMS.register("void_cleansed_perk",
             () -> new PerkItem(new Item.Properties(), new ResourceLocation(LightsPerks.MODID, "void_cleansed_perk")));
+
+    public static final RegistryObject<Item> CHARGE_BLADE_ITEM = ITEMS.register("charge_blade_item",
+            () -> new ChargeBladeItem(Tiers.DIAMOND, 5, -0.2f, new Item.Properties()));
 
     public static void register(IEventBus eventBus) {
 
